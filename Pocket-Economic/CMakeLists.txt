@@ -16,11 +16,24 @@ find_package(Qt${QT_VERSION_MAJOR}
 qt_standard_project_setup()
 
 set(PROJECT_SOURCES
-    main.cpp
-    pocket_economic.ui
-    main_window.h
-    main_window.cpp
-    Pocket-Economic.rc
+    app/main.cpp
+    app/pocket_economic.ui
+    frontend/main_window.h
+    frontend/main_window.cpp
+    app/Pocket-Economic.rc
+
+    backend/includes/realty/house.h
+    backend/includes/realty/land_plot.h
+    backend/includes/realty/realty.h
+    backend/includes/realty/real_estate_agency.h
+    backend/includes/realty/supermarket.h
+    backend/includes/player.h
+
+    backend/source/realty/house.cpp
+    backend/source/realty/land_plot.cpp
+    backend/source/realty/real_estate_agency.cpp
+    backend/source/realty/supermarket.cpp
+    backend/source/player.cpp
 )
 
 qt_add_executable(Pocket-Economic ${PROJECT_SOURCES})
