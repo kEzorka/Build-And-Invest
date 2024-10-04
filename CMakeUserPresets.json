@@ -25,20 +25,10 @@
     },
     {
       "hidden": true,
-      "name": "Qt-Default",
-      "inherits": "6.6.1_msvc2019_64",
-      "vendor": {
-        "qt-project.org/Default": {
-          "checksum": "vvrVZfv+tigg8u1rRR/QskJU854="
-        }
-      }
-    },
-    {
-      "hidden": true,
       "name": "6.6.1_msvc2019_64",
       "inherits": "Qt",
       "environment": {
-        "QTDIR": "D:/QT/6.6.1/MSVC2019_64"
+        "QTDIR": "D:/Qt/6.6.2/msvc2019_64"
       },
       "architecture": {
         "strategy": "external",
@@ -47,14 +37,42 @@
       "generator": "Ninja",
       "vendor": {
         "qt-project.org/Version": {
-          "checksum": "HDCM2JIH6vakHh43AkvORDvN+5M="
+          "checksum": "16pa8iLq/TYa5S9Ser80vT13UGY="
+        }
+      }
+    },
+    {
+      "hidden": true,
+      "name": "Qt-Default",
+      "inherits": "6.6.2_msvc2019_64",
+      "vendor": {
+        "qt-project.org/Default": {
+          "checksum": "0UezbHhs+P8aSRJV5xXUWvfOu90="
+        }
+      }
+    },
+    {
+      "hidden": true,
+      "name": "6.6.2_msvc2019_64",
+      "inherits": "Qt",
+      "environment": {
+        "QTDIR": "D:/Qt/6.6.2/msvc2019_64"
+      },
+      "architecture": {
+        "strategy": "external",
+        "value": "x64"
+      },
+      "generator": "Ninja",
+      "vendor": {
+        "qt-project.org/Version": {
+          "checksum": "VUrM8Fw7vOs2wskHtpXvzyQ+Wq8="
         }
       }
     }
   ],
   "vendor": {
     "qt-project.org/Presets": {
-      "checksum": "RG/njJbywTgbvs2j0qb30UO/RTw="
+      "checksum": "aOORldkwhAzm2crSKXVtfSdvF2k="
     }
   }
 }

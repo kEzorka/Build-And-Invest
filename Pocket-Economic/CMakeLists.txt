@@ -16,7 +16,7 @@ find_package(Qt${QT_VERSION_MAJOR}
 qt_standard_project_setup()
 
 set(PROJECT_SOURCES
-    app/main.cpp
+    main.cpp
     app/pocket_economic.ui
     frontend/main_window.h
     frontend/main_window.cpp
