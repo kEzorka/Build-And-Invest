@@ -4,14 +4,22 @@ void LandPlot::setCostOfLand(const int64_t& cost) {
 	cost_of_land_ = cost;
 }
 
-void LandPlot::setSquare(const int& square) {
-	square_ = square;
+void LandPlot::setSquare(const size_t& x, const size_t& y) {
+	cells_.resize(x, std::vector<Realty*>(y, nullptr));
+}
+
+void LandPlot::setOwner(Player* owner) {
+	owner_ = owner;
 }
 
 int64_t LandPlot::getCostOfLand() const {
 	return cost_of_land_;
 }
 
-int LandPlot::getSquare() const {
-	return square_;
+size_t LandPlot::getSquareOfLand() const {
+	return (cells_.empty() ? 0 : cells_.size() * cells_[0].size());
+}
+
+Player* LandPlot::getOwner() const {
+	return owner_;
 }

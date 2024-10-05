@@ -4,10 +4,11 @@
 
 class Realty {
 public:
-	void setBuildingCost(const int64_t& cost) { building_cost = cost; }
-	int64_t getBuildingCost() const { return building_cost; }
+	void setBuildingCost(const int64_t& cost);
+	int64_t getBuildingCost() const;
 
 protected:
 	int64_t building_cost;
+
 
 };
