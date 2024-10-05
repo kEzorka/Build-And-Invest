@@ -1,4 +1,4 @@
-#include "frontend/main_window.h"
+#include "frontend/includes/main_window.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);

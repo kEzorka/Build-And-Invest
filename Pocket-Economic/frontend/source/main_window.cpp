@@ -1,4 +1,4 @@
-#include "main_window.h"
+#include "../includes/main_window.h"
 
 PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
 	window->setWindowTitle("21");

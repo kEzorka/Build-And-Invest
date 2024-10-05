@@ -17,10 +17,13 @@ qt_standard_project_setup()
 
 set(PROJECT_SOURCES
     main.cpp
-    app/pocket_economic.ui
-    frontend/main_window.h
-    frontend/main_window.cpp
-    app/Pocket-Economic.rc
+
+
+    frontend/includes/main_window.h
+    frontend/includes/qt_headers.h
+
+    frontend/source/main_window.cpp
+
 
     backend/includes/realty/house.h
     backend/includes/realty/land_plot.h
