@@ -10,6 +10,7 @@ public:
     ~PocketEconomic() = default;
 
 private:
-    QWidget* window = new QWidget();
-    QLabel* label = new QLabel("123");
+    QWidget* window = nullptr;
+    QLabel* label = nullptr;
+    QPushButton* button = nullptr;
 };

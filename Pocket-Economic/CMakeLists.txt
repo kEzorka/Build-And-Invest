@@ -31,12 +31,14 @@ set(PROJECT_SOURCES
     backend/includes/realty/real_estate_agency.h
     backend/includes/realty/supermarket.h
     backend/includes/player.h
+    backend/includes/game.h
 
     backend/source/realty/house.cpp
     backend/source/realty/land_plot.cpp
     backend/source/realty/real_estate_agency.cpp
     backend/source/realty/supermarket.cpp
     backend/source/player.cpp
+    backend/source/game.cpp
 )
 
 qt_add_executable(Pocket-Economic ${PROJECT_SOURCES})

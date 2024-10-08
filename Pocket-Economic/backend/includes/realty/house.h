@@ -5,36 +5,51 @@
 
 class House : public virtual Realty {
 public:
-	class FlatType {
-	public:
-		void setArea(const int& area) { area_ = area; }
-		int getArea() const { return area_; }
+    class Flat {
+    public:
+        void setArea(const int& area) { area_ = area; }
+        int getArea() const { return area_; }
 
-	private:
-		int area_;
+    private:
+        int area_;
 
-	};
-	struct Flat {
-		FlatType flat;
-		int cnt = 1;
-		int free = 1;
-	};
+    };
+
+    class FlatType {
+    public:
+        FlatType(Flat* flat = nullptr, const int& cnt = 1, const int& free = 1) 
+            : flat_(flat), cnt_(cnt), free_(free) {}
+        FlatType(const FlatType&) = default;
+        FlatType(FlatType&&) = default;
+        FlatType& operator=(const FlatType&) = default;
+        FlatType& operator=(FlatType&&) = default;
+        ~FlatType() = default;
+
+        void setFlatsCnt(FlatType* flat, const int& cnt, const int& free);
+        void setFreeFlatsCnt(FlatType* flat, const int& free_cnt);
+        void pushFlat();
+
+        House::Flat* getFlat() const;
+        int getFlatsCnt(FlatType* flat) const;
+        int getFreeFlats(FlatType* flat) const;
+
+    private:
+        Flat* flat_ = nullptr;
+        int cnt_ = 1;
+        int free_ = 1;
+    };
 
 public:
-	virtual void setTotalHouseArea(const int64_t& area);
-	virtual void setAreaOfFlats(const std::vector<Flat*>& vec);
+    void setFlatTypesArr(const std::vector<FlatType*>& vec);
 
-	virtual void pushAreaOfFlat(Flat* area);
-	virtual void pushAreaOfFlat(const std::vector<Flat*>& vec);
-
+    void pushFlatType(FlatType* flat);
+    void pushFlatTypesArr(const std::vector<FlatType*>& vec);
 
 
-	virtual int64_t getTotalHouseArea() const;
-	virtual std::vector<Flat*> getAreaOfFlats() const;
+    std::vector<FlatType*> getFlatTypesArr() const;
 
 private:
-	int64_t total_house_area_;
-	std::vector<Flat*> flats_arr_;
+    std::vector<FlatType*> flats_arr_;
 
 };
 

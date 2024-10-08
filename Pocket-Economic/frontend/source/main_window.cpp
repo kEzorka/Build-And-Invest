@@ -1,9 +1,11 @@
 #include "../includes/main_window.h"
 
 PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
+    window = new QWidget();
 	window->setWindowTitle("21");
 	window->resize(900, 100);
 
+    label = new QLabel();
 	label->setGeometry(100, 50, 500, 70);
 	label->setText("1142");
 
