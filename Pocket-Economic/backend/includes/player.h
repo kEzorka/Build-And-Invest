@@ -7,7 +7,7 @@
 
 class Player {
 public:
-	void setNickname(const std::wstring& nickname);
+	void setNickname(const std::string& nickname);
 	void setMoney(const int64_t& money);
 
 
@@ -21,17 +21,18 @@ public:
 
 
 
+	std::string getNickname() const;
 	std::vector<Supermarket*> getSupermarketsArr() const;
 	std::vector<House*> getHousesArr() const;
 	std::vector<LandPlot*> getLandPlotsArr() const;
 	int64_t getMoney() const;
 
 private:
-	std::wstring nickname_;
+	std::string nickname_;
 
 	std::vector<House*> house_arr_;
 	std::vector<Supermarket*> supermarket_arr_;
 	std::vector<LandPlot*> land_plot_arr_;
-	int64_t money_;
+	int64_t money_ = 0;
 
 };

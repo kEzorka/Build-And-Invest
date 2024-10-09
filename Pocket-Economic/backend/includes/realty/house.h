@@ -7,11 +7,17 @@ class House : public virtual Realty {
 public:
     class Flat {
     public:
+        Flat(const int& area = 0) : area_(area) {}
+        Flat(const Flat&) = default;
+        Flat(Flat&&) = default;
+        Flat& operator=(const Flat&) = default;
+        Flat& operator=(Flat&&) = default;
+        ~Flat() = default;
         void setArea(const int& area) { area_ = area; }
         int getArea() const { return area_; }
 
     private:
-        int area_;
+        int area_ = 0;
 
     };
 
@@ -42,6 +48,7 @@ public:
 public:
     void setFlatTypesArr(const std::vector<FlatType*>& vec);
 
+
     void pushFlatType(FlatType* flat);
     void pushFlatTypesArr(const std::vector<FlatType*>& vec);
 
@@ -50,6 +57,7 @@ public:
 
 private:
     std::vector<FlatType*> flats_arr_;
+    int number_of_house_ = 0;
 
 };
 

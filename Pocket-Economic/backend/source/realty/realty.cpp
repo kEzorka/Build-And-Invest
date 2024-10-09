@@ -3,6 +3,8 @@
 #include "realty.h"
 #include "realty.h"
 #include "realty.h"
+#include "realty.h"
+#include "realty.h"
 #include "../../includes/realty/realty.h"
 
 void Realty::setBuildingCost(const int64_t& cost) {
@@ -27,6 +29,10 @@ void Realty::setDemand(const int& demand) {
 
 void Realty::setSupply(const int& supply) {
     supply_ = supply;
+}
+
+void Realty::setCalamity(Calamity* calamity) {
+    cur_calamity_ = calamity;
 }
 
 
@@ -54,6 +60,10 @@ int Realty::getDemand() const {
 
 int Realty::getSupply() const {
     return supply_;
+}
+
+Calamity* Realty::getCalamity() {
+    return cur_calamity_;
 }
 
 

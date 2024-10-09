@@ -2,7 +2,7 @@
 #include "../includes/realty/house.h"
 #include "../includes/realty/realty.h"
 
-void Player::setNickname(const std::wstring& nickname) {
+void Player::setNickname(const std::string& nickname) {
 	nickname_ = nickname;
 }
 
@@ -42,6 +42,10 @@ void Player::buyLandPlot() {
 
 
 
+
+std::string Player::getNickname() const {
+	return nickname_;
+}
 
 std::vector<Supermarket*> Player::getSupermarketsArr() const {
 	return supermarket_arr_;

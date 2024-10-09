@@ -2,20 +2,35 @@
 
 void Game::start() {
 	makeCalamitiesArr();
+	distrib_calamity_type_ = std::uniform_int_distribution<>(0, calamities_.size() - 1);
+	/*House::Flat* flat = new House::Flat(50);
+	House::FlatType* brick = new House::FlatType(flat);
+	brick_house_standart_ = new House();
+	brick_house_standart_->setBuildingCost(1);*/
 }
 
 bool Game::nextPlayer() {
-	++cur_player_;
-	if (cur_player_ == players_arr_.size()) {
-		cur_player_ = 0;
+	++cur_player_pos_in_arr_;
+	if (cur_player_pos_in_arr_ == players_arr_.size()) {
+		cur_player_pos_in_arr_ = 0;
 		nextGameStep();
+		cur_player_ = players_arr_[cur_player_pos_in_arr_];
 		return true;
 	}
+	cur_player_ = players_arr_[cur_player_pos_in_arr_];
 	return false;
 }
 
 
 
+
+void Game::setStartMoneyCnt(const int& money) {
+	default_money_for_player_ = money;
+}
+
+void Game::setMovesCnt(const int& moves) {
+	moves_in_the_game_ = moves;
+}
 
 void Game::pushPlayer(Player* player) {
 	players_arr_.push_back(player);
@@ -28,8 +43,12 @@ std::vector<Player*> Game::getPlayersArr() const {
 	return players_arr_;
 }
 
-std::vector<std::wstring> Game::getFreshNews() const {
+std::vector<std::string> Game::getFreshNews() const {
 	return fresh_news_arr_;
+}
+
+Player* Game::getCurPlayer() const {
+	return cur_player_;
 }
 
 
@@ -41,48 +60,88 @@ void Game::nextGameStep() {
 	for (Player*& player : players_arr_) {
 		std::vector<House*> vec_house = player->getHousesArr();
 		for (House*& house : vec_house) {
-			double rnm = distrib(RandNum);
-			if (rnm <= calamity_chance) {
-
+			if (house->getBuildingTime() != 0) {
+				double rnm = distrib_calamity_(RandNum);
+				if (rnm <= calamity_chance_) {
+					double calamity_rnm = distrib_calamity_type_(RandNum);
+					house->setCalamity(calamities_[calamity_rnm]);
+					house->setBuildingTime(house->getBuildingTime()
+						- 1 + calamities_[calamity_rnm]->getDealy());
+					fresh_news_arr_.push_back(
+						"The construction of the player's house "
+						+ player->getNickname() + " "
+						+ calamities_[calamity_rnm]->getCalamityText());
+				} else {
+					house->setCalamity(nullptr);
+					house->setBuildingTime(house->getBuildingTime() - 1);
+				}
+				if (house->getBuildingTime() == 0) {
+					fresh_news_arr_.push_back("The house of the player "
+						+ player->getNickname() + " has built!");
+				}
 			}
-			house->setBuildingTime(house->getBuildingTime() == 0 
-				? 0 : house->getBuildingTime() - 1);
 		}
 		std::vector<Supermarket*> vec_supermarket = player->getSupermarketsArr();
 		for (Supermarket*& supermarket : vec_supermarket) {
-			supermarket->setBuildingTime(supermarket->getBuildingTime() == 0
-				? 0 : supermarket->getBuildingTime() - 1);
+			if (supermarket->getBuildingTime() != 0) {
+				double rnm = distrib_calamity_(RandNum);
+				if (rnm <= calamity_chance_) {
+					double calamity_rnm = distrib_calamity_type_(RandNum);
+					supermarket->setCalamity(calamities_[calamity_rnm]);
+					supermarket->setBuildingTime(supermarket->getBuildingTime()
+						- 1 + calamities_[calamity_rnm]->getDealy());
+					fresh_news_arr_.push_back(
+						"The construction of the player's supermarket "
+						+ player->getNickname() + " "
+						+ calamities_[calamity_rnm]->getCalamityText());
+				} else {
+					supermarket->setCalamity(nullptr);
+					supermarket->setBuildingTime(supermarket->getBuildingTime() - 1);
+				}
+				if (supermarket->getBuildingTime() == 0) {
+					fresh_news_arr_.push_back("The supermarket of the player "
+						+ player->getNickname() + " has built!");
+				}
+			}
 		}
 	}
-	updateNews();
-}
-
-void Game::updateNews() {
-	//generate_news
 }
 
 void Game::makeCalamitiesArr() {
-	calamities_.push_back(new Calamity(L"В связи с несвоевременным получением материалов строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Из-за неблагоприятных погодных условий строители отказались выходить на смену. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"На бригаду строителей напал вирус. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"В связи с недобросовестным поведением заказчика строители устроили бунт. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Бригада строителей не умеет распределять собственное время. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Возникли сложности с подключением объекта к коммуникациям: нет электричества. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Возникли сложности с подключением объекта к коммуникациям: нет воды. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Госкомиссия не принимает объект. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Обнаружены дефекты, вызванные работами генподрядчика. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Обнаружены дефекты, вызванные некачественными материалами. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Обнаружены дефекты, вызванные несоблюдением технологии строительства. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Возникли проблемы с документацией. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Проектировщик не прорисовал сложный узел каркасной конструкции. Необходимо исправить чертежи. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Проектировщик не указал размеры деталей на чертежах. Необходимо отправить схемы на доработку. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Нанятые строители-универсалы отказались проводить финишную отделку. Заказчик ищет специализированную бригаду. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Строительная организация неправильно составила смету проекта. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Документы на ввод жилья в употребление не согласованы с коммунальными службами. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"В связи с недостаточной квалификацией рабочих и инженерного состава строительство задерживается."));
-	calamities_.push_back(new Calamity(L"В связи с введением новых законодательных норм и правил в процессе проектирования строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Возникла необходимость в дополнительных согласованиях проекта с экологическими службами. Строительство задерживается."));
-	calamities_.push_back(new Calamity(L"По причине обнаружения археологических находок на участке строительство задерживается."));
-	calamities_.push_back(new Calamity(L"По причине судебных разбирательств по земельным вопросам строительство задерживается."));
-	calamities_.push_back(new Calamity(L"Возникла необходимость в проведении дополнительных испытаний материалов. Строительство задерживается."));
+	calamities_.push_back(new Calamity("is delayed due to adverse weather conditions, the builders refused to go on shift."));
+	calamities_.push_back(new Calamity("is delayed: a virus attacked the construction crew."));
+	calamities_.push_back(new Calamity("is delayed: the construction crew cannot manage their own time."));
+	calamities_.push_back(new Calamity("is delayed: there were difficulties in connecting the object to communications: no electricity."));
+	calamities_.push_back(new Calamity("is delayed: there were difficulties in connecting the object to communications: no water."));
+	calamities_.push_back(new Calamity("is delayed: the state commission does not accept the object."));
+	calamities_.push_back(new Calamity("is delayed: defects caused by the works of the general contractor were found."));
+	calamities_.push_back(new Calamity("is delayed: defects caused by poor-quality materials were found."));
+	calamities_.push_back(new Calamity("is delayed: defects caused by non-compliance with construction technology were found."));
+	calamities_.push_back(new Calamity("is delayed: there were problems with documentation."));
+	calamities_.push_back(new Calamity("is delayed: the designer did not draw a complex node of the frame structure. It is necessary to correct the drawings."));
+	calamities_.push_back(new Calamity("is delayed: the designer did not specify the dimensions of the parts in the drawings. It is necessary to send the diagrams for revision."));
+	calamities_.push_back(new Calamity("is delayed: the hired universal builders refused to carry out the finishing. The customer is looking for a specialized team."));
+	calamities_.push_back(new Calamity("is delayed: documents for the commissioning of housing have not been agreed with the utilities."));
+	calamities_.push_back(new Calamity("is delayed due to insufficient qualifications of workers and engineering staff."));
+	calamities_.push_back(new Calamity("is delayed due to the introduction of new legislative norms and rules in the design process."));
+	calamities_.push_back(new Calamity("is delayed: it became necessary to obtain additional approvals for the project with environmental services."));
+	calamities_.push_back(new Calamity("is delayed due to the discovery of archaeological finds on the site."));
+	calamities_.push_back(new Calamity("is delayed due to legal proceedings on land issues."));
+	calamities_.push_back(new Calamity("is delayed: it became necessary to conduct additional material tests."));
+}
+
+void Calamity::setDealy(const int& delay) {
+	delay_ = delay;
+}
+
+void Calamity::setCalamityText(const std::string& text_of_calamity) {
+	text_of_calamity_ = text_of_calamity;
+}
+
+int Calamity::getDealy() const {
+	return delay_;
+}
+
+std::string Calamity::getCalamityText() const {
+	return text_of_calamity_;
 }
