@@ -32,7 +32,7 @@ protected:
     int64_t building_cost_ = 0;
     int64_t building_time_ = 0;
     Player* owner_ = nullptr;
-    LandPlot* lan_plot_ = nullptr;
+    LandPlot* land_plot_ = nullptr;
     int demand_ = 0;
     int supply_ = 0;
 

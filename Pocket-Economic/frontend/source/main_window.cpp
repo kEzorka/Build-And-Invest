@@ -1,4 +1,7 @@
 #include "../includes/main_window.h"
+#include <QDebug>
+#include <iostream>
+
 
 PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
     window = new QWidget();
@@ -25,4 +28,5 @@ PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
     label->setStyleSheet(LabelStyler);
 
 	window->show();
+    qDebug() << "faguerbfryufgfuoqg4r74qwurgw" << QDir::currentPath();
 }

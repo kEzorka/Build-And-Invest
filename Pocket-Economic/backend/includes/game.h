@@ -3,28 +3,11 @@
 #include <random>
 #include <chrono>
 #include <utility>
+#include "calamity.h"
+#include "player.h"
 
 static std::mt19937 RandNum = std::mt19937{ static_cast<std::mt19937::result_type>(
 	std::chrono::steady_clock::now().time_since_epoch().count()) };
-
-#include "player.h"
-
-class Calamity {
-public:
-	Calamity(const std::string& text_of_calamity, const int& delay = 1)
-		: delay_(delay), text_of_calamity_(text_of_calamity) {}
-
-	void setDealy(const int& delay);
-	void setCalamityText(const std::string& text_of_calamity);
-
-	int getDealy() const;
-	std::string getCalamityText() const;
-
-private:
-	int delay_; //in month
-	std::string text_of_calamity_;
-
-};
 
 class Game {
 public:
@@ -53,6 +36,8 @@ private:
 
 	void nextGameStep();
 	void makeCalamitiesArr();
+	void makeStandardHouses();
+	void makeLandPlotsArr();
 
 
 	std::vector<Player*> players_arr_; /*players club 7-3-5*/
@@ -67,9 +52,9 @@ private:
 	double calamity_chance_ = 3; //in percents
 	std::vector<Calamity*> calamities_;
 
-	House* monolithic_house_standart_ = nullptr;
-	House* panel_house_standart_ = nullptr;
-	House* brick_house_standart_ = nullptr;
+	House monolithic_house_standard_;
+	House panel_house_standard_;
+	House brick_house_standard_;
 
 	std::vector<LandPlot*> land_plots_arr_;
 };

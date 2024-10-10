@@ -22,23 +22,39 @@ set(PROJECT_SOURCES
     frontend/includes/main_window.h
     frontend/includes/qt_headers.h
 
+
     frontend/source/main_window.cpp
 
 
+
+    backend/includes/land_plot/building_land.h
+    backend/includes/land_plot/land_plot.h
+    backend/includes/land_plot/resort.h
+
     backend/includes/realty/house.h
-    backend/includes/realty/land_plot.h
+    backend/includes/realty/non_build_realty.h
     backend/includes/realty/realty.h
     backend/includes/realty/real_estate_agency.h
     backend/includes/realty/supermarket.h
-    backend/includes/player.h
+
+    backend/includes/calamity.h
     backend/includes/game.h
+    backend/includes/player.h
+
+
+    backend/source/land_plot/building_land.cpp
+    backend/source/land_plot/land_plot.cpp
+    backend/source/land_plot/resort.cpp
 
     backend/source/realty/house.cpp
-    backend/source/realty/land_plot.cpp
+    backend/source/realty/non_build_realty.cpp
+    backend/source/realty/realty.cpp
     backend/source/realty/real_estate_agency.cpp
     backend/source/realty/supermarket.cpp
-    backend/source/player.cpp
+
+    backend/source/calamity.cpp
     backend/source/game.cpp
+    backend/source/player.cpp
 )
 
 qt_add_executable(Pocket-Economic ${PROJECT_SOURCES})

@@ -1,10 +1,3 @@
-#include "realty.h"
-#include "realty.h"
-#include "realty.h"
-#include "realty.h"
-#include "realty.h"
-#include "realty.h"
-#include "realty.h"
 #include "../../includes/realty/realty.h"
 
 void Realty::setBuildingCost(const int64_t& cost) {

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "house.h"
-#include "land_plot.h"
 #include "supermarket.h"
+#include "non_build_realty.h"
 
 class RealEstateAgency {
 public:

@@ -3,10 +3,7 @@
 void Game::start() {
 	makeCalamitiesArr();
 	distrib_calamity_type_ = std::uniform_int_distribution<>(0, calamities_.size() - 1);
-	/*House::Flat* flat = new House::Flat(50);
-	House::FlatType* brick = new House::FlatType(flat);
-	brick_house_standart_ = new House();
-	brick_house_standart_->setBuildingCost(1);*/
+
 }
 
 bool Game::nextPlayer() {
@@ -130,18 +127,16 @@ void Game::makeCalamitiesArr() {
 	calamities_.push_back(new Calamity("is delayed: it became necessary to conduct additional material tests."));
 }
 
-void Calamity::setDealy(const int& delay) {
-	delay_ = delay;
+void Game::makeStandardHouses() {
+	House::Flat* flat = new House::Flat(50);
+	House::FlatType* monolithic_flat_type = new House::FlatType(flat, 60, 60);
+	House::FlatType* panel_flat_type = new House::FlatType(flat, 60, 60);
+	House::FlatType* brick_flat_type = new House::FlatType(flat, 60, 60);
+	monolithic_house_standard_.pushFlatType(monolithic_flat_type);
+	panel_house_standard_.pushFlatType(panel_flat_type);
+	brick_house_standard_.pushFlatType(brick_flat_type);
 }
 
-void Calamity::setCalamityText(const std::string& text_of_calamity) {
-	text_of_calamity_ = text_of_calamity;
-}
-
-int Calamity::getDealy() const {
-	return delay_;
-}
-
-std::string Calamity::getCalamityText() const {
-	return text_of_calamity_;
+void Game::makeLandPlotsArr() {
+	
 }

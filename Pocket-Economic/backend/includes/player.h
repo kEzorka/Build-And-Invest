@@ -1,6 +1,8 @@
 #pragma once
 
 #include "realty/real_estate_agency.h"
+#include "land_plot/building_land.h"
+#include "land_plot/resort.h"
 
 #include <iostream>
 #include <vector>
