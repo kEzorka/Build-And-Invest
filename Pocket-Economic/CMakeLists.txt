@@ -25,7 +25,8 @@ set(PROJECT_SOURCES
 
     frontend/source/main_window.cpp
 
-
+    
+    backend/includes/game/game.h
 
     backend/includes/land_plot/building_land.h
     backend/includes/land_plot/land_plot.h
@@ -38,9 +39,10 @@ set(PROJECT_SOURCES
     backend/includes/realty/supermarket.h
 
     backend/includes/calamity.h
-    backend/includes/game.h
     backend/includes/player.h
 
+    
+    backend/source/game/game.cpp
 
     backend/source/land_plot/building_land.cpp
     backend/source/land_plot/land_plot.cpp
@@ -53,7 +55,6 @@ set(PROJECT_SOURCES
     backend/source/realty/supermarket.cpp
 
     backend/source/calamity.cpp
-    backend/source/game.cpp
     backend/source/player.cpp
 )
 

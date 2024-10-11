@@ -2,6 +2,6 @@
 
 #include "realty.h"
 
-class NonBuildRealtys : public virtual Realty {
+class NonBuildRealty : public virtual Realty {
 	
 };

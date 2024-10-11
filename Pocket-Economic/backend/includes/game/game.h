@@ -3,8 +3,8 @@
 #include <random>
 #include <chrono>
 #include <utility>
-#include "calamity.h"
-#include "player.h"
+#include "../calamity.h"
+#include "../player.h"
 
 static std::mt19937 RandNum = std::mt19937{ static_cast<std::mt19937::result_type>(
 	std::chrono::steady_clock::now().time_since_epoch().count()) };
@@ -56,5 +56,5 @@ private:
 	House panel_house_standard_;
 	House brick_house_standard_;
 
-	std::vector<LandPlot*> land_plots_arr_;
+	std::vector<std::vector<LandPlot*>> land_plots_arr_;
 };
