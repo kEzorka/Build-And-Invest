@@ -26,9 +26,13 @@ set(PROJECT_SOURCES
     frontend/source/main_window.cpp
 
     
+    backend/includes/game/calamity.h
     backend/includes/game/game.h
+    backend/includes/game/main_game_window.h
+    backend/includes/game/news_window.h
 
     backend/includes/land_plot/building_land.h
+    backend/includes/land_plot/land_agency.h
     backend/includes/land_plot/land_plot.h
     backend/includes/land_plot/resort.h
 
@@ -38,13 +42,16 @@ set(PROJECT_SOURCES
     backend/includes/realty/real_estate_agency.h
     backend/includes/realty/supermarket.h
 
-    backend/includes/calamity.h
     backend/includes/player.h
 
     
+    backend/source/game/calamity.cpp
     backend/source/game/game.cpp
+    backend/source/game/main_game_window.cpp
+    backend/source/game/news_window.cpp
 
     backend/source/land_plot/building_land.cpp
+    backend/source/land_plot/land_agency.cpp
     backend/source/land_plot/land_plot.cpp
     backend/source/land_plot/resort.cpp
 
@@ -54,7 +61,6 @@ set(PROJECT_SOURCES
     backend/source/realty/real_estate_agency.cpp
     backend/source/realty/supermarket.cpp
 
-    backend/source/calamity.cpp
     backend/source/player.cpp
 )
 

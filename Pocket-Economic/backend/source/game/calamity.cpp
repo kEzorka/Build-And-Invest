@@ -1,4 +1,4 @@
-#include "../includes/calamity.h"
+#include "../../includes/game/calamity.h"
 
 void Calamity::setDealy(const int& delay) {
 	delay_ = delay;

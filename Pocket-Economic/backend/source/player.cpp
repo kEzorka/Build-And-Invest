@@ -1,6 +1,6 @@
 #include "../includes/player.h"
 #include "../includes/realty/house.h"
-#include "../includes/realty/realty.h"
+#include "../includes/realty/real_estate_agency.h"
 
 void Player::setNickname(const std::string& nickname) {
 	nickname_ = nickname;
@@ -28,16 +28,28 @@ void Player::giveLandPlot(LandPlot* land_plot) {
 
 
 
-void Player::buySupermarket() {
-	//buy realty using real estate agency
+Supermarket* Player::buySupermarket(RealEstateAgency& real_estate_ageny) {
+	Supermarket* supermarket = real_estate_ageny.buySupermarket(this);
+	supermarket_arr_.push_back(supermarket);
+	return supermarket;
 }
 
-void Player::buyHouse() {
-	//buy house using real estate agency
+House* Player::buyHouse(const RealEstateAgency::HouseType& house_type, RealEstateAgency& real_estate_ageny) {
+	House* house = real_estate_ageny.buyHouse(this, house_type);
+	house_arr_.push_back(house);
+	return house;
 }
 
-void Player::buyLandPlot() {
-	//buy land plot using real estate agency
+void Player::buyBuildingLand(BuildingLand* land_plot, const LandAgency& land_agency) {
+	land_agency.buyBuildingLand(this, land_plot->getSizeX(), land_plot->getSizeY());
+	land_plot->setOwner(this);
+	land_plot_arr_.push_back(land_plot);
+}
+
+void Player::buyResort(Resort* land_plot, const LandAgency& land_agency) {
+	land_agency.buyResort(this);
+	land_plot->setOwner(this);
+	land_plot_arr_.push_back(land_plot);
 }
 
 

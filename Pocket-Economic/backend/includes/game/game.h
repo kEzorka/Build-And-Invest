@@ -3,8 +3,10 @@
 #include <random>
 #include <chrono>
 #include <utility>
-#include "../calamity.h"
+#include "../game/calamity.h"
 #include "../player.h"
+#include "news_window.h"
+#include "main_game_window.h"
 
 static std::mt19937 RandNum = std::mt19937{ static_cast<std::mt19937::result_type>(
 	std::chrono::steady_clock::now().time_since_epoch().count()) };
@@ -25,10 +27,19 @@ public:
 
 	void pushPlayer(Player* player);
 	
-	std::vector<Player*> getPlayersArr() const;
-	std::vector<std::string> getFreshNews() const;	
+	std::vector<Player*> getPlayersArr() const;	
 	Player* getCurPlayer() const;
+	std::vector<std::string> getFreshNews() const;
+
 	const int INF = -1;
+
+
+	void buyHouse(Player* player, BuildingLand* building_land, const RealEstateAgency::HouseType& house_type,
+		const int& building_pos_x, const int& building_pos_y);
+	void buySupermarket(Player* player, BuildingLand* building_land, const RealEstateAgency::HouseType& house_type,
+		const int& building_pos_x, const int& building_pos_y);
+	void buyBuildingLand(Player* player, const int& pos_x, const int& pos_y);
+	void buyResort(Player* player, const int& pos_x, const int& pos_y);
 
 private:
 	int default_money_for_player_ = 0;
@@ -36,25 +47,22 @@ private:
 
 	void nextGameStep();
 	void makeCalamitiesArr();
-	void makeStandardHouses();
 	void makeLandPlotsArr();
 
 
+	void buildNonBuildRealty(Player* player, BuildingLand* building_land, const int& x, const int& y);
+
+
+	NewsWindow news_window_;
+	MainGameWindow main_game_window_;
+	RealEstateAgency real_estate_agency_;
+	LandAgency land_agency_;
+
 	std::vector<Player*> players_arr_; /*players club 7-3-5*/
 	Player* cur_player_ = nullptr;
-	std::vector<std::string> news_arr_;
-	std::vector<std::string> fresh_news_arr_;
 	size_t month_ = 0;
 	int cur_player_pos_in_arr_ = 0;
 
-	std::uniform_real_distribution<> distrib_calamity_ = std::uniform_real_distribution<>(1.0, 100.0);
-	std::uniform_int_distribution<> distrib_calamity_type_ = std::uniform_int_distribution<>(1, 100);
-	double calamity_chance_ = 3; //in percents
-	std::vector<Calamity*> calamities_;
-
-	House monolithic_house_standard_;
-	House panel_house_standard_;
-	House brick_house_standard_;
-
 	std::vector<std::vector<LandPlot*>> land_plots_arr_;
+
 };

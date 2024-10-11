@@ -5,6 +5,7 @@
 #include "../realty/realty.h"
 
 class Player;
+class LandAgency;
 
 class LandPlot {
 public:

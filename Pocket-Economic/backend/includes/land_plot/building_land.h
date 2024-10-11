@@ -16,8 +16,14 @@ public:
 	BuildingLand& operator=(BuildingLand&&) = default;
 
 	void setSquareArr(const size_t& x, const size_t& y);
+	void setCellsArr(std::vector<std::vector<Realty*>> cells);
+	void build(Realty* realty, const int& x, const int& y);
 
 	size_t getSquareArr() const;
+	std::vector<std::vector<Realty*>> getCells() const;
+	size_t getSizeX() const;
+	size_t getSizeY() const;
+	Realty* getRealty(const int& x, const int& y) const;
 
 private:
 	std::vector<std::vector<Realty*>> cells_;
