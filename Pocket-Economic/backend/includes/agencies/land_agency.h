@@ -1,7 +1,7 @@
 #pragma once
 
-#include "building_land.h"
-#include "resort.h"
+#include "../land_plot/building_land.h"
+#include "../land_plot/resort.h"
 
 class LandAgency {
 public:
@@ -9,7 +9,7 @@ public:
 	void buyResort(Player* player) const;
 
 private:
-	int64_t cost_of_cell_;
-	int64_t cost_of_resort_;
+	int64_t cost_of_cell_ = 0;
+	int64_t cost_of_resort_ = 0;
 
 };

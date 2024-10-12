@@ -35,11 +35,13 @@ public:
 
 
 	void buildHouse(Player* player, BuildingLand* building_land, const BuildingAgency::HouseType& house_type,
-		const int& building_pos_x, const int& building_pos_y) const;
+		const int& building_pos_x, const int& building_pos_y);
 	void buildSupermarket(Player* player, BuildingLand* building_land, const BuildingAgency::HouseType& house_type,
-		const int& building_pos_x, const int& building_pos_y) const;
-	void buyBuildingLand(Player* player, const int& pos_x, const int& pos_y) const;
-	void buyResort(Player* player, const int& pos_x, const int& pos_y) const;
+		const int& building_pos_x, const int& building_pos_y);
+	void buyBuildingLand(Player* player, const int& pos_x, const int& pos_y);
+	void buyResort(Player* player, const int& pos_x, const int& pos_y);
+	
+	void buyAdvert(Player* player, const int& cnt_of_advert) const;
 
 private:
 	int default_money_for_player_ = 0;
@@ -55,9 +57,11 @@ private:
 
 	NewsWindow news_window_;
 	MainGameWindow main_game_window_;
+
 	RealEstateAgency real_estate_agency_;
 	LandAgency land_agency_;
 	BuildingAgency building_agency_;
+	AdvertAgency advert_agency_;
 
 	std::vector<Player*> players_arr_; /*players club 7-3-5*/
 	Player* cur_player_ = nullptr;

@@ -26,41 +26,45 @@ set(PROJECT_SOURCES
     frontend/source/main_window.cpp
 
     
+    backend/includes/agencies/advert_agency.h
+    backend/includes/agencies/building_agency.h
+    backend/includes/agencies/land_agency.h
+    backend/includes/agencies/real_estate_agency.h
+
     backend/includes/game/calamity.h
     backend/includes/game/game.h
     backend/includes/game/main_game_window.h
     backend/includes/game/news_window.h
 
     backend/includes/land_plot/building_land.h
-    backend/includes/land_plot/land_agency.h
     backend/includes/land_plot/land_plot.h
     backend/includes/land_plot/resort.h
 
-    backend/includes/realty/building_agency.h
     backend/includes/realty/house.h
     backend/includes/realty/non_build_realty.h
     backend/includes/realty/realty.h
-    backend/includes/realty/real_estate_agency.h
     backend/includes/realty/supermarket.h
 
     backend/includes/player.h
 
-    
+
+    backend/source/agencies/advert_agency.cpp
+    backend/source/agencies/building_agency.cpp
+    backend/source/agencies/land_agency.cpp
+    backend/source/agencies/real_estate_agency.cpp
+
     backend/source/game/calamity.cpp
     backend/source/game/game.cpp
     backend/source/game/main_game_window.cpp
     backend/source/game/news_window.cpp
 
     backend/source/land_plot/building_land.cpp
-    backend/source/land_plot/land_agency.cpp
     backend/source/land_plot/land_plot.cpp
     backend/source/land_plot/resort.cpp
 
-    backend/source/realty/building_agency.cpp
     backend/source/realty/house.cpp
     backend/source/realty/non_build_realty.cpp
     backend/source/realty/realty.cpp
-    backend/source/realty/real_estate_agency.cpp
     backend/source/realty/supermarket.cpp
 
     backend/source/player.cpp

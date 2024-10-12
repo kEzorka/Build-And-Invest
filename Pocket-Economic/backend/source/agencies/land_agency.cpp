@@ -1,4 +1,4 @@
-#include "../../includes/land_plot/land_agency.h"
+#include "../../includes/agencies/land_agency.h"
 #include "../../includes/player.h"
 
 void LandAgency::buyBuildingLand(Player* player, const int& size_x, const int& size_y) const {

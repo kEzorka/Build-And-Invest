@@ -25,7 +25,6 @@ public:
     virtual int64_t getIncome() const;
 
     virtual bool isBuilt() const;
-    virtual void buyAdvert();
 
 protected:
     int64_t building_cost_ = 0;

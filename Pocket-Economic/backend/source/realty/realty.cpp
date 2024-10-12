@@ -61,7 +61,3 @@ int64_t Realty::getIncome() const {
 bool Realty::isBuilt() const {
     return building_time_ == 0 ? true : false;
 }
-
-void Realty::buyAdvert() {
-
-}

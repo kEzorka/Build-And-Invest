@@ -8,23 +8,20 @@ void Player::setMoney(const int64_t& money) {
 	money_ = money;
 }
 
-
-
-
-void Player::giveSupermarket(Supermarket* supermarket) {
-	supermarket_arr_.push_back(supermarket);
-}
-
-void Player::giveHouses(House* house) {
-	house_arr_.push_back(house);
-}
-
-void Player::giveLandPlot(LandPlot* land_plot) {
-	land_plot_arr_.push_back(land_plot);
+void Player::updateSpendingMoneyForAdvertForNewStep() {
+	spend_on_advert_this_month_ = spend_on_advert_next_month_;
+	spend_on_advert_next_month_ = 0;
 }
 
 
 
+
+
+void Player::buyAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency) {
+	int64_t cost_of_advert = advert_agency.buyAdvert(this, cnt_of_advert);
+	spend_on_advert_this_month_ += cost_of_advert / 2;
+	spend_on_advert_next_month_ += cost_of_advert / 2;
+}
 
 Supermarket* Player::buildSupermarket(const BuildingAgency& building_agency) {
 	Supermarket* supermarket = building_agency.buySupermarket(this);
