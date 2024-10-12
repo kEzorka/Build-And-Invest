@@ -13,8 +13,6 @@ public:
     virtual void setBuildingTime(const int64_t& time);
     virtual void setOwner(Player* owner);
     virtual void setLandPlot(LandPlot* land_plot);
-    virtual void setDemand(const int& demand);
-    virtual void setSupply(const int& supply);
     virtual void setCalamity(Calamity* calamity);
     virtual void setNumberOfRealty(const int& number);
 
@@ -22,8 +20,6 @@ public:
     virtual int64_t getBuildingTime() const;
     virtual Player* getOwner() const;
     virtual LandPlot* getLandPlot() const;
-    virtual int getDemand() const;
-    virtual int getSupply() const;
     virtual Calamity* getCalamity();
     virtual int getNumberOfRealty() const;
     virtual int64_t getIncome() const;
@@ -36,8 +32,6 @@ protected:
     int64_t building_time_ = 0;
     Player* owner_ = nullptr;
     LandPlot* land_plot_ = nullptr;
-    int demand_ = 0;
-    int supply_ = 0;
     int number_of_realty_ = 0;
 
     Calamity* cur_calamity_ = nullptr;

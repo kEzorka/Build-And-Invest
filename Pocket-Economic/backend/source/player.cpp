@@ -72,3 +72,8 @@ std::vector<LandPlot*> Player::getLandPlotsArr() const {
 int64_t Player::getMoney() const {
 	return money_;
 }
+
+int64_t Player::getIncome() const {
+	//get inclome using real estate agency
+	return 0;
+}

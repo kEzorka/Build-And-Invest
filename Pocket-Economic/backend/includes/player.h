@@ -29,6 +29,7 @@ public:
 	std::vector<House*> getHousesArr() const;
 	std::vector<LandPlot*> getLandPlotsArr() const;
 	int64_t getMoney() const;
+	int64_t getIncome() const;
 
 private:
 	std::string nickname_;

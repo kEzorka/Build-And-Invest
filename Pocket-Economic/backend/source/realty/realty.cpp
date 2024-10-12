@@ -16,14 +16,6 @@ void Realty::setLandPlot(LandPlot* land_plot) {
     land_plot_ = land_plot;
 }
 
-void Realty::setDemand(const int& demand) {
-    demand_ = demand;
-}
-
-void Realty::setSupply(const int& supply) {
-    supply_ = supply;
-}
-
 void Realty::setCalamity(Calamity* calamity) {
     cur_calamity_ = calamity;
 }
@@ -49,14 +41,6 @@ Player* Realty::getOwner() const {
 
 LandPlot* Realty::getLandPlot() const {
     return land_plot_;
-}
-
-int Realty::getDemand() const {
-    return demand_;
-}
-
-int Realty::getSupply() const {
-    return supply_;
 }
 
 Calamity* Realty::getCalamity() {
