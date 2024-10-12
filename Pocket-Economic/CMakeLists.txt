@@ -36,6 +36,7 @@ set(PROJECT_SOURCES
     backend/includes/land_plot/land_plot.h
     backend/includes/land_plot/resort.h
 
+    backend/includes/realty/building_agency.h
     backend/includes/realty/house.h
     backend/includes/realty/non_build_realty.h
     backend/includes/realty/realty.h
@@ -55,6 +56,7 @@ set(PROJECT_SOURCES
     backend/source/land_plot/land_plot.cpp
     backend/source/land_plot/resort.cpp
 
+    backend/source/realty/building_agency.cpp
     backend/source/realty/house.cpp
     backend/source/realty/non_build_realty.cpp
     backend/source/realty/realty.cpp

@@ -1,6 +1,4 @@
 #include "../includes/player.h"
-#include "../includes/realty/house.h"
-#include "../includes/realty/real_estate_agency.h"
 
 void Player::setNickname(const std::string& nickname) {
 	nickname_ = nickname;
@@ -28,14 +26,14 @@ void Player::giveLandPlot(LandPlot* land_plot) {
 
 
 
-Supermarket* Player::buySupermarket(RealEstateAgency& real_estate_ageny) {
-	Supermarket* supermarket = real_estate_ageny.buySupermarket(this);
+Supermarket* Player::buildSupermarket(const BuildingAgency& building_agency) {
+	Supermarket* supermarket = building_agency.buySupermarket(this);
 	supermarket_arr_.push_back(supermarket);
 	return supermarket;
 }
 
-House* Player::buyHouse(const RealEstateAgency::HouseType& house_type, RealEstateAgency& real_estate_ageny) {
-	House* house = real_estate_ageny.buyHouse(this, house_type);
+House* Player::buildHouse(const BuildingAgency::HouseType& house_type, const BuildingAgency& building_agency) {
+	House* house = building_agency.buyHouse(this, house_type);
 	house_arr_.push_back(house);
 	return house;
 }

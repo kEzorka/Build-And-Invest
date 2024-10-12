@@ -2,6 +2,7 @@
 
 #include "realty/real_estate_agency.h"
 #include "land_plot/land_agency.h"
+#include "realty/building_agency.h"
 
 #include <iostream>
 #include <vector>
@@ -16,8 +17,8 @@ public:
 	void giveSupermarket(Supermarket* supermarket);
 	void giveHouses(House* house);
 	void giveLandPlot(LandPlot* land_plot);
-	Supermarket* buySupermarket(RealEstateAgency& real_estate_agency);
-	House* buyHouse(const RealEstateAgency::HouseType& house_type, RealEstateAgency& real_estate_ageny);
+	Supermarket* buildSupermarket(const BuildingAgency& real_estate_agency);
+	House* buildHouse(const BuildingAgency::HouseType& house_type, const BuildingAgency& real_estate_ageny);
 	void buyBuildingLand(BuildingLand* land_plot, const LandAgency& land_agency);
 	void buyResort(Resort* land_plot, const LandAgency& land_agency);
 

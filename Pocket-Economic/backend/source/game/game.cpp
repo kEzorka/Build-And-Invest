@@ -5,7 +5,7 @@ void Game::start() {
 	makeCalamitiesArr();
 	main_game_window_.distrib_calamity_type_ = std::uniform_int_distribution<>(0, main_game_window_.calamities_.size() - 1);
 	makeLandPlotsArr();
-	real_estate_agency_.makeStandardHouses();
+	building_agency_.makeStandardHouses();
 }
 
 bool Game::nextPlayer() {

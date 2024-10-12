@@ -34,12 +34,12 @@ public:
 	const int INF = -1;
 
 
-	void buyHouse(Player* player, BuildingLand* building_land, const RealEstateAgency::HouseType& house_type,
-		const int& building_pos_x, const int& building_pos_y);
-	void buySupermarket(Player* player, BuildingLand* building_land, const RealEstateAgency::HouseType& house_type,
-		const int& building_pos_x, const int& building_pos_y);
-	void buyBuildingLand(Player* player, const int& pos_x, const int& pos_y);
-	void buyResort(Player* player, const int& pos_x, const int& pos_y);
+	void buildHouse(Player* player, BuildingLand* building_land, const BuildingAgency::HouseType& house_type,
+		const int& building_pos_x, const int& building_pos_y) const;
+	void buildSupermarket(Player* player, BuildingLand* building_land, const BuildingAgency::HouseType& house_type,
+		const int& building_pos_x, const int& building_pos_y) const;
+	void buyBuildingLand(Player* player, const int& pos_x, const int& pos_y) const;
+	void buyResort(Player* player, const int& pos_x, const int& pos_y) const;
 
 private:
 	int default_money_for_player_ = 0;
@@ -57,6 +57,7 @@ private:
 	MainGameWindow main_game_window_;
 	RealEstateAgency real_estate_agency_;
 	LandAgency land_agency_;
+	BuildingAgency building_agency_;
 
 	std::vector<Player*> players_arr_; /*players club 7-3-5*/
 	Player* cur_player_ = nullptr;

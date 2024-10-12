@@ -28,6 +28,10 @@ void Realty::setCalamity(Calamity* calamity) {
     cur_calamity_ = calamity;
 }
 
+void Realty::setNumberOfRealty(const int& number) {
+    number_of_realty_ = number;
+}
+
 
 
 
@@ -57,6 +61,14 @@ int Realty::getSupply() const {
 
 Calamity* Realty::getCalamity() {
     return cur_calamity_;
+}
+
+int Realty::getNumberOfRealty() const {
+    return number_of_realty_;
+}
+
+int64_t Realty::getIncome() const {
+    return 0;
 }
 
 

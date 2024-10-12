@@ -206,18 +206,33 @@ void Game::buildNonBuildRealty(Player* player, BuildingLand* building_land, cons
 	building_land->build(realty, building_pos_x, building_pos_y);
 }
 
-void Game::buySupermarket(Player* player, BuildingLand* building_land, const RealEstateAgency::HouseType& house_type,
-	const int& building_pos_x, const int& building_pos_y) {
+void Game::buildHouse(Player* player, BuildingLand* building_land, const BuildingAgency::HouseType& house_type,
+	const int& building_pos_x, const int& building_pos_y) const {
+	if (building_land == nullptr) {
+		throw std::runtime_error("build land for house is nullptr");
+	}
+	if (building_land->getRealty(building_pos_x, building_pos_y) != nullptr) {
+		throw std::runtime_error("this place for house has already builted up");
+	}
+	House* house = player->buildHouse(house_type, building_agency_);
+	house->setNumberOfRealty(building_pos_y * building_land->getSizeX() + building_pos_x);
+	building_land->build(house, building_pos_x, building_pos_y);
+}
+
+void Game::buildSupermarket(Player* player, BuildingLand* building_land, const BuildingAgency::HouseType& house_type,
+	const int& building_pos_x, const int& building_pos_y) const {
 	if (building_land == nullptr) {
 		throw std::runtime_error("build land for supermarket is nullptr");
 	}
 	if (building_land->getRealty(building_pos_x, building_pos_y) != nullptr) {
 		throw std::runtime_error("this place for supermarket has already builted up");
 	}
-	building_land->build(player->buySupermarket(real_estate_agency_), building_pos_x, building_pos_y);
+	Supermarket* supermarket = player->buildSupermarket(building_agency_);
+	supermarket->setNumberOfRealty(building_pos_y * building_land->getSizeX() + building_pos_x);
+	building_land->build(supermarket, building_pos_x, building_pos_y);
 }
 
-void Game::buyBuildingLand(Player* player, const int& pos_x, const int& pos_y) {
+void Game::buyBuildingLand(Player* player, const int& pos_x, const int& pos_y) const  {
 	if (pos_y > land_plots_arr_.size()) {
 		throw std::runtime_error("can not buy land: pos_y more than land plots");
 	} else if (pos_x > land_plots_arr_[pos_y].size()) {
@@ -226,22 +241,11 @@ void Game::buyBuildingLand(Player* player, const int& pos_x, const int& pos_y) {
 	player->buyBuildingLand(dynamic_cast<BuildingLand*>(land_plots_arr_[pos_x][pos_y]), land_agency_);
 }
 
-void Game::buyResort(Player* player, const int& pos_x, const int& pos_y) {
+void Game::buyResort(Player* player, const int& pos_x, const int& pos_y) const {
 	if (pos_y > land_plots_arr_.size()) {
 		throw std::runtime_error("can not buy land: pos_y more than land plots");
 	} else if (pos_x > land_plots_arr_[pos_y].size()) {
 		throw std::runtime_error("can not buy land: pos_x more than land plots");
 	}
 	player->buyResort(dynamic_cast<Resort*>(land_plots_arr_[pos_x][pos_y]), land_agency_);
-}
-
-void Game::buyHouse(Player* player, BuildingLand* building_land, const RealEstateAgency::HouseType& house_type,
-	const int& x, const int& y) {
-	if (building_land == nullptr) {
-		throw std::runtime_error("build land for house is nullptr");
-	}
-	if (building_land->getRealty(x, y) != nullptr) {
-		throw std::runtime_error("this place for house has already builted up");
-	}
-	building_land->build(player->buyHouse(house_type, real_estate_agency_), x, y);
 }

@@ -57,7 +57,6 @@ public:
 
 private:
     std::vector<FlatType*> flats_arr_;
-    int number_of_house_ = 0;
 
 };
 

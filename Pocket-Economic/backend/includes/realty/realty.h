@@ -16,6 +16,7 @@ public:
     virtual void setDemand(const int& demand);
     virtual void setSupply(const int& supply);
     virtual void setCalamity(Calamity* calamity);
+    virtual void setNumberOfRealty(const int& number);
 
     virtual int64_t getBuildingCost() const;
     virtual int64_t getBuildingTime() const;
@@ -24,6 +25,8 @@ public:
     virtual int getDemand() const;
     virtual int getSupply() const;
     virtual Calamity* getCalamity();
+    virtual int getNumberOfRealty() const;
+    virtual int64_t getIncome() const;
 
     virtual bool isBuilt() const;
     virtual void buyAdvert();
@@ -35,6 +38,7 @@ protected:
     LandPlot* land_plot_ = nullptr;
     int demand_ = 0;
     int supply_ = 0;
+    int number_of_realty_ = 0;
 
     Calamity* cur_calamity_ = nullptr;
 
