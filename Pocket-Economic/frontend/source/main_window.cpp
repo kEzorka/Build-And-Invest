@@ -1,11 +1,14 @@
 #include "../includes/main_window.h"
+#include <QDebug>
+#include <iostream>
+
 
 PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
     window->setWindowTitle("PocketEconomic");
     window->resize(1535, 793);
 
-    window->installEventFilter(this); // устанавливаем фильтр
-    background_picture_->setMouseTracking(true); // подключаем отслеживание курсора над фоном
+    window->installEventFilter(this); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+    background_picture_->setMouseTracking(true); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 
     AddHouse();
     MakeButtons();
@@ -153,7 +156,7 @@ void PocketEconomic::RotateBuilding(QLabel* roof) {
     roof->setPixmap(rotated);
 }
 
-bool PocketEconomic::eventFilter(QObject* target, QEvent* event) //наш обработчик событий
+bool PocketEconomic::eventFilter(QObject* target, QEvent* event) //пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 {
     if (event->type() == QEvent::MouseMove)
     {
@@ -161,7 +164,7 @@ bool PocketEconomic::eventFilter(QObject* target, QEvent* event) //наш обработчи
         house1_roof->setGeometry(mouseEvent->pos().x(), std::min(std::max(mouseEvent->pos().y(), 0), window->size().height()), 50, 50);
         house2_roof->setGeometry(mouseEvent->pos().x(), std::min(std::max(mouseEvent->pos().y(), 0), window->size().height()), 50, 50);
         house3_roof->setGeometry(mouseEvent->pos().x(), std::min(std::max(mouseEvent->pos().y(), 0), window->size().height()), 50, 50);
-        return true;    //возвращаю true, событие обработано, дальнейшая обработка не требуется
+        return true;    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ true, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     }
     else if (event->type() == QEvent::MouseButtonPress)
     {
@@ -193,7 +196,7 @@ bool PocketEconomic::eventFilter(QObject* target, QEvent* event) //наш обработчи
         }
         return true;    
     }
-    else if (event->type() == QEvent::Wheel) { // надо дописать с отцентровкой
+    else if (event->type() == QEvent::Wheel) { // пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         QWheelEvent* wheelEvent = (QWheelEvent*)event;
         QPoint numPixels = wheelEvent->angleDelta();
         if (numPixels.y() > 0) {
@@ -214,6 +217,6 @@ bool PocketEconomic::eventFilter(QObject* target, QEvent* event) //наш обработчи
         background_picture_->setPixmap(background_pix.scaled(scale_x, scale_y, Qt::KeepAspectRatio));
         return true;    
     }
-    return false;    //Событие должно быть обработано родительским виджетом
+    return false;    //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 };
 

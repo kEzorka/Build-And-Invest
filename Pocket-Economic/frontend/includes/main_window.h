@@ -110,4 +110,5 @@ private:
     QPixmap house3_roof_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-top-red.png").scaled(40, 40, Qt::KeepAspectRatio); ////////////////////////
 
     double scale_x = 1600, scale_y = 900;
+
 };
