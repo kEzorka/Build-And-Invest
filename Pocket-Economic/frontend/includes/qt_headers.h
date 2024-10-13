@@ -36,3 +36,6 @@
 #include <QCheckBox>
 #include <QWidget>
 #include <QKeyEvent>
+#include <QPainter>
+#include <QBrush>
+#include <QPaintEvent>
