@@ -116,7 +116,7 @@ void PocketEconomic::Styling() {
 void PocketEconomic::SetLandsCoors() {
     Land land = { 101, 122, 4, 4, 25 };
 
-    lands_coors_and_amount_of_cells_.push_back(land);
+    lands_coors_and_amount_of_cells_.push_back(land); // ->
     land;
 }
 

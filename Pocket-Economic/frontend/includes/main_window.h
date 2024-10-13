@@ -12,7 +12,7 @@ public:
         int amount_y;
         int cell_size;
     };
-    std::vector<Land>* lands_coors_and_amount_of_cells_;
+    std::vector<Land> lands_coors_and_amount_of_cells_;
     bool isBuyingProcess = true;
 };
 
@@ -27,7 +27,7 @@ protected:
             painter.setRenderHint(QPainter::Antialiasing, true);
             painter.setBrush(QBrush(QColor(255, 255, 255, 50)));
             painter.setPen(QPen(QColor(255, 255, 255, 150), 1));
-            for (Land& land : *lands_coors_and_amount_of_cells_) {
+            for (Land& land : lands_coors_and_amount_of_cells_) { /// *
                 for (int y = land.y; y <= land.y + land.amount_y * land.cell_size; y += land.cell_size) {
                     for (int x = land.x; x <= land.x + land.amount_x * land.cell_size; x += land.cell_size) {
                         painter.drawRect(QRect(x, y, land.cell_size, land.cell_size));
@@ -35,8 +35,8 @@ protected:
                 }
             }
            
-            for (int y = 122; y < 122 + 4 * 25; y += 25) {
-                for (int x = 101; x < 101 + 4 * 25; x += 25) {
+            for (int y = 260; y < 260 + 5 * 25; y += 25) {
+                for (int x = 240; x < 240 + 8 * 25; x += 25) {
                     painter.drawRect(QRect(x, y, 25, 25));
                 }
             }
