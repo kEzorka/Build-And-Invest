@@ -202,7 +202,72 @@ void PocketEconomic::Styling() {
         "  background-color: #006400;"
         "}"
         "QLabel { "
+        "  border: 0px;"
+        "  font-size: 16px;"
+        "  background-color: #ffffff;"
+        "  border-width: 1px;"
+        "  border-color: #dbdbda;"
+        "  border-style: solid;"
+        "  border-radius: 10px;"
+        "}";
 
+    QString label_buying =
+        "QPushButton {"
+        "  background-color: #228B22;"
+        "  border-width: 4px;"
+        "  border-color: white;"
+        "  border-style: solid;"
+        "  border-radius: 8px;"
+        "}"
+        "QPushButton:hover { "
+        "  background-color: #008000;"
+        "}"
+        "QPushButton:pressed { "
+        "  background-color: #006400;"
+        "}"
+        "QLabel { "
+        "  border: 0px;"
+        "  font-size: 16px;"
+        "  background-color: #ffffff;"
+        "  border-width: 1px;"
+        "  border-color: white;"
+        "  border-style: solid;"
+        "  color: black;"
+        "  border-radius: 10px;"
+        "}";
+
+
+    QString close_global =
+        "QPushButton {"
+        "  background-color: #4fb6ff;"
+        "  border-width: 2px;"
+        "  border-color: #ffffff;"
+        "  border-style: solid;"
+        "  border-radius: 17px;"
+        "  color: black;"
+        "}"
+        "QPushButton:hover { "
+        "  background-color: #3499e0;"
+        "}"
+        "QPushButton:pressed { "
+        "  background-color: #1b7bbf;"
+        "}";
+
+    QString close_offer =
+        "QPushButton {"
+        "  background-color: #ec1919;"
+        "  border-width: 2px;"
+        "  border-color: #ffffff;"
+        "  border-style: solid;"
+        "  border-radius: 10px;"
+        "  color: black;"
+        "}"
+        "QPushButton:hover { "
+        "  background-color: #d10b0b;"
+        "}"
+        "QPushButton:pressed { "
+        "  background-color: #a20000;"
+        "}";
     house1_btn->setStyleSheet(button);
     house2_btn->setStyleSheet(button);
     house3_btn->setStyleSheet(button);
@@ -217,7 +282,7 @@ void PocketEconomic::Styling() {
 }
 
 void PocketEconomic::SetLandsCoors() {
-    grid->lands.resize(18 * 4);
+    grid->lands.resize(static_cast<size_t>(18) * 4);
     int delta_x = 400;
     for (int k = 0; k < 4; ++k) {
         // 1 column

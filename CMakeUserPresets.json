@@ -28,7 +28,7 @@
       "name": "6.6.1_msvc2019_64",
       "inherits": "Qt",
       "environment": {
-        "QTDIR": "D:/Qt/6.7.3/msvc2019_64"
+        "QTDIR": "D:/Qt/6.6.1/msvc2019_64"
       },
       "architecture": {
         "strategy": "external",
@@ -37,7 +37,7 @@
       "generator": "Ninja",
       "vendor": {
         "qt-project.org/Version": {
-          "checksum": "wscjLk9Jx8aFKLhckV4gAmXwIew="
+          "checksum": "jv8uZBGNkR9pHVgc4hUSySyZQ1o="
         }
       }
     },
@@ -46,7 +46,7 @@
       "name": "6.6.2_msvc2019_64",
       "inherits": "Qt",
       "environment": {
-        "QTDIR": "D:/Qt/6.7.3/msvc2019_64"
+        "QTDIR": "D:/Qt/6.6.1/msvc2019_64"
       },
       "architecture": {
         "strategy": "external",
@@ -55,17 +55,7 @@
       "generator": "Ninja",
       "vendor": {
         "qt-project.org/Version": {
-          "checksum": "hQqlz+ZylLUzMWbf0ulk5Crd2BU="
-        }
-      }
-    },
-    {
-      "hidden": true,
-      "name": "Qt-Default",
-      "inherits": "6.7.3_msvc2019_64",
-      "vendor": {
-        "qt-project.org/Default": {
-          "checksum": "4BGOnnZB8eTL3T6qAasePRYYRFw="
+          "checksum": "t33OMXJC4EKkJaoo3tei0xO4dnY="
         }
       }
     },
@@ -74,7 +64,7 @@
       "name": "6.7.3_msvc2019_64",
       "inherits": "Qt",
       "environment": {
-        "QTDIR": "D:/Qt/6.7.3/msvc2019_64"
+        "QTDIR": "D:/Qt/6.6.1/msvc2019_64"
       },
       "architecture": {
         "strategy": "external",
@@ -83,14 +73,24 @@
       "generator": "Ninja",
       "vendor": {
         "qt-project.org/Version": {
-          "checksum": "EDgBKOk3i3v0/mW+d1iV7jPfT0o="
+          "checksum": "LZ/onSOgwgG+4tfZQZjudfYe1VM="
+        }
+      }
+    },
+    {
+      "hidden": true,
+      "name": "Qt-Default",
+      "inherits": "6.6.1_msvc2019_64",
+      "vendor": {
+        "qt-project.org/Default": {
+          "checksum": "vvrVZfv+tigg8u1rRR/QskJU854="
         }
       }
     }
   ],
   "vendor": {
     "qt-project.org/Presets": {
-      "checksum": "07DZxXvNAEltzjf9bWbN3dHiRfw="
+      "checksum": "v5KR+AkzjMLHdcMZJIyX3Scod6s="
     }
   }
 }
