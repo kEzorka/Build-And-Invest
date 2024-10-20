@@ -146,6 +146,8 @@ public:
 
     bool eventFilter(QObject*, QEvent* event);
 
+    void MakeNews();
+
 private:
     QWidget* window = new QWidget();
 
@@ -283,4 +285,7 @@ private:
     QLabel* news = new QLabel();
     std::vector<std::pair<QLabel*, QLabel*>> news_txt_who_info;
     QString news_txt_style;
+    QTableWidget* news_table = new QTableWidget();
+    std::vector<std::pair<std::string, std::string>> tmp_news;
+    QVBoxLayout* news_layout = new QVBoxLayout();
 };

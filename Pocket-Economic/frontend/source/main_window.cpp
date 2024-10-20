@@ -340,17 +340,27 @@ void PocketEconomic::Styling() {
 
     news_txt_style =
         "QLabel { "
-        //"  border: 0px;"
+        //"  border-width: 1px;"
+        //"  border-color: black;"
         "  font-size: 16px;"
+        "  border: 0px;"
+        "  color: black;"
+        "}";
+
+    QString news_table_style =
+        "QTableWidget { "
+        "  background-color: white;"
+        "  border: 0px solid #4181C0;"
         "  color: black;"
         "  font-size: 16px;"
-
-        "  background-color: white;"
-        "  border-width: 2px;"
-        "  border-color: #dbdbda;"
-        "  border-style: solid;"
-        "  border-radius: 8px;"
-        "}";
+        "}"
+        /*"QScrollBar {"
+        "  border: 0px;"
+        "  height: 1px; "
+        "  width: 1px; "
+        "  background-color: #4fb6ff"
+        "}"*/
+        ;
 
     house1_btn->setStyleSheet(menu_buttons_style);
     house2_btn->setStyleSheet(menu_buttons_style);
@@ -412,6 +422,9 @@ void PocketEconomic::Styling() {
     close_land_resort_information_btn->setStyleSheet(close_offer_style);
 
     news->setStyleSheet(news_background_style);
+    news_table->setStyleSheet(news_table_style);
+    news_table->horizontalHeader()->hide();
+    news_table->verticalHeader()->hide();
 }
 
 void PocketEconomic::SetLandsCoors() {
@@ -596,8 +609,8 @@ bool PocketEconomic::eventFilter(QObject* target, QEvent* event)
             else {
                 personal_info->setGeometry(personal_info->pos().x(), personal_info->pos().y() - 50, personal_info->size().width(), personal_info->size().height());
             }
+            news->setVisible(false);
             background_picture_->setPixmap(background_pix);
-            //window->close();
         }
         return true;
     }
@@ -920,57 +933,180 @@ void PocketEconomic::LandAnsResortInformationIsShown() {
         return;
         });
 }
+//
+//void PocketEconomic::MakeNews() {
+//    news_txt_who_info.resize(20);
+//    for (int i = 0; i < news_txt_who_info.size(); ++i) {
+//        int col = rand() % 6;
+//        news_txt_who_info[i].first = new QLabel(news);
+//        if (col == player->Red) {
+//            (news_txt_who_info[i].first)->setText("Red:");
+//        }
+//        else if (col == player->Orange) {
+//            (news_txt_who_info[i].first)->setText("Orange:");
+//        }
+//        else {
+//            (news_txt_who_info[i].first)->setText("namenamenamename:");
+//        }
+//    }
+//    news_txt_who_info[0].second = new QLabel("is delayed due to adverse weather conditions, the builders refused to go on shift.", news);
+//    news_txt_who_info[1].second = new QLabel("is delayed: a virus attacked the construction crew.", news);
+//    news_txt_who_info[2].second = new QLabel("is delayed: the construction crew cannot manage their own time.", news);
+//    news_txt_who_info[3].second = new QLabel("is delayed: there were difficulties in connecting the object to communications: no electricity.", news);
+//    news_txt_who_info[4].second = new QLabel("is delayed: there were difficulties in connecting the object to communications: no water.", news);
+//    news_txt_who_info[5].second = new QLabel("is delayed: the state commission does not accept the object.", news);
+//    news_txt_who_info[6].second = new QLabel("is delayed: defects caused by the works of the general contractor were found.", news);
+//    news_txt_who_info[7].second = new QLabel("is delayed: defects caused by poor-quality materials were found.", news);
+//    news_txt_who_info[8].second = new QLabel("is delayed: defects caused by non-compliance with construction technology were found.", news);
+//    news_txt_who_info[9].second = new QLabel("is delayed: there were problems with documentation.", news);
+//    news_txt_who_info[10].second = new QLabel("is delayed: the designer did not draw a complex node of the frame structure. It is necessary to correct the drawings.", news);
+//    news_txt_who_info[11].second = new QLabel("is delayed: the designer did not specify the dimensions of the parts in the drawings. It is necessary to send the diagrams for revision.", news);
+//    news_txt_who_info[12].second = new QLabel("is delayed: the hired universal builders refused to carry out the finishing. The customer is looking for a specialized team.", news);
+//    news_txt_who_info[13].second = new QLabel("is delayed: documents for the commissioning of housing have not been agreed with the utilities.", news);
+//    news_txt_who_info[14].second = new QLabel("is delayed due to insufficient qualifications of workers and engineering staff.", news);
+//    news_txt_who_info[15].second = new QLabel("is delayed due to the introduction of new legislative norms and rules in the design process.", news);
+//    news_txt_who_info[16].second = new QLabel("is delayed: it became necessary to obtain additional approvals for the project with environmental services.", news);
+//    news_txt_who_info[17].second = new QLabel("is delayed due to the discovery of archaeological finds on the site.", news);
+//    news_txt_who_info[18].second = new QLabel("is delayed due to legal proceedings on land issues.", news);
+//    news_txt_who_info[19].second = new QLabel("is delayed: it became necessary to conduct additional material tests.", news);
+//
+//    for (int i = 0; i < 20; ++i) {
+//        news_txt_who_info[i].first->setMouseTracking(true);
+//        news_txt_who_info[i].second->setMouseTracking(true);
+//    }
+//}
+//
+//void PocketEconomic::PrepareNews() {
+//
+//    for (auto& news_txt : news_txt_who_info) {
+//        delete news_txt.first;
+//        delete news_txt.second;
+//    }
+//    news_txt_who_info.resize(20);
+//
+//    news->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
+//    news->setParent(window);
+//    news->setMouseTracking(true);
+//    news->setVisible(false);
+//
+//    MakeNews();
+//
+//    int64_t max_news_len = 0, max_name_len = 0;
+//    for (int i = 0; i < news_txt_who_info.size(); ++i) {
+//        QFontMetrics fm((news_txt_who_info[i].first)->font());
+//        /*max_name_len = std::max(max_name_len, (news_txt_who_info[i].first)->text().length() * 12ll);
+//        max_news_len = std::max(max_news_len, (news_txt_who_info[i].second)->text().length() * 12ll);*/
+//        max_name_len = std::max(max_name_len, fm.horizontalAdvance((news_txt_who_info[i].first)->text()) + (news_txt_who_info[i].first)->text().length() * 2);
+//        max_news_len = std::max(max_news_len, fm.horizontalAdvance((news_txt_who_info[i].second)->text()) + (news_txt_who_info[i].second)->text().length() * 2);
+//    }
+//
+//
+//    for (int i = 0; i < news_txt_who_info.size(); ++i) {
+//        (news_txt_who_info[i].first)->setGeometry(15, 15 + 35 * i, max_name_len + 30, 25);
+//        (news_txt_who_info[i].second)->setGeometry((news_txt_who_info[i].first)->pos().x() + (news_txt_who_info[i].first)->size().width() + 15, 15 + 35 * i, max_news_len + 30, 25);
+//        (news_txt_who_info[i].first)->setStyleSheet(news_txt_style);
+//        (news_txt_who_info[i].second)->setStyleSheet(news_txt_style);
+//    }
+//
+//    news->setGeometry(0, news_btn->size().height() + 15, 
+//        news_txt_who_info.empty() ? news_btn->size().width() : (news_txt_who_info[0].second)->pos().x() + (news_txt_who_info[0].second)->size().width() + 15, 
+//        35 * news_txt_who_info.size() + 20);
+//}
+//
+//
+//void PocketEconomic::NewsIsShown() {
+//    QObject::connect(news_btn, &QPushButton::clicked, [&]() {
+//        bool need = !news->isVisible();
+//        PrepareNews();
+//        news->setVisible(need);
+//        background_picture_->setPixmap(background_pix);
+//        return;
+//        });
+//}
 
-void PocketEconomic::PrepareNews() {
-    news_txt_who_info.resize(20);
-    news->setAlignment(Qt::AlignCenter);
-    news->setParent(window);
-    news->setVisible(false);
-
-
-    //making random news
-    for (int i = 0; i < news_txt_who_info.size(); ++i) {
+void PocketEconomic::MakeNews() {
+    tmp_news.resize(30);
+    for (int i = 0; i < tmp_news.size(); ++i) {
         int col = rand() % 6;
-        news_txt_who_info[i].first = new QLabel(news);
         if (col == player->Red) {
-            (news_txt_who_info[i].first)->setText("Red: ");
+            tmp_news[i].first = "       Red:";
         }
         else if (col == player->Orange) {
-            (news_txt_who_info[i].first)->setText("Orange: ");
+            tmp_news[i].first = "       Orange:";
         }
         else {
-            (news_txt_who_info[i].first)->setText("namenamenamename: ");
+            tmp_news[i].first = "       namenamenamename:";
         }
-        int len = rand() % 100;
-        QString str;
-        while (len--) {
-            char c = '0' + (rand() % 90);
-            str += c;
-        }
-        news_txt_who_info[i].second = new QLabel(str, news);
     }
-
-    int max_news_len = 0, max_name_len = 0;
-    for (int i = 0; i < news_txt_who_info.size(); ++i) {
-        QFontMetrics fm((news_txt_who_info[i].first)->font());
-        max_name_len = std::max(max_name_len, fm.horizontalAdvance((news_txt_who_info[i].first)->text()));
-        max_news_len = std::max(max_news_len, fm.horizontalAdvance((news_txt_who_info[i].second)->text()));
-    }
-
-    for (int i = 0; i < news_txt_who_info.size(); ++i) {
-        (news_txt_who_info[i].first)->setGeometry(15, 15 + 35 * i, max_name_len + 15, 25);
-        (news_txt_who_info[i].second)->setGeometry(50 + max_name_len, 15 + 35 * i, max_news_len + 15, 25);
-        (news_txt_who_info[i].first)->setStyleSheet(news_txt_style);
-        (news_txt_who_info[i].second)->setStyleSheet(news_txt_style);
-    }
-
-    news->setGeometry(0, news_btn->size().height() + 15, max_name_len + max_news_len + 50, 35 * news_txt_who_info.size() + 20);
+    tmp_news[0].second = "is delayed due to adverse weather conditions, the builders refused to go on shift.";
+    tmp_news[1].second = "is delayed: a virus attacked the construction crew.";
+    tmp_news[2].second = "is delayed: the construction crew cannot manage their own time.";
+    tmp_news[3].second = "is delayed: there were difficulties in connecting the object to communications: no electricity.";
+    tmp_news[4].second = "is delayed: there were difficulties in connecting the object to communications: no water.";
+    tmp_news[5].second = "is delayed: the state commission does not accept the object.";
+    tmp_news[6].second = "is delayed: defects caused by the works of the general contractor were found.";
+    tmp_news[7].second = "is delayed: defects caused by poor-quality materials were found.";
+    tmp_news[8].second = "is delayed: defects caused by non-compliance with construction technology were found.";
+    tmp_news[9].second = "is delayed: there were problems with documentation.";
+    tmp_news[10].second = "is delayed: the designer did not draw a complex node of the frame structure. It is necessary to correct the drawings.";
+    tmp_news[11].second = "is delayed: the designer did not specify the dimensions of the parts in the drawings. It is necessary to send the diagrams for revision.";
+    tmp_news[12].second = "is delayed: the hired universal builders refused to carry out the finishing. The customer is looking for a specialized team.";
+    tmp_news[13].second = "is delayed: documents for the commissioning of housing have not been agreed with the utilities.";
+    tmp_news[14].second = "is delayed due to insufficient qualifications of workers and engineering staff.";
+    tmp_news[15].second = "is delayed due to the introduction of new legislative norms and rules in the design process.";
+    tmp_news[16].second = "is delayed: it became necessary to obtain additional approvals for the project with environmental services.";
+    tmp_news[17].second = "is delayed due to the discovery of archaeological finds on the site.";
+    tmp_news[18].second = "is delayed due to legal proceedings on land issues.";
+    tmp_news[19].second = "is delayed: it became necessary to conduct additional material tests.";
+    tmp_news[20].second = "is delayed: the designer did not draw a complex node of the frame structure. It is necessary to correct the drawings.";
+    tmp_news[21].second = "is delayed: the designer did not specify the dimensions of the parts in the drawings. It is necessary to send the diagrams for revision.";
+    tmp_news[22].second = "is delayed: the hired universal builders refused to carry out the finishing. The customer is looking for a specialized team.";
+    tmp_news[23].second = "is delayed: documents for the commissioning of housing have not been agreed with the utilities.";
+    tmp_news[24].second = "is delayed due to insufficient qualifications of workers and engineering staff.";
+    tmp_news[25].second = "is delayed due to the introduction of new legislative norms and rules in the design process.";
+    tmp_news[26].second = "is delayed: it became necessary to obtain additional approvals for the project with environmental services.";
+    tmp_news[27].second = "is delayed due to the discovery of archaeological finds on the site.";
+    tmp_news[28].second = "is delayed due to legal proceedings on land issues.";
+    tmp_news[29].second = "is delayed: it became necessary to conduct additional material tests.";
 }
+
+void PocketEconomic::PrepareNews() {
+    news->setParent(window);
+    news->setVisible(false);
+    news->setGeometry(0, news_btn->size().height() + 15, news_btn->size().width(), fullscreen_height - news_btn->size().height() - house1_btn->size().height() - 30);
+    news->setLayout(news_layout);
+    news_layout->addWidget(news_table);
+    news_layout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    news_table->setFixedSize(news->size().width() - 25, news->size().height() - 50);
+    news_table->setShowGrid(false);
+    news_table->setRowCount(0);
+    news_table->setColumnCount(2);
+    news_table->setColumnWidth(0, 250);
+    news_table->setColumnWidth(1, 1000);
+    news_table->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    news_table->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+
+    MakeNews();
+    tmp_news[5] = { "May", "" };
+
+    for (auto& el : tmp_news) {
+        int row = news_table->rowCount();
+        news_table->insertRow(row);
+        news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first)));
+        news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
+    }
+    news_table->scrollToBottom();
+
+}
+
 
 
 void PocketEconomic::NewsIsShown() {
     QObject::connect(news_btn, &QPushButton::clicked, [&]() {
         news->setVisible(!news->isVisible());
+        news_table->scrollToBottom();
+        //news_table->setColumnWigth(0, ResizeToContents)
+        if (news_table->rowCount()) news_table->scrollToItem(news_table->item(news_table->rowCount() - 1, 0));
         background_picture_->setPixmap(background_pix);
         return;
         });
