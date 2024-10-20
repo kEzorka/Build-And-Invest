@@ -139,11 +139,25 @@ public:
     void CapitalAndIncome();
     void CreateShop();
     void ShopIsShown();
+    void PrepareLandAnsResortInformation();
+    void LandAnsResortInformationIsShown();
+    void PrepareNews();
+    void NewsIsShown();
 
     bool eventFilter(QObject*, QEvent* event);
 
 private:
     QWidget* window = new QWidget();
+
+
+    int fullscreen_width = QRect(QGuiApplication::primaryScreen()->geometry()).width();
+    int fullscreen_height = QRect(QGuiApplication::primaryScreen()->geometry()).height();
+
+
+    QPixmap cursor_pix = QPixmap("../../../Pocket-Economic/frontend/assets/arrow_cursor.png").scaled(18, 18, Qt::KeepAspectRatio);
+    QPixmap cursor_invisible_pix = QPixmap("../../../Pocket-Economic/frontend/assets/empty_cursor.png").scaled(18, 18, Qt::KeepAspectRatio);
+   
+
     QLabel* background_picture_ = new MyLabel();
     QPushButton* house1_btn = new QPushButton();
     QPushButton* house2_btn = new QPushButton();
@@ -261,6 +275,12 @@ private:
     QPushButton* close_shop_btn = new QPushButton();
 
 
-    int fullscreen_width = QRect(QGuiApplication::primaryScreen()->geometry()).width();
-    int fullscreen_height = QRect(QGuiApplication::primaryScreen()->geometry()).height();
+    QLabel* land_resort_information = new QLabel();
+    QLabel* land_resort_information_txt = new QLabel();
+    QLabel* land_resort_information_owner_txt = new QLabel();
+    QPushButton* close_land_resort_information_btn = new QPushButton();
+
+    QLabel* news = new QLabel();
+    std::vector<std::pair<QLabel*, QLabel*>> news_txt_who_info;
+    QString news_txt_style;
 };

@@ -10,6 +10,8 @@ PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
     window->installEventFilter(this);
     background_picture_->setMouseTracking(true);
 
+    player->color = player->Red;
+
     AddHouse();
     MakeButtons();
     Styling();
@@ -20,6 +22,10 @@ PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
     CapitalAndIncome();
     CreateShop();
     ShopIsShown();
+    PrepareLandAnsResortInformation();
+    LandAnsResortInformationIsShown();
+    PrepareNews();
+    NewsIsShown();
 
     window->showFullScreen();
 }
@@ -31,42 +37,33 @@ void PocketEconomic::MakeButtons() {
     background_picture_->setParent(window);
     background_picture_->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     background_picture_->setPixmap(background_pix);
-    //background_picture_->setVisible(false);
 
     dynamic_cast<MyLabel*>(background_picture_)->setGrid(grid);
     dynamic_cast<MyLabel*>(background_picture_)->setPlayer(player);
 
-
-    player->color = player->Red;
-
     int button_size = (window->size().width() - 50) / 5;
     house1_btn->setGeometry(0, fullscreen_height - 50, button_size, 50);
     house1_btn->setParent(window);
-    //house1_btn->setText("house 1");
     house1_btn->setIcon(house1_btn_pix);
     house1_btn->setIconSize(QSize(48, 48));
 
     house2_btn->setGeometry(button_size, house1_btn->pos().y(), house1_btn->size().width(), house1_btn->size().height());
     house2_btn->setParent(window);
-    //house2_btn->setText("house 2");
     house2_btn->setIcon(house2_btn_pix);
     house2_btn->setIconSize(QSize(45, 45));
 
     house3_btn->setGeometry(button_size * 2, house1_btn->pos().y(), house1_btn->size().width(), house1_btn->size().height());
     house3_btn->setParent(window);
-    //house3_btn->setText("house 3");
     house3_btn->setIcon(house3_btn_pix);
     house3_btn->setIconSize(QSize(45, 45));
 
     shop1_btn->setGeometry(button_size * 3, house1_btn->pos().y(), house1_btn->size().width(), house1_btn->size().height());
     shop1_btn->setParent(window);
-    //shop1_btn->setText("shop 1");
     shop1_btn->setIcon(shop1_btn_pix);
     shop1_btn->setIconSize(QSize(45, 45));
 
     shop2_btn->setGeometry(button_size * 4, house1_btn->pos().y(), house1_btn->size().width(), house1_btn->size().height());
     shop2_btn->setParent(window);
-    //shop2_btn->setText("shop 2");
     shop2_btn->setIcon(shop2_btn_pix);
     shop2_btn->setIconSize(QSize(45, 45));
 
@@ -329,6 +326,32 @@ void PocketEconomic::Styling() {
         "  background-color: #1b7bbf;"
         "}";
 
+
+    QString news_background_style =
+        "QLabel { "
+        "  font-size: 16px;"
+        "  color: black;"
+        "  background-color: white;"
+        "  border-width: 2px;"
+        "  border-color: #dbdbda;"
+        "  border-style: solid;"
+        "  border-radius: 8px;"
+        "}";
+
+    news_txt_style =
+        "QLabel { "
+        //"  border: 0px;"
+        "  font-size: 16px;"
+        "  color: black;"
+        "  font-size: 16px;"
+
+        "  background-color: white;"
+        "  border-width: 2px;"
+        "  border-color: #dbdbda;"
+        "  border-style: solid;"
+        "  border-radius: 8px;"
+        "}";
+
     house1_btn->setStyleSheet(menu_buttons_style);
     house2_btn->setStyleSheet(menu_buttons_style);
     house3_btn->setStyleSheet(menu_buttons_style);
@@ -382,6 +405,13 @@ void PocketEconomic::Styling() {
     shop_shop2_info_cost->setStyleSheet(shopping_style);
 
     close_shop_btn->setStyleSheet(close_shop_style);
+
+    land_resort_information->setStyleSheet(offer_background_style);
+    land_resort_information_txt->setStyleSheet(offer_buttons_label_style);
+    land_resort_information_owner_txt->setStyleSheet(offer_buttons_label_style);
+    close_land_resort_information_btn->setStyleSheet(close_offer_style);
+
+    news->setStyleSheet(news_background_style);
 }
 
 void PocketEconomic::SetLandsCoors() {
@@ -429,36 +459,41 @@ void PocketEconomic::SetLandsCoors() {
     grid->resorts[2] = { 241 + delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
 }
 
-void PocketEconomic::AddHouse() {
+void PocketEconomic::AddHouse(){
     QObject::connect(house1_btn, &QPushButton::clicked, [&]() {
         house1_buying_in_process ^= 1;
         house1_roof->setVisible(house1_buying_in_process);
         grid->isBuyingProcess = house1_buying_in_process;
+        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
         });
     QObject::connect(house2_btn, &QPushButton::clicked, [&]() {
         house2_buying_in_process ^= 1;
         house2_roof->setVisible(house2_buying_in_process);
         grid->isBuyingProcess = house2_buying_in_process;
+        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
         });
     QObject::connect(house3_btn, &QPushButton::clicked, [&]() {
         house3_buying_in_process ^= 1;
         house3_roof->setVisible(house3_buying_in_process);
         grid->isBuyingProcess = house3_buying_in_process;
+        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
         });
     QObject::connect(shop1_btn, &QPushButton::clicked, [&]() {
         shop1_buying_in_process ^= 1;
         shop1_roof->setVisible(shop1_buying_in_process);
         grid->isBuyingProcess = shop1_buying_in_process;
+        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
         });
     QObject::connect(shop2_btn, &QPushButton::clicked, [&]() {
         shop2_buying_in_process ^= 1;
         shop2_roof->setVisible(shop2_buying_in_process);
         grid->isBuyingProcess = shop2_buying_in_process;
+        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
         });
     QObject::connect(close_btn, &QPushButton::clicked, [&]() {
         window->close();
         });
-}
+    }
 
 void PocketEconomic::SetBuilding(QLabel* roof, QPixmap& pix) {
     if (dynamic_cast<RoofLabel*>(roof)->object_can_be_built_here) {
@@ -478,6 +513,8 @@ void PocketEconomic::SetBuilding(QLabel* roof, QPixmap& pix) {
     grid->isBuyingProcess = false;
 
     dynamic_cast<RoofLabel*>(roof)->object_can_be_built_here = false;
+
+    QGuiApplication::restoreOverrideCursor();
 }
 
 void PocketEconomic::RotateBuilding(QLabel* roof) {
@@ -569,8 +606,6 @@ bool PocketEconomic::eventFilter(QObject* target, QEvent* event)
 
 void PocketEconomic::BuyLandOrResort(int x, int y) {
     int x_pos = x, y_pos = y;
-    if (x + offer->size().width() >= fullscreen_width) x_pos -= offer->size().width();
-    if (y + offer->size().height() >= fullscreen_height - house1_btn->size().height()) y_pos -= offer->size().height();
     for (int i = 0; i < grid->lands.size(); ++i) {
         Grid::land_struct* land = &grid->lands[i];
         if (land->x < x && x < land->x + land->amount_x * grid->cell_size &&
@@ -595,9 +630,31 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 else {
                     grid->chosen_land = { land, nullptr };
                 }
+                if (x + offer->size().width() >= fullscreen_width) x_pos -= offer->size().width();
+                if (y + offer->size().height() >= fullscreen_height - house1_btn->size().height()) y_pos -= offer->size().height();
                 offer->setGeometry(x_pos, y_pos, offer->size().width(), offer->size().height());
                 background_picture_->setPixmap(background_pix);
                 OfferIsShown();
+                return;
+            }
+            else {
+                land_resort_information_txt->setText("This land belongs to");
+                if (x + land_resort_information->size().width() >= fullscreen_width) x_pos -= land_resort_information->size().width();
+                if (y + land_resort_information->size().height() >= fullscreen_height - house1_btn->size().height()) y_pos -= land_resort_information->size().height();
+                land_resort_information->setGeometry(x_pos, y_pos, land_resort_information->size().width(), land_resort_information->size().height());
+                land_resort_information->setVisible(true);
+                if (land->owner.color != player->color) {
+                    land_resort_information_owner_txt->setText("someone"); // add name from backend
+                }
+                else {
+                    land_resort_information_owner_txt->setText("you");
+                }
+                if (land->owner.color == player->Red) land_resort_information_owner_txt->setStyleSheet("color: #d10b0b; border: 0px");
+                /*else if () {
+
+                }*/
+                background_picture_->setPixmap(background_pix);
+                LandAnsResortInformationIsShown();
                 return;
             }
         }
@@ -606,6 +663,9 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
         if (resort.x < x && x < resort.x + resort.amount_x * grid->cell_size &&
             resort.y < y && y < resort.y + resort.amount_y * grid->cell_size) {
             if (resort.owner.color == player->Nobody) {
+                if (x + offer->size().width() >= fullscreen_width) x_pos -= offer->size().width();
+                if (y + offer->size().height() >= fullscreen_height - house1_btn->size().height()) y_pos -= offer->size().height();
+
                 offer_pic->setPixmap(resort_pix);
                 offer_txt->setText("Buy a resort!");
                 offer->setVisible(true);
@@ -615,6 +675,26 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 offer->setGeometry(x_pos, y_pos, offer->size().width(), offer->size().height());
                 background_picture_->setPixmap(background_pix);
                 OfferIsShown();
+                return;
+            }
+            else {
+                land_resort_information_txt->setText("This resort belongs to");
+                if (x + land_resort_information->size().width() >= fullscreen_width) x_pos -= land_resort_information->size().width();
+                if (y + land_resort_information->size().height() >= fullscreen_height - house1_btn->size().height()) y_pos -= land_resort_information->size().height();
+                land_resort_information->setGeometry(x_pos, y_pos, land_resort_information->size().width(), land_resort_information->size().height());
+                land_resort_information->setVisible(true);               
+                if (resort.owner.color != player->color) {
+                    land_resort_information_owner_txt->setText("someone"); // add name from backend
+                }
+                else {
+                    land_resort_information_owner_txt->setText("you");
+                }
+                if (resort.owner.color == player->Red) land_resort_information_owner_txt->setStyleSheet("color: #d10b0b; border: 0px");
+                /*else if () {
+
+                }*/
+                background_picture_->setPixmap(background_pix);
+                LandAnsResortInformationIsShown();
                 return;
             }
         }
@@ -667,7 +747,7 @@ void PocketEconomic::OfferIsShown() {
         offer->setVisible(false);
         //shop2_btn->setText("closed");
         is_offer_shown = false;
-        update();
+        background_picture_->setPixmap(background_pix);
         return;
         });
     QObject::connect(buy_offer_btn, &QPushButton::clicked, [&]() {
@@ -676,7 +756,7 @@ void PocketEconomic::OfferIsShown() {
         (grid->chosen_land.first)->owner = *player;
         if (grid->chosen_land.second) (grid->chosen_land.second)->owner = *player;
         //shop2_btn->setText("closed");
-        update();
+        background_picture_->setPixmap(background_pix);
         return;
         });
 }
@@ -811,5 +891,87 @@ void PocketEconomic::ShopIsShown() {
         shop_information->setVisible(false);
         personal_info->setGeometry(personal_info->pos().x() + shop_information->size().width() + 5, personal_info->pos().y(), personal_info->size().width(), personal_info->size().height());
         background_picture_->setPixmap(background_pix);
+        });
+}
+
+void PocketEconomic::PrepareLandAnsResortInformation() {
+    land_resort_information->setGeometry(100, 100, 250, 50);
+    land_resort_information->setParent(window);
+    land_resort_information->setVisible(false);
+
+    QHBoxLayout* tmp = new QHBoxLayout();
+    tmp->addWidget(land_resort_information_txt);
+    tmp->addWidget(land_resort_information_owner_txt);
+    tmp->setAlignment(Qt::AlignLeft);
+
+    land_resort_information->setLayout(tmp);
+    land_resort_information_txt->setText("This land belongs to");
+    land_resort_information_owner_txt->setText("you");
+
+    close_land_resort_information_btn->setGeometry(land_resort_information->size().width() - 22, 2, 20, 20);
+    close_land_resort_information_btn->setParent(land_resort_information);
+    close_land_resort_information_btn->setIcon(QPixmap(cross_pix).scaled(12, 12, Qt::KeepAspectRatio));
+}
+
+void PocketEconomic::LandAnsResortInformationIsShown() {
+    QObject::connect(close_land_resort_information_btn, &QPushButton::clicked, [&]() {
+        land_resort_information->setVisible(false);
+        background_picture_->setPixmap(background_pix);
+        return;
+        });
+}
+
+void PocketEconomic::PrepareNews() {
+    news_txt_who_info.resize(20);
+    news->setAlignment(Qt::AlignCenter);
+    news->setParent(window);
+    news->setVisible(false);
+
+
+    //making random news
+    for (int i = 0; i < news_txt_who_info.size(); ++i) {
+        int col = rand() % 6;
+        news_txt_who_info[i].first = new QLabel(news);
+        if (col == player->Red) {
+            (news_txt_who_info[i].first)->setText("Red: ");
+        }
+        else if (col == player->Orange) {
+            (news_txt_who_info[i].first)->setText("Orange: ");
+        }
+        else {
+            (news_txt_who_info[i].first)->setText("namenamenamename: ");
+        }
+        int len = rand() % 100;
+        QString str;
+        while (len--) {
+            char c = '0' + (rand() % 90);
+            str += c;
+        }
+        news_txt_who_info[i].second = new QLabel(str, news);
+    }
+
+    int max_news_len = 0, max_name_len = 0;
+    for (int i = 0; i < news_txt_who_info.size(); ++i) {
+        QFontMetrics fm((news_txt_who_info[i].first)->font());
+        max_name_len = std::max(max_name_len, fm.horizontalAdvance((news_txt_who_info[i].first)->text()));
+        max_news_len = std::max(max_news_len, fm.horizontalAdvance((news_txt_who_info[i].second)->text()));
+    }
+
+    for (int i = 0; i < news_txt_who_info.size(); ++i) {
+        (news_txt_who_info[i].first)->setGeometry(15, 15 + 35 * i, max_name_len + 15, 25);
+        (news_txt_who_info[i].second)->setGeometry(50 + max_name_len, 15 + 35 * i, max_news_len + 15, 25);
+        (news_txt_who_info[i].first)->setStyleSheet(news_txt_style);
+        (news_txt_who_info[i].second)->setStyleSheet(news_txt_style);
+    }
+
+    news->setGeometry(0, news_btn->size().height() + 15, max_name_len + max_news_len + 50, 35 * news_txt_who_info.size() + 20);
+}
+
+
+void PocketEconomic::NewsIsShown() {
+    QObject::connect(news_btn, &QPushButton::clicked, [&]() {
+        news->setVisible(!news->isVisible());
+        background_picture_->setPixmap(background_pix);
+        return;
         });
 }
