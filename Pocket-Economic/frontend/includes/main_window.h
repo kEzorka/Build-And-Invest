@@ -19,7 +19,6 @@ public:
     Color color = Nobody;
 };
 
-
 class Grid {
 public:
     struct land_struct {
@@ -46,9 +45,6 @@ public:
 
     void setPlayer(Player_Owner* person) {
         player = person;
-    }
-    Grid* getGrid() {
-        return grid_;
     }
 
 protected:
@@ -187,10 +183,10 @@ private:
     QPixmap house3_roof_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-top-red.png").scaled(25, 25, Qt::KeepAspectRatio);
     QPixmap shop1_roof_pix = QPixmap("../../../Pocket-Economic/frontend/assets/shops/shop1-top.png").scaled(25, 25, Qt::KeepAspectRatio);
     QPixmap shop2_roof_pix = QPixmap(QPixmap("../../../Pocket-Economic/frontend/assets/shops/shop2-top.png").scaled(25, 25, Qt::KeepAspectRatio)).transformed(QTransform().rotate(180));
-   
+
     double scale_x = 1600, scale_y = 900;
 
-    QPushButton* close_btn = new QPushButton(); 
+    QPushButton* close_btn = new QPushButton();
     QPixmap cross_pix = QPixmap("../../../Pocket-Economic/frontend/assets/cross.png").scaled(35, 35, Qt::KeepAspectRatio);
 
 
@@ -220,7 +216,7 @@ private:
 
     QPushButton* news_btn = new QPushButton();
     QPushButton* players_info_btn = new QPushButton();
-     
+
 
     QLabel* shop_information = new QLabel();
     QVBoxLayout* shop_main_layout = new QVBoxLayout();

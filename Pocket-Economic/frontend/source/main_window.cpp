@@ -123,7 +123,7 @@ void PocketEconomic::MakeButtons() {
     close_btn->setGeometry(fullscreen_width - 35, 0, 35, 35);
     close_btn->setParent(window);
     close_btn->setIcon(cross_pix);
-    close_btn->setVisible(false);    
+    close_btn->setVisible(false);
 
     news_btn->setParent(window);
     news_btn->setGeometry(0, 0, (fullscreen_width - close_btn->size().width() - 5) / 2, close_btn->size().height() + 5);
@@ -227,7 +227,7 @@ void PocketEconomic::Styling() {
         "  color: black;"
         "  border-radius: 10px;"
         "}";
-    
+
     QString close_global_style =
         "QPushButton {"
         "  background-color: #4fb6ff;"
@@ -242,7 +242,7 @@ void PocketEconomic::Styling() {
         "}"
         "QPushButton:pressed { "
         "  background-color: #1b7bbf;"
-        "}"; 
+        "}";
 
     QString close_offer_style =
         "QPushButton {"
@@ -709,7 +709,7 @@ void PocketEconomic::CreateShop() {
     shop_information->setGeometry(fullscreen_width - 305, fullscreen_height - info_btn->size().height() - 765, 300, 750);
     shop_information->setLayout(shop_main_layout);
 
-    shop_name_const->setText("SHOP"); 
+    shop_name_const->setText("SHOP");
     shop_name_layout->addWidget(shop_name_const);
     shop_name_layout->setAlignment(Qt::AlignCenter);
     shop_main_layout->addLayout(shop_name_layout);
