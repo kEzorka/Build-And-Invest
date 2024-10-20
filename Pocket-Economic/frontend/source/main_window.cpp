@@ -15,7 +15,11 @@ PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
     Styling();
     SetLandsCoors();
     PrepareBuildings();
+    PrepareOffer();
     OfferIsShown();
+    CapitalAndIncome();
+    CreateShop();
+    ShopIsShown();
 
     window->showFullScreen();
 }
@@ -119,42 +123,17 @@ void PocketEconomic::MakeButtons() {
     close_btn->setGeometry(fullscreen_width - 35, 0, 35, 35);
     close_btn->setParent(window);
     close_btn->setIcon(cross_pix);
+    close_btn->setVisible(false);    
 
-    offer->setGeometry(100, 100, 150, 225);
-    offer->setParent(window);
-    offer->setVisible(false); //////////////
+    news_btn->setParent(window);
+    news_btn->setGeometry(0, 0, (fullscreen_width - close_btn->size().width() - 5) / 2, close_btn->size().height() + 5);
+    news_btn->setText("News");
+    news_btn->setVisible(false);
 
-
-    main_layout->setAlignment(Qt::AlignHCenter);
-    horizontal->setAlignment(Qt::AlignRight | Qt::AlignTop);
-    //horizontal;
-    vertical->setAlignment(Qt::AlignCenter);
-    main_layout->addLayout(horizontal);
-    main_layout->addLayout(vertical);
-    
-    offer->setLayout(main_layout);
-
-    //close_offer_btn->setGeometry(offer->size().width() - 22, 2, 20, 20);
-    close_offer_btn->setParent(offer);
-    close_offer_btn->setIcon(QPixmap(cross_pix).scaled(12, 12, Qt::KeepAspectRatio));
-    close_offer_btn->setFixedSize(20, 20);
-    horizontal->addWidget(close_offer_btn);
-
-    offer_pic->setParent(offer);
-    offer_pic->setFixedSize(130, 100);
-    //offer_pic->setGeometry(20, 20, 130, 100);
-    offer_pic->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
-    offer_pic->setPixmap(land_pix);
-
-    buy_offer_btn->setParent(offer);
-    //buy_offer_btn->setGeometry(35, 175, 90, 15);
-    buy_offer_btn->setText("Buy");
-
-    offer_txt->setAlignment(Qt::AlignCenter);
-
-    vertical->addWidget(offer_txt);
-    vertical->addWidget(offer_pic);
-    vertical->addWidget(buy_offer_btn);
+    players_info_btn->setParent(window);
+    players_info_btn->setGeometry(news_btn->size().width(), 0, news_btn->size().width(), close_btn->size().height() + 5);
+    players_info_btn->setText("Player's information");
+    players_info_btn->setVisible(false);
 }
 
 void PocketEconomic::PrepareBuildings() {
@@ -170,7 +149,7 @@ void PocketEconomic::PrepareBuildings() {
 }
 
 void PocketEconomic::Styling() {
-    QString button =
+    QString menu_buttons_style =
         "QPushButton {"
         "  border: 0px;"
         "  font-size: 16px;"
@@ -178,7 +157,7 @@ void PocketEconomic::Styling() {
         "  border-width: 1px;"
         "  border-color: #ffffff;"
         "  border-style: solid;"
-        "  color: black;"
+        "  color: white;"
         "}"
         "QPushButton:hover { "
         "  background-color: #3499e0;"
@@ -187,7 +166,7 @@ void PocketEconomic::Styling() {
         "  background-color: #1b7bbf;"
         "}";
 
-    QString label_buying_background =
+    QString offer_background_style =
         "QPushButton {"
         "  background-color: #228B22;"
         "  border-width: 4px;"
@@ -211,7 +190,7 @@ void PocketEconomic::Styling() {
         "  border-radius: 10px;"
         "}";
 
-    QString label_buying =
+    QString offer_buttons_label_style =
         "QPushButton {"
         "  background-color: #228B22;"
         "  border-width: 4px;"
@@ -236,8 +215,20 @@ void PocketEconomic::Styling() {
         "  border-radius: 10px;"
         "}";
 
+
+    QString offer_cost_style =
+        "QLabel { "
+        "  border: 0px;"
+        "  font-size: 10px;"
+        "  background-color: #ffffff;"
+        "  border-width: 1px;"
+        "  border-color: white;"
+        "  border-style: solid;"
+        "  color: black;"
+        "  border-radius: 10px;"
+        "}";
     
-    QString close_global =
+    QString close_global_style =
         "QPushButton {"
         "  background-color: #4fb6ff;"
         "  border-width: 2px;"
@@ -252,8 +243,8 @@ void PocketEconomic::Styling() {
         "QPushButton:pressed { "
         "  background-color: #1b7bbf;"
         "}"; 
-    
-    QString close_offer =
+
+    QString close_offer_style =
         "QPushButton {"
         "  background-color: #ec1919;"
         "  border-width: 2px;"
@@ -269,23 +260,134 @@ void PocketEconomic::Styling() {
         "  background-color: #a20000;"
         "}";
 
-    house1_btn->setStyleSheet(button);
-    house2_btn->setStyleSheet(button);
-    house3_btn->setStyleSheet(button);
-    shop1_btn->setStyleSheet(button);
-    shop2_btn->setStyleSheet(button);
-    info_btn->setStyleSheet(button);
-    offer->setStyleSheet(label_buying_background);
-    offer_pic->setStyleSheet(label_buying);
-    offer_txt->setStyleSheet(label_buying);
-    close_btn->setStyleSheet(close_global);
-    close_offer_btn->setStyleSheet(close_offer);
+    QString personal_info_red_border_style =
+        "QLabel { "
+        "  background-color: #ffffff;"
+        "  border-width: 3px;"
+        "  border-color: #d10b0b;"
+        "  border-style: solid;"
+        "  border-radius: 10px;"
+        "}";
+
+
+    QString personal_info_const_style =
+        "QLabel { "
+        "  font-size: 16px;"
+        "  background-color: #ffffff;"
+        "  color: black;"
+        "  border-color: white;"
+        "}";
+
+    QString personal_info_good_value_style =
+        "QLabel { "
+        "  font-size: 16px;"
+        "  background-color: #ffffff;"
+        "  color: black;"
+        "  border-color: white;"
+        "}";
+
+    QString personal_info_bad_value_style =
+        "QLabel { "
+        "  font-size: 16px;"
+        "  background-color: #ffffff;"
+        "  color: #d10b0b;"
+        "  border-color: white;"
+        "}";
+
+    QString shopping_background_style =
+        "QLabel { "
+        "  font-size: 16px;"
+        "  color: white;"
+        "  background-color: #4fb6ff;"
+        "  border-width: 2px;"
+        "  border-color: white;"
+        "  border-style: solid;"
+        "  border-radius: 8px;"
+        "}";
+
+    QString shopping_style =
+        "QLabel { "
+        "  border: 0px;"
+        "  font-size: 16px;"
+        "  color: white;"
+        "  background-color: #4fb6ff;"
+        "}";
+
+
+    QString close_shop_style =
+        "QPushButton {"
+        "  background-color: #4fb6ff;"
+        "  border-width: 2px;"
+        "  border-color: #ffffff;"
+        "  border-style: solid;"
+        "  border-radius: 12px;"
+        "}"
+        "QPushButton:hover { "
+        "  background-color: #3499e0;"
+        "}"
+        "QPushButton:pressed { "
+        "  background-color: #1b7bbf;"
+        "}";
+
+    house1_btn->setStyleSheet(menu_buttons_style);
+    house2_btn->setStyleSheet(menu_buttons_style);
+    house3_btn->setStyleSheet(menu_buttons_style);
+    shop1_btn->setStyleSheet(menu_buttons_style);
+    shop2_btn->setStyleSheet(menu_buttons_style);
+    info_btn->setStyleSheet(menu_buttons_style);
+
+    offer->setStyleSheet(offer_background_style);
+    offer_pic->setStyleSheet(offer_buttons_label_style);
+    offer_txt->setStyleSheet(offer_buttons_label_style);
+    offer_cost_txt->setStyleSheet(offer_cost_style);
+
+    close_btn->setStyleSheet(close_global_style);
+    close_offer_btn->setStyleSheet(close_offer_style);
+
+    personal_info->setStyleSheet(personal_info_red_border_style);
+    capital->setStyleSheet(personal_info_const_style);
+    capital_number->setStyleSheet(personal_info_good_value_style);
+    income->setStyleSheet(personal_info_const_style);
+    income_number->setStyleSheet(personal_info_bad_value_style);
+
+    news_btn->setStyleSheet(menu_buttons_style);
+    players_info_btn->setStyleSheet(menu_buttons_style);
+
+    shop_name_const->setStyleSheet(" font-size: 25px; color: white; style: solid; border-width: 1px; border-style: solid; border-color: white;");
+    shop_information->setStyleSheet(shopping_background_style);
+
+    shop_house1_picture->setStyleSheet(shopping_style);
+    shop_house1_info_name->setStyleSheet(shopping_style);
+    shop_house1_info_income->setStyleSheet(shopping_style);
+    shop_house1_info_cost->setStyleSheet(shopping_style);
+
+    shop_house2_picture->setStyleSheet(shopping_style);
+    shop_house2_info_name->setStyleSheet(shopping_style);
+    shop_house2_info_income->setStyleSheet(shopping_style);
+    shop_house2_info_cost->setStyleSheet(shopping_style);
+
+    shop_house3_picture->setStyleSheet(shopping_style);
+    shop_house3_info_name->setStyleSheet(shopping_style);
+    shop_house3_info_income->setStyleSheet(shopping_style);
+    shop_house3_info_cost->setStyleSheet(shopping_style);
+
+    shop_shop1_picture->setStyleSheet(shopping_style);
+    shop_shop1_info_name->setStyleSheet(shopping_style);
+    shop_shop1_info_income->setStyleSheet(shopping_style);
+    shop_shop1_info_cost->setStyleSheet(shopping_style);
+
+    shop_shop2_picture->setStyleSheet(shopping_style);
+    shop_shop2_info_name->setStyleSheet(shopping_style);
+    shop_shop2_info_income->setStyleSheet(shopping_style);
+    shop_shop2_info_cost->setStyleSheet(shopping_style);
+
+    close_shop_btn->setStyleSheet(close_shop_style);
 }
 
 void PocketEconomic::SetLandsCoors() {
-    grid->lands.resize(18 * 4);
+    grid->lands.resize(18ll * 4 + 5);
     int delta_x = 400;
-    for (int k = 0; k < 4; ++k) {
+    for (int k = 0; k < 3; ++k) {
         // 1 column
         grid->lands[k * grid->lands.size() / 4] = { 101 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
         grid->lands[k * grid->lands.size() / 4 + 1] = { 101 + k * delta_x, 260, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)) };
@@ -295,7 +397,7 @@ void PocketEconomic::SetLandsCoors() {
 
         // 2 column
         grid->lands[k * grid->lands.size() / 4 + 5] = { 241 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 7] = { 240 + k * delta_x, 260, k == 2 ? 3 : 8, 5, std::vector<std::vector<bool>>(k == 2 ? 3 : 8, std::vector<bool>(5, true)) };
+        grid->lands[k * grid->lands.size() / 4 + 7] = { 240 + k * delta_x, 260, k == 2 ? 0 : 8, 5, std::vector<std::vector<bool>>(k == 2 ? 0 : 8, std::vector<bool>(5, true)) };
         grid->lands[k * grid->lands.size() / 4 + 6] = { 241 + k * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
         grid->lands[k * grid->lands.size() / 4 + 8] = { 240 + k * delta_x, 561, 8, 5, std::vector<std::vector<bool>>(8, std::vector<bool>(5, true)) };
         grid->lands[k * grid->lands.size() / 4 + 9] = { 241 + k * delta_x, 723, k == 1 ? 0 : 4, 4, std::vector<std::vector<bool>>(k == 1 ? 0 : 4, std::vector<bool>(4, true)) };
@@ -314,6 +416,12 @@ void PocketEconomic::SetLandsCoors() {
         grid->lands[k * grid->lands.size() / 4 + 16] = { 414 + k * delta_x, 423, 2, 4, std::vector<std::vector<bool>>(2, std::vector<bool>(4, true)) };
         grid->lands[k * grid->lands.size() / 4 + 17] = { 414 + k * delta_x, 723, 2, 4, std::vector<std::vector<bool>>(2, std::vector<bool>(4, true)) };
     }
+
+    grid->lands[3 * grid->lands.size() / 4] = { 101 + 3 * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
+    grid->lands[3 * grid->lands.size() / 4 + 1] = { 101 + 3 * delta_x, 260, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)) };
+    grid->lands[3 * grid->lands.size() / 4 + 2] = { 101 + 3 * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
+    grid->lands[3 * grid->lands.size() / 4 + 3] = { 101 + 3 * delta_x, 561, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)) };
+    grid->lands[3 * grid->lands.size() / 4 + 4] = { 101 + 3 * delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
 
     grid->resorts.resize(3);
     grid->resorts[0] = { 0, 122, 3, 4, std::vector<std::vector<bool>>(3, std::vector<bool>(4, true)) };
@@ -360,6 +468,7 @@ void PocketEconomic::SetBuilding(QLabel* roof, QPixmap& pix) {
         bought_objects_[index_bought_buildings_]->setAlignment(roof->alignment());
         bought_objects_[index_bought_buildings_]->setPixmap(roof->pixmap());
         bought_objects_[index_bought_buildings_]->setVisible(true);
+        bought_objects_[index_bought_buildings_]->setMouseTracking(true);
         index_bought_buildings_++;
     }
     roof->setVisible(false);
@@ -415,7 +524,6 @@ bool PocketEconomic::eventFilter(QObject* target, QEvent* event)
                 SetBuilding(shop2_roof, shop2_roof_pix);
                 shop2_buying_in_process = false;
             }
-            //shops
             else {
                 BuyLandOrResort(mouseEvent->pos().x(), mouseEvent->pos().y());
             }
@@ -439,6 +547,23 @@ bool PocketEconomic::eventFilter(QObject* target, QEvent* event)
         }
         return true;
     }
+    else if (event->type() == QEvent::KeyPress) {
+        QKeyEvent* keyEvent = (QKeyEvent*)event;
+        if (keyEvent->key() == Qt::Key::Key_Escape) {
+            close_btn->setVisible(!close_btn->isVisible());
+            news_btn->setVisible(!news_btn->isVisible());
+            players_info_btn->setVisible(!players_info_btn->isVisible());
+            if (close_btn->isVisible()) {
+                personal_info->setGeometry(personal_info->pos().x(), personal_info->pos().y() + 50, personal_info->size().width(), personal_info->size().height());
+            }
+            else {
+                personal_info->setGeometry(personal_info->pos().x(), personal_info->pos().y() - 50, personal_info->size().width(), personal_info->size().height());
+            }
+            background_picture_->setPixmap(background_pix);
+            //window->close();
+        }
+        return true;
+    }
     return false;
 };
 
@@ -458,14 +583,20 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 if (land->amount_x == 8) {
                     grid->chosen_land = { land, &grid->lands[i + 3] };
                 }
-                else if (land->amount_x == 1) {
+                else if (land->amount_x == 1 && land->amount_y == 4) {
                     grid->chosen_land = { land, &grid->lands[i - 3] };
+                }
+                else if (land->amount_x == 2 && land->amount_y == 4) {
+                    grid->chosen_land = { land, &grid->lands[i - 3] };
+                }
+                else if (land->amount_x == 1 && land->amount_y == 2) {
+                    grid->chosen_land = { land, &grid->lands[i + 3] };
                 }
                 else {
                     grid->chosen_land = { land, nullptr };
                 }
                 offer->setGeometry(x_pos, y_pos, offer->size().width(), offer->size().height());
-                update();
+                background_picture_->setPixmap(background_pix);
                 OfferIsShown();
                 return;
             }
@@ -482,7 +613,7 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
 
                 grid->chosen_land = { &resort, nullptr };
                 offer->setGeometry(x_pos, y_pos, offer->size().width(), offer->size().height());
-                update();
+                background_picture_->setPixmap(background_pix);
                 OfferIsShown();
                 return;
             }
@@ -490,23 +621,195 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
     }
 }
 
+void PocketEconomic::PrepareOffer() {
+    offer->setGeometry(100, 100, 150, 225);
+    offer->setParent(window);
+    offer->setVisible(false);
+
+
+    main_layout_offer->setAlignment(Qt::AlignHCenter);
+    horizontal_offer->setAlignment(Qt::AlignRight | Qt::AlignTop);
+    vertical_offer->setAlignment(Qt::AlignCenter);
+    main_layout_offer->addLayout(horizontal_offer);
+    main_layout_offer->addLayout(vertical_offer);
+
+    offer->setLayout(main_layout_offer);
+
+    //close_offer_btn->setGeometry(offer->size().width() - 22, 2, 20, 20);
+    close_offer_btn->setParent(offer);
+    close_offer_btn->setIcon(QPixmap(cross_pix).scaled(12, 12, Qt::KeepAspectRatio));
+    close_offer_btn->setFixedSize(20, 20);
+    horizontal_offer->addWidget(close_offer_btn);
+
+    offer_pic->setParent(offer);
+    offer_pic->setFixedSize(130, 100);
+    //offer_pic->setGeometry(20, 20, 130, 100);
+    offer_pic->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+    offer_pic->setPixmap(land_pix);
+
+    buy_offer_btn->setParent(offer);
+    //buy_offer_btn->setGeometry(35, 175, 90, 15);
+    buy_offer_btn->setText("Buy");
+
+    offer_txt->setAlignment(Qt::AlignCenter);
+    offer_cost_txt->setAlignment(Qt::AlignCenter);
+    offer_cost_txt->setText("Cost: 70M");
+
+    vertical_offer->addWidget(offer_txt);
+    vertical_offer->addWidget(offer_cost_txt);
+    vertical_offer->addWidget(offer_pic);
+    vertical_offer->addWidget(buy_offer_btn);
+
+}
+
 void PocketEconomic::OfferIsShown() {
-    if (offer->isVisible()) {
-        QObject::connect(close_offer_btn, &QPushButton::clicked, [&]() {
-            offer->setVisible(false);
-            //shop2_btn->setText("closed");
-            is_offer_shown = false;
-            update();
-            return;
-            });
-        QObject::connect(buy_offer_btn, &QPushButton::clicked, [&]() {
-            offer->setVisible(false);
-            is_offer_shown = false;
-            (grid->chosen_land.first)->owner = *player;
-            if (grid->chosen_land.second) (grid->chosen_land.second)->owner = *player;
-            //shop2_btn->setText("closed");
-            update();
-            return;
-            });
-    }
+    QObject::connect(close_offer_btn, &QPushButton::clicked, [&]() {
+        offer->setVisible(false);
+        //shop2_btn->setText("closed");
+        is_offer_shown = false;
+        update();
+        return;
+        });
+    QObject::connect(buy_offer_btn, &QPushButton::clicked, [&]() {
+        offer->setVisible(false);
+        is_offer_shown = false;
+        (grid->chosen_land.first)->owner = *player;
+        if (grid->chosen_land.second) (grid->chosen_land.second)->owner = *player;
+        //shop2_btn->setText("closed");
+        update();
+        return;
+        });
+}
+
+void PocketEconomic::CapitalAndIncome() {
+    personal_info->setGeometry(fullscreen_width - 155, 5, 150, 100);
+    personal_info->setParent(window);
+    personal_info->setLayout(personal_info_layout);
+    personal_info_layout->addLayout(capital_layout);
+    personal_info_layout->addLayout(income_layout);
+
+    personal_info_layout->setAlignment(Qt::AlignCenter);
+    capital_layout->setAlignment(Qt::AlignLeft);
+    income_layout->setAlignment(Qt::AlignLeft);
+
+    capital->setText("Capital: ");
+    capital_number->setText("70M");
+    capital_layout->addWidget(capital);
+    capital_layout->addWidget(capital_number);
+
+    income->setText("Income: ");
+    income_number->setText("-30M");
+    income_layout->addWidget(income);
+    income_layout->addWidget(income_number);
+}
+
+void PocketEconomic::CreateShop() {
+    shop_information->setVisible(false);
+    shop_information->setParent(window);
+    shop_information->setGeometry(fullscreen_width - 305, fullscreen_height - info_btn->size().height() - 765, 300, 750);
+    shop_information->setLayout(shop_main_layout);
+
+    shop_name_const->setText("SHOP"); 
+    shop_name_layout->addWidget(shop_name_const);
+    shop_name_layout->setAlignment(Qt::AlignCenter);
+    shop_main_layout->addLayout(shop_name_layout);
+
+    /*
+    QLabel* trying = new QLabel();
+    trying->setText("House 0\nIncome: +500000\nCost: 8000000\n");
+    trying->setStyleSheet("color: white;");
+    trying->setIcon(shop_house1_picture->pixmap());
+    shop_main_layout->addWidget(trying);*/
+
+
+    shop_house1_picture->setFixedSize(100, 100);
+    shop_house1_picture->setAlignment(Qt::AlignCenter);
+    shop_house1_layout->addWidget(shop_house1_picture);
+    shop_house1_layout->addLayout(shop_house1_info_layout);
+    shop_house1_info_layout->addWidget(shop_house1_info_name);
+    shop_house1_info_layout->addWidget(shop_house1_info_income);
+    shop_house1_info_layout->addWidget(shop_house1_info_cost);
+    shop_house1_info_layout->setAlignment(Qt::AlignVCenter);
+    shop_main_layout->addLayout(shop_house1_layout);
+    shop_house1_picture->setPixmap(house1_btn_pix.scaled(100, 100, Qt::KeepAspectRatio));
+    shop_house1_info_name->setText("House 1");
+    shop_house1_info_income->setText("Income: +500000");
+    shop_house1_info_cost->setText("Cost: 800000");
+
+    shop_house2_picture->setFixedSize(100, 100);
+    shop_house2_picture->setAlignment(Qt::AlignCenter);
+    shop_house2_layout->addWidget(shop_house2_picture);
+    shop_house2_layout->addLayout(shop_house2_info_layout);
+    shop_house2_info_layout->addWidget(shop_house2_info_name);
+    shop_house2_info_layout->addWidget(shop_house2_info_income);
+    shop_house2_info_layout->addWidget(shop_house2_info_cost);
+    shop_house2_info_layout->setAlignment(Qt::AlignVCenter);
+    shop_main_layout->addLayout(shop_house2_layout);
+    shop_house2_picture->setPixmap(house2_btn_pix.scaled(75, 75, Qt::KeepAspectRatio));
+    shop_house2_info_name->setText("House 2");
+    shop_house2_info_income->setText("Income: +250000");
+    shop_house2_info_cost->setText("Cost: 400000");
+
+    shop_house3_picture->setFixedSize(100, 100);
+    shop_house3_picture->setAlignment(Qt::AlignCenter);
+    shop_house3_layout->addWidget(shop_house3_picture);
+    shop_house3_layout->addLayout(shop_house3_info_layout);
+    shop_house3_info_layout->addWidget(shop_house3_info_name);
+    shop_house3_info_layout->addWidget(shop_house3_info_income);
+    shop_house3_info_layout->addWidget(shop_house3_info_cost);
+    shop_house3_info_layout->setAlignment(Qt::AlignVCenter);
+    shop_main_layout->addLayout(shop_house3_layout);
+    shop_house3_picture->setPixmap(house3_btn_pix.scaled(70, 70, Qt::KeepAspectRatio));
+    shop_house3_info_name->setText("House 3");
+    shop_house3_info_income->setText("Income: +10000");
+    shop_house3_info_cost->setText("Cost: 100000");
+
+    shop_shop1_picture->setFixedSize(100, 100);
+    shop_shop1_picture->setAlignment(Qt::AlignCenter);
+    shop_shop1_layout->addWidget(shop_shop1_picture);
+    shop_shop1_layout->addLayout(shop_shop1_info_layout);
+    shop_shop1_info_layout->addWidget(shop_shop1_info_name);
+    shop_shop1_info_layout->addWidget(shop_shop1_info_income);
+    shop_shop1_info_layout->addWidget(shop_shop1_info_cost);
+    shop_shop1_info_layout->setAlignment(Qt::AlignVCenter);
+    shop_main_layout->addLayout(shop_shop1_layout);
+    shop_shop1_picture->setPixmap(shop1_btn_pix.scaled(65, 65, Qt::KeepAspectRatio));
+    shop_shop1_info_name->setText("Supermarket 1");
+    shop_shop1_info_income->setText("Income: +500000");
+    shop_shop1_info_cost->setText("Cost: 800000");
+
+    shop_shop2_picture->setFixedSize(100, 100);
+    shop_shop2_picture->setAlignment(Qt::AlignCenter);
+    shop_shop2_layout->addWidget(shop_shop2_picture);
+    shop_shop2_layout->addLayout(shop_shop2_info_layout);
+    shop_shop2_info_layout->addWidget(shop_shop2_info_name);
+    shop_shop2_info_layout->addWidget(shop_shop2_info_income);
+    shop_shop2_info_layout->addWidget(shop_shop2_info_cost);
+    shop_shop2_info_layout->setAlignment(Qt::AlignVCenter);
+    shop_main_layout->addLayout(shop_shop2_layout);
+    shop_shop2_picture->setPixmap(shop2_btn_pix.scaled(50, 50, Qt::KeepAspectRatio));
+    shop_shop2_info_name->setText("Supermarket 2");
+    shop_shop2_info_income->setText("Income: +350000");
+    shop_shop2_info_cost->setText("Cost: 600000");
+
+
+    close_shop_btn->setIcon(cross_pix);
+    close_shop_btn->setIconSize(QSize(15, 15));
+    close_shop_btn->setParent(shop_information);
+    close_shop_btn->setGeometry(shop_information->size().width() - 30, 5, 25, 25);
+}
+
+void PocketEconomic::ShopIsShown() {
+    QObject::connect(info_btn, &QPushButton::clicked, [&]() {
+        if (!shop_information->isVisible()) {
+            shop_information->setVisible(true);
+            personal_info->setGeometry(personal_info->pos().x() - shop_information->size().width() - 5, personal_info->pos().y(), personal_info->size().width(), personal_info->size().height());
+            background_picture_->setPixmap(background_pix);
+        }
+        });
+    QObject::connect(close_shop_btn, &QPushButton::clicked, [&]() {
+        shop_information->setVisible(false);
+        personal_info->setGeometry(personal_info->pos().x() + shop_information->size().width() + 5, personal_info->pos().y(), personal_info->size().width(), personal_info->size().height());
+        background_picture_->setPixmap(background_pix);
+        });
 }

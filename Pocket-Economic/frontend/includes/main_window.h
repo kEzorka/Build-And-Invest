@@ -5,6 +5,9 @@
 
 class Player_Owner {
 public:
+    Player_Owner() {
+        color = Nobody;
+    }
     enum Color {
         Red,
         Orange,
@@ -19,10 +22,10 @@ public:
 class Grid {
 public:
     struct land_struct {
-        int x;
-        int y;
-        int amount_x;
-        int amount_y;
+        int x = 0;
+        int y = 0;
+        int amount_x = -1;
+        int amount_y = -1;
         std::vector<std::vector<bool>> free_space;
         Player_Owner owner;
     };
@@ -69,6 +72,7 @@ private:
     Grid* grid_ = new Grid();
     Player_Owner* player = new Player_Owner();
 };
+
 
 class RoofLabel : public QLabel {
 public:
@@ -130,7 +134,11 @@ public:
     void SetLandsCoors();
     void PrepareBuildings();
     void BuyLandOrResort(int x, int y);
+    void PrepareOffer();
     void OfferIsShown();
+    void CapitalAndIncome();
+    void CreateShop();
+    void ShopIsShown();
 
     bool eventFilter(QObject*, QEvent* event);
 
@@ -189,11 +197,69 @@ private:
     QPushButton* buy_offer_btn = new QPushButton();
     QPushButton* close_offer_btn = new QPushButton();
     QLabel* offer_txt = new QLabel();
+    QLabel* offer_cost_txt = new QLabel();
     bool is_offer_shown = false;
 
-    QVBoxLayout* main_layout = new QVBoxLayout();
-    QVBoxLayout* horizontal = new QVBoxLayout();
-    QVBoxLayout* vertical = new QVBoxLayout();
+    QVBoxLayout* main_layout_offer = new QVBoxLayout();
+    QVBoxLayout* horizontal_offer = new QVBoxLayout();
+    QVBoxLayout* vertical_offer = new QVBoxLayout();
+
+    QLabel* personal_info = new QLabel();
+    QLabel* income = new QLabel();
+    QLabel* capital = new QLabel();
+    QLabel* income_number = new QLabel();
+    QLabel* capital_number = new QLabel();
+    QVBoxLayout* personal_info_layout = new QVBoxLayout();
+    QHBoxLayout* income_layout = new QHBoxLayout();
+    QHBoxLayout* capital_layout = new QHBoxLayout();
+
+
+    QPushButton* news_btn = new QPushButton();
+    QPushButton* players_info_btn = new QPushButton();
+     
+
+    QLabel* shop_information = new QLabel();
+    QVBoxLayout* shop_main_layout = new QVBoxLayout();
+    QHBoxLayout* shop_name_layout = new QHBoxLayout();
+    QLabel* shop_name_const = new QLabel();
+
+    QHBoxLayout* shop_house1_layout = new QHBoxLayout();
+    QVBoxLayout* shop_house1_info_layout = new QVBoxLayout();
+    QLabel* shop_house1_picture = new QLabel();
+    QLabel* shop_house1_info_name = new QLabel();
+    QLabel* shop_house1_info_income = new QLabel();
+    QLabel* shop_house1_info_cost = new QLabel();
+
+    QHBoxLayout* shop_house2_layout = new QHBoxLayout();
+    QVBoxLayout* shop_house2_info_layout = new QVBoxLayout();
+    QLabel* shop_house2_picture = new QLabel();
+    QLabel* shop_house2_info_name = new QLabel();
+    QLabel* shop_house2_info_income = new QLabel();
+    QLabel* shop_house2_info_cost = new QLabel();
+
+    QHBoxLayout* shop_house3_layout = new QHBoxLayout();
+    QVBoxLayout* shop_house3_info_layout = new QVBoxLayout();
+    QLabel* shop_house3_picture = new QLabel();
+    QLabel* shop_house3_info_name = new QLabel();
+    QLabel* shop_house3_info_income = new QLabel();
+    QLabel* shop_house3_info_cost = new QLabel();
+
+    QHBoxLayout* shop_shop1_layout = new QHBoxLayout();
+    QVBoxLayout* shop_shop1_info_layout = new QVBoxLayout();
+    QLabel* shop_shop1_picture = new QLabel();
+    QLabel* shop_shop1_info_name = new QLabel();
+    QLabel* shop_shop1_info_income = new QLabel();
+    QLabel* shop_shop1_info_cost = new QLabel();
+
+    QHBoxLayout* shop_shop2_layout = new QHBoxLayout();
+    QVBoxLayout* shop_shop2_info_layout = new QVBoxLayout();
+    QLabel* shop_shop2_picture = new QLabel();
+    QLabel* shop_shop2_info_name = new QLabel();
+    QLabel* shop_shop2_info_income = new QLabel();
+    QLabel* shop_shop2_info_cost = new QLabel();
+
+    QPushButton* close_shop_btn = new QPushButton();
+
 
     int fullscreen_width = QRect(QGuiApplication::primaryScreen()->geometry()).width();
     int fullscreen_height = QRect(QGuiApplication::primaryScreen()->geometry()).height();

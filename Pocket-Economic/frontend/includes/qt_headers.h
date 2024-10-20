@@ -39,3 +39,4 @@
 #include <QPainter>
 #include <QBrush>
 #include <QPaintEvent>
+#include <QScrollArea>
