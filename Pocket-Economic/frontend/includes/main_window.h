@@ -19,6 +19,7 @@ public:
     Color color = Nobody;
 };
 
+
 class Grid {
 public:
     struct land_struct {
@@ -45,6 +46,9 @@ public:
 
     void setPlayer(Player_Owner* person) {
         player = person;
+    }
+    Grid* getGrid() {
+        return grid_;
     }
 
 protected:

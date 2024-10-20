@@ -1,6 +1,6 @@
 #pragma once
 
-#include "agencies/real_estate_agency.h"
+#include "agencies/real_estate_agency/player_sales_agency.h"
 #include "agencies/land_agency.h"
 #include "agencies/building_agency.h"
 #include "agencies/advert_agency.h"
@@ -42,4 +42,5 @@ private:
 	int64_t spend_on_advert_this_month_;
 	int64_t spend_on_advert_next_month_;
 
+	PlayerSalesAgency* player_sales_agency = nullptr;
 };
