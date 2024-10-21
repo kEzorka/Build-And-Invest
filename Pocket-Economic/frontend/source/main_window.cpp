@@ -1027,16 +1027,18 @@ void PocketEconomic::LandAnsResortInformationIsShown() {
 void PocketEconomic::MakeNews() {
     tmp_news.resize(30);
     for (int i = 0; i < tmp_news.size(); ++i) {
-        int col = rand() % 6;
+        int col = rand() % 6; 
+        tmp_news[i].first += "       ";
         if (col == player->Red) {
-            tmp_news[i].first = "       Red:";
+            tmp_news[i].first += "Red:";
         }
         else if (col == player->Orange) {
-            tmp_news[i].first = "       Orange:";
+            tmp_news[i].first += "Orange:";
         }
         else {
-            tmp_news[i].first = "       namenamenamename:";
+            tmp_news[i].first += "namenamenamename:";
         }
+        tmp_news[i].first += "       ";
     }
     tmp_news[0].second = "is delayed due to adverse weather conditions, the builders refused to go on shift.";
     tmp_news[1].second = "is delayed: a virus attacked the construction crew.";
@@ -1087,6 +1089,7 @@ void PocketEconomic::PrepareNews() {
     news_table->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
 
     MakeNews();
+    // add months
     tmp_news[5] = { "May", "" };
 
     for (auto& el : tmp_news) {
@@ -1095,8 +1098,16 @@ void PocketEconomic::PrepareNews() {
         news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first)));
         news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
     }
-    news_table->scrollToBottom();
+    //merge cells for months
+    news_table->setSpan(5, 0, 1, 2);
+    news_table->item(5, 0)->setBackground(QColor(0, 0, 0, 25));
 
+    for (int i = 0; i < news_table->rowCount(); ++i) {
+        QTableWidgetItem* cur = news_table->item(i, 0);
+        std::string color = (cur->text()).toStdString();
+        if (color.find("Red") != std::string::npos) cur->setForeground(QColor(209, 11, 11));
+        else if (color.find("Orange") != std::string::npos) cur->setForeground(QColor(250, 153, 7));
+    }
 }
 
 
@@ -1105,7 +1116,7 @@ void PocketEconomic::NewsIsShown() {
     QObject::connect(news_btn, &QPushButton::clicked, [&]() {
         news->setVisible(!news->isVisible());
         news_table->scrollToBottom();
-        //news_table->setColumnWigth(0, ResizeToContents)
+        news_table->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
         if (news_table->rowCount()) news_table->scrollToItem(news_table->item(news_table->rowCount() - 1, 0));
         background_picture_->setPixmap(background_pix);
         return;
