@@ -12,6 +12,10 @@ void LandPlot::setNameOfLand(const std::string& str) {
 	name_of_land_ = str;
 }
 
+void LandPlot::updateSupply() {
+
+}
+
 int64_t LandPlot::getCostOfLand() const {
 	return cost_of_land_;
 }

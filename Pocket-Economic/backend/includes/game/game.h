@@ -58,7 +58,7 @@ private:
 	NewsWindow news_window_;
 	MainGameWindow main_game_window_;
 
-	RealEstateAgency real_estate_agency_;
+	RealEstateAgency global_real_estate_agency_;
 	LandAgency land_agency_;
 	BuildingAgency building_agency_;
 	AdvertAgency advert_agency_;

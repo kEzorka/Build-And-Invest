@@ -1,6 +1,7 @@
 #pragma once
 
 #include "land_plot.h"
+#include "../agencies/real_estate_agency.h"
 
 class BuildingLand : public virtual LandPlot {
 public:
@@ -28,4 +29,5 @@ public:
 private:
 	std::vector<std::vector<Realty*>> cells_;
 
+	RealEstateAgency* land_estate_ageny_ = nullptr;
 };

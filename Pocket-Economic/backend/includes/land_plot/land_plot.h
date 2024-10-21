@@ -12,6 +12,7 @@ public:
 	virtual void setCostOfLand(const int64_t& cost);
 	virtual void setOwner(Player* owner);
 	virtual void setNameOfLand(const std::string& str);
+	virtual void updateSupply();
 
 	virtual int64_t getCostOfLand() const;
 	virtual Player* getOwner() const;
@@ -22,5 +23,6 @@ protected:
 	Player* owner_ = nullptr;
 	std::string name_of_land_ = "";
 
+	RealEstateAgency* land_estate_agency_ = new RealEstateAgency();
 };
 
