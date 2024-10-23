@@ -26,6 +26,8 @@ PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
     LandAnsResortInformationIsShown();
     PrepareNews();
     NewsIsShown();
+    PreparePlayersInfo();
+    PlayersInfoIsShown();
 
     window->showFullScreen();
 }
@@ -117,18 +119,18 @@ void PocketEconomic::MakeButtons() {
     dynamic_cast<RoofLabel*>(shop2_roof)->setGrid(grid);
     dynamic_cast<RoofLabel*>(shop2_roof)->setPlayer(player);
 
-    close_btn->setGeometry(fullscreen_width - 35, 0, 35, 35);
+    close_btn->setGeometry(fullscreen_width - 47, 0, 47, 47);
     close_btn->setParent(window);
     close_btn->setIcon(cross_pix);
     close_btn->setVisible(false);
 
     news_btn->setParent(window);
-    news_btn->setGeometry(0, 0, (fullscreen_width - close_btn->size().width() - 5) / 2, close_btn->size().height() + 5);
+    news_btn->setGeometry(0, 0, (fullscreen_width - 45) / 2, close_btn->size().height());
     news_btn->setText("News");
     news_btn->setVisible(false);
 
     players_info_btn->setParent(window);
-    players_info_btn->setGeometry(news_btn->size().width(), 0, news_btn->size().width(), close_btn->size().height() + 5);
+    players_info_btn->setGeometry(news_btn->size().width(), 0, news_btn->size().width(), news_btn->size().height());
     players_info_btn->setText("Player's information");
     players_info_btn->setVisible(false);
 }
@@ -228,10 +230,11 @@ void PocketEconomic::Styling() {
     QString close_global_style =
         "QPushButton {"
         "  background-color: #4fb6ff;"
-        "  border-width: 2px;"
+        //"  border-width: 2px;"
+        "  border-width: 1px;"
         "  border-color: #ffffff;"
         "  border-style: solid;"
-        "  border-radius: 17px;"
+        //"  border-radius: 17px;"
         "  color: black;"
         "}"
         "QPushButton:hover { "
@@ -302,10 +305,10 @@ void PocketEconomic::Styling() {
         "  border-radius: 8px;"
         "}";
 
-    QString shopping_style =
+    shopping_style =
         "QLabel { "
         "  border: 0px;"
-        "  font-size: 16px;"
+        "  font-size: 15px;"
         "  color: white;"
         "  background-color: #4fb6ff;"
         "}";
@@ -389,7 +392,7 @@ void PocketEconomic::Styling() {
     shop_name_const->setStyleSheet(" font-size: 25px; color: white; style: solid; border-width: 1px; border-style: solid; border-color: white;");
     shop_information->setStyleSheet(shopping_background_style);
 
-    shop_house1_picture->setStyleSheet(shopping_style);
+   /* shop_house1_picture->setStyleSheet(shopping_style);
     shop_house1_info_name->setStyleSheet(shopping_style);
     shop_house1_info_income->setStyleSheet(shopping_style);
     shop_house1_info_cost->setStyleSheet(shopping_style);
@@ -414,7 +417,7 @@ void PocketEconomic::Styling() {
     shop_shop2_info_income->setStyleSheet(shopping_style);
     shop_shop2_info_cost->setStyleSheet(shopping_style);
 
-    close_shop_btn->setStyleSheet(close_shop_style);
+    close_shop_btn->setStyleSheet(close_shop_style);*/
 
     land_resort_information->setStyleSheet(offer_background_style);
     land_resort_information_txt->setStyleSheet(offer_buttons_label_style);
@@ -425,6 +428,11 @@ void PocketEconomic::Styling() {
     news_table->setStyleSheet(news_table_style);
     news_table->horizontalHeader()->hide();
     news_table->verticalHeader()->hide();
+
+    players_info->setStyleSheet(news_background_style);
+    /*players_nicknames_table->setStyleSheet(news_table_style);
+    players_nicknames_table->horizontalHeader()->hide();
+    players_nicknames_table->verticalHeader()->hide();*/
 }
 
 void PocketEconomic::SetLandsCoors() {
@@ -477,31 +485,36 @@ void PocketEconomic::AddHouse(){
         house1_buying_in_process ^= 1;
         house1_roof->setVisible(house1_buying_in_process);
         grid->isBuyingProcess = house1_buying_in_process;
-        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        if (house1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        else QGuiApplication::restoreOverrideCursor();
         });
     QObject::connect(house2_btn, &QPushButton::clicked, [&]() {
         house2_buying_in_process ^= 1;
         house2_roof->setVisible(house2_buying_in_process);
         grid->isBuyingProcess = house2_buying_in_process;
-        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        if (house2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        else QGuiApplication::restoreOverrideCursor();
         });
     QObject::connect(house3_btn, &QPushButton::clicked, [&]() {
         house3_buying_in_process ^= 1;
         house3_roof->setVisible(house3_buying_in_process);
         grid->isBuyingProcess = house3_buying_in_process;
-        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        if (house3_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        else QGuiApplication::restoreOverrideCursor();
         });
     QObject::connect(shop1_btn, &QPushButton::clicked, [&]() {
         shop1_buying_in_process ^= 1;
         shop1_roof->setVisible(shop1_buying_in_process);
         grid->isBuyingProcess = shop1_buying_in_process;
-        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        if (shop1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        else QGuiApplication::restoreOverrideCursor();
         });
     QObject::connect(shop2_btn, &QPushButton::clicked, [&]() {
         shop2_buying_in_process ^= 1;
         shop2_roof->setVisible(shop2_buying_in_process);
         grid->isBuyingProcess = shop2_buying_in_process;
-        QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        if (shop2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+        else QGuiApplication::restoreOverrideCursor();
         });
     QObject::connect(close_btn, &QPushButton::clicked, [&]() {
         window->close();
@@ -605,9 +618,11 @@ bool PocketEconomic::eventFilter(QObject* target, QEvent* event)
             players_info_btn->setVisible(!players_info_btn->isVisible());
             if (close_btn->isVisible()) {
                 personal_info->setGeometry(personal_info->pos().x(), personal_info->pos().y() + 50, personal_info->size().width(), personal_info->size().height());
+                shop_information->setGeometry(shop_information->pos().x(), shop_information->pos().y() + 50, shop_information->size().width(), shop_information->size().height() - 50);
             }
             else {
                 personal_info->setGeometry(personal_info->pos().x(), personal_info->pos().y() - 50, personal_info->size().width(), personal_info->size().height());
+                shop_information->setGeometry(shop_information->pos().x(), shop_information->pos().y() - 50, shop_information->size().width(), shop_information->size().height() + 50);
             }
             news->setVisible(false);
             background_picture_->setPixmap(background_pix);
@@ -622,7 +637,7 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
     for (int i = 0; i < grid->lands.size(); ++i) {
         Grid::land_struct* land = &grid->lands[i];
         if (land->x < x && x < land->x + land->amount_x * grid->cell_size &&
-            land->y < y && y < land->y + land->amount_y * grid->cell_size) {
+            land->y < y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
             if (land->owner.color == player->Nobody) {
                 offer_pic->setPixmap(land_pix);
                 offer_txt->setText("Buy a land!");
@@ -674,7 +689,7 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
     }
     for (Grid::land_struct& resort : grid->resorts) {
         if (resort.x < x && x < resort.x + resort.amount_x * grid->cell_size &&
-            resort.y < y && y < resort.y + resort.amount_y * grid->cell_size) {
+            resort.y < y + 50 && y + 50 < resort.y + resort.amount_y * grid->cell_size) {
             if (resort.owner.color == player->Nobody) {
                 if (x + offer->size().width() >= fullscreen_width) x_pos -= offer->size().width();
                 if (y + offer->size().height() >= fullscreen_height - house1_btn->size().height()) y_pos -= offer->size().height();
@@ -799,7 +814,7 @@ void PocketEconomic::CapitalAndIncome() {
 void PocketEconomic::CreateShop() {
     shop_information->setVisible(false);
     shop_information->setParent(window);
-    shop_information->setGeometry(fullscreen_width - 305, fullscreen_height - info_btn->size().height() - 765, 300, 750);
+    shop_information->setGeometry(fullscreen_width - 305, personal_info->pos().y() - 5, 300, 750);
     shop_information->setLayout(shop_main_layout);
 
     shop_name_const->setText("SHOP");
@@ -807,15 +822,7 @@ void PocketEconomic::CreateShop() {
     shop_name_layout->setAlignment(Qt::AlignCenter);
     shop_main_layout->addLayout(shop_name_layout);
 
-    /*
-    QLabel* trying = new QLabel();
-    trying->setText("House 0\nIncome: +500000\nCost: 8000000\n");
-    trying->setStyleSheet("color: white;");
-    trying->setIcon(shop_house1_picture->pixmap());
-    shop_main_layout->addWidget(trying);*/
-
-
-    shop_house1_picture->setFixedSize(100, 100);
+    /*shop_house1_picture->setFixedSize(100, 100);
     shop_house1_picture->setAlignment(Qt::AlignCenter);
     shop_house1_layout->addWidget(shop_house1_picture);
     shop_house1_layout->addLayout(shop_house1_info_layout);
@@ -883,28 +890,94 @@ void PocketEconomic::CreateShop() {
     shop_shop2_picture->setPixmap(shop2_btn_pix.scaled(50, 50, Qt::KeepAspectRatio));
     shop_shop2_info_name->setText("Supermarket 2");
     shop_shop2_info_income->setText("Income: +350000");
-    shop_shop2_info_cost->setText("Cost: 600000");
+    shop_shop2_info_cost->setText("Cost: 600000");*/
 
 
-    close_shop_btn->setIcon(cross_pix);
-    close_shop_btn->setIconSize(QSize(15, 15));
-    close_shop_btn->setParent(shop_information);
-    close_shop_btn->setGeometry(shop_information->size().width() - 30, 5, 25, 25);
+    //close_shop_btn->setIcon(cross_pix);
+    //close_shop_btn->setIconSize(QSize(15, 15));
+    //close_shop_btn->setParent(shop_information);
+    //close_shop_btn->setGeometry(shop_information->size().width() - 30, 5, 25, 25);
+
+    for (int i = 0; i < 5; ++i) {
+        shop_buidings_pictures[i] = new QLabel(news);
+        shop_buidings_layouts[i] = new QHBoxLayout();
+        shop_buidings_info_layouts[i] = new QVBoxLayout();
+        shop_buidings_pictures[i]->setStyleSheet(shopping_style);
+        shop_building_infos[i].resize(4);
+        shop_buidings_pictures[i]->setFixedSize(100, 100);
+        shop_buidings_pictures[i]->setAlignment(Qt::AlignCenter);
+        shop_buidings_layouts[i]->addWidget(shop_buidings_pictures[i]);
+        shop_buidings_layouts[i]->addLayout(shop_buidings_info_layouts[i]);
+        shop_buidings_info_layouts[i]->setAlignment(Qt::AlignVCenter);
+        for (int j = 0; j < 4; ++j) {
+            shop_building_infos[i][j] = new QLabel();
+            shop_building_infos[i][j]->setStyleSheet(shopping_style);
+        }
+        shop_buidings_info_layouts[i]->addWidget(shop_building_infos[i][0]);
+        shop_buidings_info_layouts[i]->addWidget(shop_building_infos[i][1]);
+        shop_buidings_info_layouts[i]->addWidget(shop_building_infos[i][2]);
+        shop_buidings_info_layouts[i]->addWidget(shop_building_infos[i][3]);
+        shop_main_layout->addLayout(shop_buidings_layouts[i]);
+    }
+    shop_buidings_pictures[0]->setPixmap(house1_btn_pix.scaled(100, 100, Qt::KeepAspectRatio));
+    shop_building_infos[0][0]->setText("House 1");
+    shop_building_infos[0][1]->setText("Income: +800K");
+    shop_building_infos[0][2]->setText("Cost: 5M");
+    shop_building_infos[0][3]->setText("Building: 3 months");
+
+    shop_buidings_pictures[1]->setPixmap(house2_btn_pix.scaled(80, 80, Qt::KeepAspectRatio));
+    shop_building_infos[1][0]->setText("House 2");
+    shop_building_infos[1][1]->setText("Income: +500K");
+    shop_building_infos[1][2]->setText("Cost: 2M");
+    shop_building_infos[1][3]->setText("Building: 2 months");
+
+    shop_buidings_pictures[2]->setPixmap(house3_btn_pix.scaled(75, 75, Qt::KeepAspectRatio));
+    shop_building_infos[2][0]->setText("House 3");
+    shop_building_infos[2][1]->setText("Income: +350K");
+    shop_building_infos[2][2]->setText("Cost: 1M");
+    shop_building_infos[2][3]->setText("Building: 1 month");
+
+    shop_buidings_pictures[3]->setPixmap(shop1_btn_pix.scaled(75, 75, Qt::KeepAspectRatio));
+    shop_building_infos[3][0]->setText("Supermarket 1");
+    shop_building_infos[3][1]->setText("Income: +200K");
+    shop_building_infos[3][2]->setText("Cost: 10M");
+    shop_building_infos[3][3]->setText("Building: 6 months");
+
+    shop_buidings_pictures[4]->setPixmap(shop2_btn_pix.scaled(50, 50, Qt::KeepAspectRatio));
+    shop_building_infos[4][0]->setText("Supermarket 2");
+    shop_building_infos[4][1]->setText("Income: +100K");
+    shop_building_infos[4][2]->setText("Cost: 5M");
+    shop_building_infos[4][3]->setText("Building: 3 months");
 }
 
 void PocketEconomic::ShopIsShown() {
     QObject::connect(info_btn, &QPushButton::clicked, [&]() {
         if (!shop_information->isVisible()) {
-            shop_information->setVisible(true);
             personal_info->setGeometry(personal_info->pos().x() - shop_information->size().width() - 5, personal_info->pos().y(), personal_info->size().width(), personal_info->size().height());
-            background_picture_->setPixmap(background_pix);
+            shop_information->setVisible(true);
+            int x_pos = fullscreen_width - 305, y_pos = personal_info->pos().y();
+            int x_size, y_size;
+            if (players_info_btn->isVisible()) {
+                x_size = 300;
+                y_size = 750;
+            }
+            else {
+                x_size = 300;
+                y_size = 750 + players_info_btn->size().height();
+            }
+            shop_information->setGeometry(x_pos, y_pos, x_size, y_size);
         }
-        });
-    QObject::connect(close_shop_btn, &QPushButton::clicked, [&]() {
-        shop_information->setVisible(false);
-        personal_info->setGeometry(personal_info->pos().x() + shop_information->size().width() + 5, personal_info->pos().y(), personal_info->size().width(), personal_info->size().height());
+        else {
+            shop_information->setVisible(false);
+            personal_info->setGeometry(personal_info->pos().x() + shop_information->size().width() + 5, personal_info->pos().y(), personal_info->size().width(), personal_info->size().height());
+        }
         background_picture_->setPixmap(background_pix);
         });
+    /*qobject::connect(close_shop_btn, &qpushbutton::clicked, [&]() {
+        shop_information->setvisible(false);
+        personal_info->setgeometry(personal_info->pos().x() + shop_information->size().width() + 5, personal_info->pos().y(), personal_info->size().width(), personal_info->size().height());
+        background_picture_->setpixmap(background_pix);
+        });*/
 }
 
 void PocketEconomic::PrepareLandAnsResortInformation() {
@@ -933,96 +1006,6 @@ void PocketEconomic::LandAnsResortInformationIsShown() {
         return;
         });
 }
-//
-//void PocketEconomic::MakeNews() {
-//    news_txt_who_info.resize(20);
-//    for (int i = 0; i < news_txt_who_info.size(); ++i) {
-//        int col = rand() % 6;
-//        news_txt_who_info[i].first = new QLabel(news);
-//        if (col == player->Red) {
-//            (news_txt_who_info[i].first)->setText("Red:");
-//        }
-//        else if (col == player->Orange) {
-//            (news_txt_who_info[i].first)->setText("Orange:");
-//        }
-//        else {
-//            (news_txt_who_info[i].first)->setText("namenamenamename:");
-//        }
-//    }
-//    news_txt_who_info[0].second = new QLabel("is delayed due to adverse weather conditions, the builders refused to go on shift.", news);
-//    news_txt_who_info[1].second = new QLabel("is delayed: a virus attacked the construction crew.", news);
-//    news_txt_who_info[2].second = new QLabel("is delayed: the construction crew cannot manage their own time.", news);
-//    news_txt_who_info[3].second = new QLabel("is delayed: there were difficulties in connecting the object to communications: no electricity.", news);
-//    news_txt_who_info[4].second = new QLabel("is delayed: there were difficulties in connecting the object to communications: no water.", news);
-//    news_txt_who_info[5].second = new QLabel("is delayed: the state commission does not accept the object.", news);
-//    news_txt_who_info[6].second = new QLabel("is delayed: defects caused by the works of the general contractor were found.", news);
-//    news_txt_who_info[7].second = new QLabel("is delayed: defects caused by poor-quality materials were found.", news);
-//    news_txt_who_info[8].second = new QLabel("is delayed: defects caused by non-compliance with construction technology were found.", news);
-//    news_txt_who_info[9].second = new QLabel("is delayed: there were problems with documentation.", news);
-//    news_txt_who_info[10].second = new QLabel("is delayed: the designer did not draw a complex node of the frame structure. It is necessary to correct the drawings.", news);
-//    news_txt_who_info[11].second = new QLabel("is delayed: the designer did not specify the dimensions of the parts in the drawings. It is necessary to send the diagrams for revision.", news);
-//    news_txt_who_info[12].second = new QLabel("is delayed: the hired universal builders refused to carry out the finishing. The customer is looking for a specialized team.", news);
-//    news_txt_who_info[13].second = new QLabel("is delayed: documents for the commissioning of housing have not been agreed with the utilities.", news);
-//    news_txt_who_info[14].second = new QLabel("is delayed due to insufficient qualifications of workers and engineering staff.", news);
-//    news_txt_who_info[15].second = new QLabel("is delayed due to the introduction of new legislative norms and rules in the design process.", news);
-//    news_txt_who_info[16].second = new QLabel("is delayed: it became necessary to obtain additional approvals for the project with environmental services.", news);
-//    news_txt_who_info[17].second = new QLabel("is delayed due to the discovery of archaeological finds on the site.", news);
-//    news_txt_who_info[18].second = new QLabel("is delayed due to legal proceedings on land issues.", news);
-//    news_txt_who_info[19].second = new QLabel("is delayed: it became necessary to conduct additional material tests.", news);
-//
-//    for (int i = 0; i < 20; ++i) {
-//        news_txt_who_info[i].first->setMouseTracking(true);
-//        news_txt_who_info[i].second->setMouseTracking(true);
-//    }
-//}
-//
-//void PocketEconomic::PrepareNews() {
-//
-//    for (auto& news_txt : news_txt_who_info) {
-//        delete news_txt.first;
-//        delete news_txt.second;
-//    }
-//    news_txt_who_info.resize(20);
-//
-//    news->setAlignment(Qt::AlignVCenter | Qt::AlignLeft);
-//    news->setParent(window);
-//    news->setMouseTracking(true);
-//    news->setVisible(false);
-//
-//    MakeNews();
-//
-//    int64_t max_news_len = 0, max_name_len = 0;
-//    for (int i = 0; i < news_txt_who_info.size(); ++i) {
-//        QFontMetrics fm((news_txt_who_info[i].first)->font());
-//        /*max_name_len = std::max(max_name_len, (news_txt_who_info[i].first)->text().length() * 12ll);
-//        max_news_len = std::max(max_news_len, (news_txt_who_info[i].second)->text().length() * 12ll);*/
-//        max_name_len = std::max(max_name_len, fm.horizontalAdvance((news_txt_who_info[i].first)->text()) + (news_txt_who_info[i].first)->text().length() * 2);
-//        max_news_len = std::max(max_news_len, fm.horizontalAdvance((news_txt_who_info[i].second)->text()) + (news_txt_who_info[i].second)->text().length() * 2);
-//    }
-//
-//
-//    for (int i = 0; i < news_txt_who_info.size(); ++i) {
-//        (news_txt_who_info[i].first)->setGeometry(15, 15 + 35 * i, max_name_len + 30, 25);
-//        (news_txt_who_info[i].second)->setGeometry((news_txt_who_info[i].first)->pos().x() + (news_txt_who_info[i].first)->size().width() + 15, 15 + 35 * i, max_news_len + 30, 25);
-//        (news_txt_who_info[i].first)->setStyleSheet(news_txt_style);
-//        (news_txt_who_info[i].second)->setStyleSheet(news_txt_style);
-//    }
-//
-//    news->setGeometry(0, news_btn->size().height() + 15, 
-//        news_txt_who_info.empty() ? news_btn->size().width() : (news_txt_who_info[0].second)->pos().x() + (news_txt_who_info[0].second)->size().width() + 15, 
-//        35 * news_txt_who_info.size() + 20);
-//}
-//
-//
-//void PocketEconomic::NewsIsShown() {
-//    QObject::connect(news_btn, &QPushButton::clicked, [&]() {
-//        bool need = !news->isVisible();
-//        PrepareNews();
-//        news->setVisible(need);
-//        background_picture_->setPixmap(background_pix);
-//        return;
-//        });
-//}
 
 void PocketEconomic::MakeNews() {
     tmp_news.resize(30);
@@ -1087,6 +1070,8 @@ void PocketEconomic::PrepareNews() {
     news_table->setColumnWidth(1, 1000);
     news_table->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     news_table->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+    news_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    news_table->setSelectionMode(QAbstractItemView::NoSelection);
 
     MakeNews();
     // add months
@@ -1110,11 +1095,130 @@ void PocketEconomic::PrepareNews() {
     }
 }
 
-
-
 void PocketEconomic::NewsIsShown() {
     QObject::connect(news_btn, &QPushButton::clicked, [&]() {
         news->setVisible(!news->isVisible());
+        news_table->scrollToBottom();
+        news_table->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+        if (news_table->rowCount()) news_table->scrollToItem(news_table->item(news_table->rowCount() - 1, 0));
+        background_picture_->setPixmap(background_pix);
+        return;
+        });
+}
+
+//void PocketEconomic::PreparePlayersInfo() {
+//    players_info->setParent(window);
+//    players_info->setGeometry(players_info_btn->pos().x(), news->pos().y(), fullscreen_width - players_info_btn->pos().x() - personal_info->size().width() - 25, news->size().height());
+//    players_info->setLayout(players_info_layout);
+//    players_info_layout->addWidget(players_nicknames_table);
+//    players_info_layout->addWidget(players_info_table);
+//    players_info_layout->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+//    players_nicknames_table->setFixedSize(players_info->size().width() / 2 - 25, news->size().height() - 50);
+//    players_nicknames_table->setShowGrid(false);
+//    players_nicknames_table->setRowCount(10);
+//    players_nicknames_table->setColumnCount(2);
+//    players_nicknames_table->setColumnWidth(0, 100);
+//    players_nicknames_table->setRowHeight(0, 100);
+//    players_nicknames_table->setColumnWidth(1, 250);
+//    players_nicknames_table->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+//    players_nicknames_table->setHorizontalScrollMode(QAbstractItemView::ScrollPerPixel);
+//
+//
+//    for (int i = 0; i < 5; ++i) {
+//        players_info_icons[i] = new QLabel();
+//        players_info_icons[i]->setPixmap(players_info_profile_icon);
+//        players_info_icons[i]->setStyleSheet("background-color: red;");
+//        players_info_icons[i]->setAlignment(Qt::AlignCenter);
+//        players_info_icons[i]->setFixedSize(100, 100);
+//
+//        auto icon = QIcon(players_info_profile_icon);
+//        QPushButton* tryy = new QPushButton();
+//        tryy->setIcon(players_info_profile_icon);
+//        auto add = new QTableWidgetItem(tryy);
+//        add->setBackground(QColor(255, 0, 0));
+//        players_nicknames_table->setItem(i * 2, 0, add);
+//        players_nicknames_table->setSpan(i * 2, 0, 2, 1);
+//        players_nicknames_table->setItem(i * 2, 1, new QTableWidgetItem(QString("Player " + QString::fromStdString(std::to_string(i + 1)))));
+//        players_nicknames_table->setItem(i * 2 + 1, 0, new QTableWidgetItem("Nickname"));
+//    }/**/
+//
+//
+//
+//
+//    //MakeNews();
+//    //// add months
+//    //tmp_news[5] = { "May", "" };
+//
+//    //for (auto& el : tmp_news) {
+//    //    int row = news_table->rowCount();
+//    //    news_table->insertRow(row);
+//    //    news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first)));
+//    //    news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
+//    //}
+//    ////merge cells for months
+//    //news_table->setSpan(5, 0, 1, 2);
+//    //news_table->item(5, 0)->setBackground(QColor(0, 0, 0, 25));
+//
+//    //for (int i = 0; i < news_table->rowCount(); ++i) {
+//    //    QTableWidgetItem* cur = news_table->item(i, 0);
+//    //    std::string color = (cur->text()).toStdString();
+//    //    if (color.find("Red") != std::string::npos) cur->setForeground(QColor(209, 11, 11));
+//    //    else if (color.find("Orange") != std::string::npos) cur->setForeground(QColor(250, 153, 7));
+//    //}
+//}
+
+
+void PocketEconomic::PreparePlayersInfo() {
+    players_info->setParent(window);
+    players_info->setGeometry(players_info_btn->pos().x(), news->pos().y(), fullscreen_width - players_info_btn->pos().x() - personal_info->size().width() - 25, news->size().height());
+    players_info->setLayout(players_info_layout);
+    players_info_layout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    QLabel* right_part = new QLabel(), *left_part = new QLabel();
+    players_info_layout->addWidget(left_part);
+    players_info_layout->addWidget(right_part);
+
+    left_part->setFixedSize(players_info->size().width() / 2 - 100, players_info->size().height() - 20);
+    left_part->setLayout(players_info_vertical_layout);
+    left_part->setAlignment(Qt::AlignCenter);
+    left_part->setStyleSheet("background-color: white; border-width: 1px;");
+    for (int i = 0; i < 5; ++i) {
+        QHBoxLayout* layout = new QHBoxLayout();
+        players_info_vertical_layout->addLayout(layout);
+        /*players_info_icons[i] = new QLabel();
+        players_info_icons[i]->setPixmap(players_info_profile_icon);
+        players_info_icons[i]->setStyleSheet("background-color: red;");
+        players_info_icons[i]->setAlignment(Qt::AlignCenter);
+        players_info_icons[i]->setFixedSize(75, 75);*/
+
+        players_info_icons[i] = new QPushButton();
+        players_info_icons[i]->setIcon(players_info_profile_icon);
+        players_info_icons[i]->setIconSize(QSize(70, 70));
+        players_info_icons[i]->setStyleSheet("background-color: red;");
+        players_info_icons[i]->setFixedSize(75, 75);
+
+        layout->addWidget(players_info_icons[i]);
+        layout->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+
+        QVBoxLayout* info = new QVBoxLayout();
+        info->setAlignment(Qt::AlignCenter);
+        layout->addLayout(info);
+        QLabel* player = new QLabel(QString::fromStdString("Player " + std::to_string(i + 1)));
+        player->setStyleSheet(news_txt_style);
+        info->addWidget(player);
+        QLabel* nickname = new QLabel("Nickname");
+        nickname->setStyleSheet(news_txt_style);
+        info->addWidget(nickname);
+    }
+
+    right_part->setFixedSize(players_info->size().width() - left_part->size().width() - 50, left_part->size().height());
+    //right_part->setLayout(players_info_vertical_layout);
+    right_part->setAlignment(Qt::AlignCenter);
+    right_part->setStyleSheet("background-color: white; border-width: 1px;");
+}
+
+void PocketEconomic::PlayersInfoIsShown() {
+    QObject::connect(players_info_btn, &QPushButton::clicked, [&]() {
+        players_info->setVisible(!players_info->isVisible());
         news_table->scrollToBottom();
         news_table->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
         if (news_table->rowCount()) news_table->scrollToItem(news_table->item(news_table->rowCount() - 1, 0));

@@ -143,6 +143,8 @@ public:
     void LandAnsResortInformationIsShown();
     void PrepareNews();
     void NewsIsShown();
+    void PreparePlayersInfo();
+    void PlayersInfoIsShown();
 
     bool eventFilter(QObject*, QEvent* event);
 
@@ -203,7 +205,7 @@ private:
     double scale_x = 1600, scale_y = 900;
 
     QPushButton* close_btn = new QPushButton();
-    QPixmap cross_pix = QPixmap("../../../Pocket-Economic/frontend/assets/cross.png").scaled(35, 35, Qt::KeepAspectRatio);
+    QPixmap cross_pix = QPixmap("../../../Pocket-Economic/frontend/assets/cross.png").scaled(40, 40, Qt::KeepAspectRatio);
 
 
     QLabel* offer = new QLabel();
@@ -239,7 +241,13 @@ private:
     QHBoxLayout* shop_name_layout = new QHBoxLayout();
     QLabel* shop_name_const = new QLabel();
 
-    QHBoxLayout* shop_house1_layout = new QHBoxLayout();
+
+    std::vector<QHBoxLayout*> shop_buidings_layouts = std::vector<QHBoxLayout*>(5);
+    std::vector<QVBoxLayout*> shop_buidings_info_layouts = std::vector<QVBoxLayout*>(5);
+    std::vector<QLabel*> shop_buidings_pictures = std::vector<QLabel*>(5);
+    std::vector<std::vector<QLabel*>> shop_building_infos = std::vector<std::vector<QLabel*>>(5);
+    QString shopping_style;
+    /*QHBoxLayout* shop_house1_layout = new QHBoxLayout();
     QVBoxLayout* shop_house1_info_layout = new QVBoxLayout();
     QLabel* shop_house1_picture = new QLabel();
     QLabel* shop_house1_info_name = new QLabel();
@@ -274,7 +282,7 @@ private:
     QLabel* shop_shop2_info_income = new QLabel();
     QLabel* shop_shop2_info_cost = new QLabel();
 
-    QPushButton* close_shop_btn = new QPushButton();
+    QPushButton* close_shop_btn = new QPushButton();*/
 
 
     QLabel* land_resort_information = new QLabel();
@@ -283,9 +291,36 @@ private:
     QPushButton* close_land_resort_information_btn = new QPushButton();
 
     QLabel* news = new QLabel();
-    std::vector<std::pair<QLabel*, QLabel*>> news_txt_who_info;
     QString news_txt_style;
     QTableWidget* news_table = new QTableWidget();
     std::vector<std::pair<std::string, std::string>> tmp_news;
     QVBoxLayout* news_layout = new QVBoxLayout();
+
+
+    //QLabel* players_info = new QLabel();
+    //QHBoxLayout* players_info_layout = new QHBoxLayout();
+    //QString players_info_txt_style;
+    //QTableWidget* players_nicknames_table = new QTableWidget();/*
+    //QPixmap players_info_profile_icon = QPixmap("../../../Pocket-Economic/frontend/assets/profile_icon.png").scaled(100, 100, Qt::KeepAspectRatio);*/
+    //QPixmap players_info_profile_icon = QPixmap("../../../Pocket-Economic/frontend/assets/profile_icon.png");
+    //std::vector<QLabel*> players_info_icons = std::vector<QLabel*>(5);
+    //std::vector<std::vector<QLabel*>> players_info_nicknames_infos = std::vector<std::vector<QLabel*>>(5);
+    //std::vector<std::pair<std::string, std::string>> tmp_players_info;
+
+    //QTableWidget* players_info_table = new QTableWidget();
+
+    QLabel* players_info = new QLabel();
+    QHBoxLayout* players_info_layout = new QHBoxLayout();
+    QVBoxLayout* players_info_vertical_layout = new QVBoxLayout();
+    QString players_info_txt_style;
+    QPixmap players_info_profile_icon = QPixmap("../../../Pocket-Economic/frontend/assets/profile_icon.png").scaled(70, 70, Qt::KeepAspectRatio);
+   /* std::vector<QVBoxLayout*> players_info_layouts = std::vector<QVBoxLayout*>(5);
+    std::vector<QLabel*> players_info_icons = std::vector<QLabel*>(5);
+    std::vector<std::vector<QLabel*>> players_info_nicknames_infos = std::vector<std::vector<QLabel*>>(5);
+    std::vector<std::pair<std::string, std::string>> tmp_players_info;*/
+
+
+    std::vector<QPushButton*> players_info_icons = std::vector<QPushButton*>(5);
+    std::vector<QLabel*> players_info_profiles = std::vector<QLabel*>(5);
+
 };
