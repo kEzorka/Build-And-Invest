@@ -29,6 +29,7 @@ set(PROJECT_SOURCES
 
     backend/includes/agencies/advert_agency.h
     backend/includes/agencies/building_agency.h
+    backend/includes/agencies/grocery_agency.h
     backend/includes/agencies/land_agency.h
     backend/includes/agencies/real_estate_agency.h
 
@@ -52,6 +53,7 @@ set(PROJECT_SOURCES
 
     backend/source/agencies/advert_agency.cpp
     backend/source/agencies/building_agency.cpp
+    backend/source/agencies/grocery_agency.cpp
     backend/source/agencies/land_agency.cpp
     backend/source/agencies/real_estate_agency.cpp
 

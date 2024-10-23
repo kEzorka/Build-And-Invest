@@ -1,6 +1,15 @@
 #include "../../includes/land_plot/land_plot.h"
+#include "../../includes/agencies/real_estate_agency.h"
+
+LandPlot::LandPlot(const int64_t& cost_of_land) : cost_of_land_(cost_of_land) {}
+
+LandPlot::LandPlot(int64_t&& cost_of_land) : cost_of_land_(cost_of_land) {}
 
 void LandPlot::setCostOfLand(const int64_t& cost) {
+	cost_of_land_ = cost;
+}
+
+void LandPlot::setCostOfLand(int64_t&& cost) {
 	cost_of_land_ = cost;
 }
 
@@ -14,6 +23,10 @@ void LandPlot::setNameOfLand(const std::string& str) {
 
 void LandPlot::updateSupply() {
 
+}
+
+int64_t LandPlot::getIncome() const {
+	return 0;
 }
 
 int64_t LandPlot::getCostOfLand() const {
