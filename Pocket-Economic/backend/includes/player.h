@@ -9,9 +9,6 @@
 #include <iostream>
 #include <vector>
 
-class RealEstateAgency;
-class GroceryAgency;
-
 class Player {
 public:
 	Player();
@@ -40,8 +37,11 @@ public:
 	std::string getColor();
 	int64_t getCoefOfHouseAdvertThisMonth() const;
 	int64_t getCoefOfSupermarketAdvertThisMonth() const;
+	RealEstateAgency* getRealEstateAgency() const;
 
 	void getIncome(const int& month);
+
+	bool hasSupply() const;
 
 private:
 	std::string nickname_ = "";

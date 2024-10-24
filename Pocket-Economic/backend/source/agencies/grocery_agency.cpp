@@ -1,7 +1,6 @@
 #include "../../includes/agencies/grocery_agency.h"
 
 int64_t GroceryAgency::getIncome(Player* player, BuildingLand* building_land, const int& month) {
-    int64_t income = 0;
 
     double coef_by_month = getCoefByMonth(month);
     double coef_by_houses = 1 + building_land->getHouses().size() * 0.8;
@@ -15,13 +14,21 @@ int64_t GroceryAgency::getIncome(Player* player, BuildingLand* building_land, co
         int64_t time_end_of_bulding = supermarket->getBuildingTime();
         double coef_of_house = 1.0 / (time_end_of_bulding + 1);
         if (supermarket->getSupermarketType() == Supermarket::SupermarketType::Supermarket) {
-            income += supermarket_demand_coef * supermarket->getCostOfOneProduct();
+            income_supermarket += supermarket_demand_coef * supermarket->getCostOfOneProduct();
         } else if (supermarket->getSupermarketType() == Supermarket::SupermarketType::Hypermarket) {
-            income += hypermarket_demand_coef * supermarket->getCostOfOneProduct();
+            income_hypermarket += hypermarket_demand_coef * supermarket->getCostOfOneProduct();
         }
     }
 
-    return income;
+    return income_supermarket + income_hypermarket;
+}
+
+double GroceryAgency::getCurSupermarketIncome() const {
+    return income_supermarket;
+}
+
+double GroceryAgency::getCurHypermarketIncome() const {
+    return income_hypermarket;
 }
 
 void GroceryAgency::setDefaultSupermarketDemand(const double& demand) {

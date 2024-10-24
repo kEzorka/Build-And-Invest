@@ -92,20 +92,45 @@ int64_t Player::getMoney() const {
 }
 
 void Player::getIncome(const int& month) {
-    int64_t income = 0;
+    int64_t house_income = 0;
+    int64_t supermarket_income = 0;
+    int64_t player_income = 0;
 
     for (LandPlot*& land_plot : land_plot_arr_) {
         BuildingLand* building_land = dynamic_cast<BuildingLand*>(land_plot);
         Resort* resort = dynamic_cast<Resort*>(land_plot);
         if (building_land != nullptr) {
-            income += building_land->getRealEstateAgency()->getIncome(this, building_land, month);
-            income += building_land->getGroceryAgency()->getIncome(this, building_land, month);
+            building_land->getRealEstateAgency()->makeDemand(this, building_land, month);
+            house_income += building_land->getRealEstateAgency()->getIncome(this, building_land, month);
+            building_land->getRealEstateAgency()->giveDemandForPlayer(this);
+            supermarket_income += building_land->getGroceryAgency()->getIncome(this, building_land, month);
         } else if (resort != nullptr) {
 
         }
     }
 
-    money_ += income;
+    if (hasSupply()) {
+        for (LandPlot*& land_plot : land_plot_arr_) {
+            BuildingLand* building_land = dynamic_cast<BuildingLand*>(land_plot);
+            if (building_land != nullptr) {
+                if (building_land->hasMonolithicHouseSupply() ||
+                    building_land->hasBrickHouseSupply() ||
+                    building_land->hasPanelHouseSupply()) {
+                    player_income += player_estate_agency_->getIncome(this, building_land, month);
+                }
+            }
+        }
+    }
+
+    money_ += house_income;
+    money_ += supermarket_income;
+    money_ += player_income;
+}
+
+bool Player::hasSupply() const {
+    return player_estate_agency_->getCurMonolithicDemand() != 0 ||
+        player_estate_agency_->getCurPanelDemand() != 0 ||
+        player_estate_agency_->getCurBrickDemand() != 0;
 }
 
 std::string Player::getColor() {
@@ -118,4 +143,8 @@ int64_t Player::getCoefOfHouseAdvertThisMonth() const {
 
 int64_t Player::getCoefOfSupermarketAdvertThisMonth() const {
     return coef_of_advert_supermarket_this_month_;
+}
+
+RealEstateAgency* Player::getRealEstateAgency() const {
+    return player_estate_agency_;
 }

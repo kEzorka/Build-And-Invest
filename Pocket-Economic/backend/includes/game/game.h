@@ -45,6 +45,14 @@ public:
     void buyHouseAdvert(Player* player, const int& cnt_of_advert) const;
     void buySupermarketAdvert(Player* player, const int& cnt_of_advert) const;
 
+
+
+
+
+    double getMonolithicIncome(Player* player) const;
+    double getPanelIncome(Player* player) const;
+    double getBrickIncome(Player* player) const;
+
 private:
     int default_money_for_player_ = 0;
     int moves_in_the_game_ = INF;

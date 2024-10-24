@@ -44,62 +44,32 @@ void RealEstateAgency::setBrickHouseDemand(double&& demand) {
 }
 
 
-void RealEstateAgency::updateMonoliticHouseDemand(const double& demand) {
-    monolithic_house_demand_ /= 10;
+void RealEstateAgency::addMonoliticHouseDemand(const double& demand) {
     monolithic_house_demand_ += demand;
 }
 
-void RealEstateAgency::updateMonoliticHouseDemand(double&& demand) {
-    monolithic_house_demand_ /= 10;
+void RealEstateAgency::addMonoliticHouseDemand(double&& demand) {
     monolithic_house_demand_ += demand;
 }
 
-void RealEstateAgency::updatePanelHouseDemand(const double& demand) {
-    panel_house_demand_ /= 10;
+void RealEstateAgency::addPanelHouseDemand(const double& demand) {
     panel_house_demand_ += demand;
 }
 
-void RealEstateAgency::updatePanelHouseDemand(double&& demand) {
-    panel_house_demand_ /= 10;
+void RealEstateAgency::addPanelHouseDemand(double&& demand) {
     panel_house_demand_ += demand;
 }
 
-void RealEstateAgency::updateBrickHouseDemand(const double& demand) {
-    brick_house_demand_ /= 10;
+void RealEstateAgency::addBrickHouseDemand(const double& demand) {
     brick_house_demand_ += demand;
 }
 
-void RealEstateAgency::updateBrickHouseDemand(double&& demand) {
-    brick_house_demand_ /= 10;
+void RealEstateAgency::addBrickHouseDemand(double&& demand) {
     brick_house_demand_ += demand;
 }
 
 
 
-
-void RealEstateAgency::setMonoliticHouseSupply(const double& supply) {
-    monolithic_house_supply_ += supply;
-}
-
-void RealEstateAgency::setMonoliticHouseSupply(double&& supply) {
-    monolithic_house_supply_ += supply;
-}
-
-void RealEstateAgency::setPanelHouseSupply(const double& supply) {
-    panel_house_supply_ += supply;
-}
-
-void RealEstateAgency::setPanelHouseSupply(double&& supply) {
-    panel_house_supply_ += supply;
-}
-
-void RealEstateAgency::setBrickHouseSupply(const double& supply) {
-    brick_house_supply_ += supply;
-}
-
-void RealEstateAgency::setBrickHouseSupply(double&& supply) {
-    brick_house_supply_ += supply;
-}
 
 double RealEstateAgency::getDefaultMonolicticHouseDemand() const {
     return default_monolitic_house_demand_;
@@ -114,8 +84,59 @@ double RealEstateAgency::getDefaultBrickHouseDemand() const {
 }
 
 int64_t RealEstateAgency::getIncome(Player* player, BuildingLand* building_land, const int& month) {
-    int64_t income = 0;
+    income_monolithic_house = 0;
+    income_panel_house = 0;
+    income_brick_house = 0;
+    
 
+    for (House*& house : building_land->getHouses()) {
+        std::vector<House::FlatType*> flat_type_arr = house->getFlatTypesArr();
+        if (!flat_type_arr.empty()) {
+            int free_flats = flat_type_arr[0]->getFreeFlats();
+            if (house->getHouseType() == House::HouseType::MonoliticHouse) {
+                if (free_flats <= monolithic_house_demand_) {
+                    income_monolithic_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
+                    flat_type_arr[0]->setFreeFlatsCnt(0);
+                    monolithic_house_demand_ -= free_flats;
+                } else {
+                    income_monolithic_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
+                        * monolithic_house_demand_;
+                    flat_type_arr[0]->setFreeFlatsCnt(free_flats - monolithic_house_demand_);
+                    monolithic_house_demand_ = 0;
+                    building_land->makeMonolithicHouseSupplyFalse();
+                }
+            } else if (house->getHouseType() == House::HouseType::PanelHouse) {
+                if (free_flats <= panel_house_demand_) {
+                    income_panel_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
+                    flat_type_arr[0]->setFreeFlatsCnt(0);
+                    panel_house_demand_ -= free_flats;
+                } else {
+                    income_panel_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
+                        * panel_house_demand_;
+                    flat_type_arr[0]->setFreeFlatsCnt(free_flats - panel_house_demand_);
+                    panel_house_demand_ = 0;
+                    building_land->makePanelHouseSupplyFalse();
+                }
+            } else if (house->getHouseType() == House::HouseType::BrickHouse) {
+                if (free_flats <= brick_house_demand_) {
+                    income_brick_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
+                    flat_type_arr[0]->setFreeFlatsCnt(0);
+                    brick_house_demand_ -= free_flats;
+                } else {
+                    income_brick_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
+                        * brick_house_demand_;
+                    flat_type_arr[0]->setFreeFlatsCnt(free_flats - brick_house_demand_);
+                    brick_house_demand_ = 0;
+                    building_land->makeBrickHouseSupplyFalse();
+                }
+            }
+        }
+    }
+
+    return income_monolithic_house + income_panel_house + income_brick_house;
+}
+
+void RealEstateAgency::makeDemand(Player* player, BuildingLand* building_land, const int& month) {
     double coef_by_month = getCoefByMonth(month);
     double coef_by_supermarkets = 1 + building_land->getSupermarkets().size() * 0.3;
     double coef_by_advert = 1 + player->getCoefOfHouseAdvertThisMonth() / 100.0;
@@ -153,57 +174,77 @@ int64_t RealEstateAgency::getIncome(Player* player, BuildingLand* building_land,
     panel_demand_coef *= coef_for_panel_house;
     brick_demand_coef *= coef_for_brick_house;
 
-    updateMonoliticHouseDemand(monolitic_demand_coef);
-    updatePanelHouseDemand(panel_demand_coef);
-    updateBrickHouseDemand(brick_demand_coef);
+    addMonoliticHouseDemand(monolitic_demand_coef);
+    addPanelHouseDemand(panel_demand_coef);
+    addBrickHouseDemand(brick_demand_coef);
 
     monolithic_house_demand_ = static_cast<int>(monolithic_house_demand_);
     panel_house_demand_ = static_cast<int>(panel_house_demand_);
     brick_house_demand_ = static_cast<int>(brick_house_demand_);
+}
 
+void RealEstateAgency::updateDemand() {
+    monolithic_house_demand_ /= 10;
+    panel_house_demand_ /= 10;
+    brick_house_demand_ /= 10;
+}
 
-
-    for (House*& house : building_land->getHouses()) {
-        std::vector<House::FlatType*> flat_type_arr = house->getFlatTypesArr();
-        if (!flat_type_arr.empty()) {
-            int free_flats = flat_type_arr[0]->getFreeFlats();
-            if (house->getHouseType() == House::HouseType::MonoliticHouse) {
-                if (free_flats <= monolithic_house_demand_) {
-                    income += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
-                    flat_type_arr[0]->setFreeFlatsCnt(0);
-                    monolithic_house_demand_ -= free_flats;
-                } else {
-                    income += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
-                        * monolithic_house_demand_;
-                    flat_type_arr[0]->setFreeFlatsCnt(free_flats - monolithic_house_demand_);
-                    monolithic_house_demand_ = 0;
-                }
-            } else if (house->getHouseType() == House::HouseType::PanelHouse) {
-                if (free_flats <= panel_house_demand_) {
-                    income += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
-                    flat_type_arr[0]->setFreeFlatsCnt(0);
-                    panel_house_demand_ -= free_flats;
-                } else {
-                    income += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
-                        * panel_house_demand_;
-                    flat_type_arr[0]->setFreeFlatsCnt(free_flats - panel_house_demand_);
-                    panel_house_demand_ = 0;
-                }
-            } else if (house->getHouseType() == House::HouseType::BrickHouse) {
-                if (free_flats <= brick_house_demand_) {
-                    income += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
-                    flat_type_arr[0]->setFreeFlatsCnt(0);
-                    brick_house_demand_ -= free_flats;
-                } else {
-                    income += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
-                        * brick_house_demand_;
-                    flat_type_arr[0]->setFreeFlatsCnt(free_flats - brick_house_demand_);
-                    brick_house_demand_ = 0;
-                }
-            }
-        }
+void RealEstateAgency::giveDemandForPlayer(Player* player) {
+    if (monolithic_house_demand_ != 0) {
+        player->getRealEstateAgency()->addMonoliticHouseDemand(monolithic_house_demand_);
+        monolithic_house_demand_ = 0;
     }
-    return income;
+
+    if (panel_house_demand_ != 0) {
+        player->getRealEstateAgency()->addPanelHouseDemand(panel_house_demand_);
+        panel_house_demand_ = 0;
+    }
+
+    if (brick_house_demand_ != 0) {
+        player->getRealEstateAgency()->addBrickHouseDemand(brick_house_demand_);
+        brick_house_demand_ = 0;
+    }
+}
+
+void RealEstateAgency::giveDemandForGlobalRealEsateAgency(RealEstateAgency& real_estate_agecny) {
+    if (monolithic_house_demand_ != 0) {
+        real_estate_agecny.addMonoliticHouseDemand(monolithic_house_demand_);
+        monolithic_house_demand_ = 0;
+    }
+
+    if (panel_house_demand_ != 0) {
+        real_estate_agecny.addPanelHouseDemand(panel_house_demand_);
+        panel_house_demand_ = 0;
+    }
+
+    if (brick_house_demand_ != 0) {
+        real_estate_agecny.addBrickHouseDemand(brick_house_demand_);
+        brick_house_demand_ = 0;
+    }
+}
+
+double RealEstateAgency::getCurMonolithicIncome() const {
+    return income_monolithic_house;
+}
+
+double RealEstateAgency::getCurPanelIncome() const {
+    return income_panel_house;
+}
+
+double RealEstateAgency::getCurBrickIncome() const {
+    return income_brick_house;
+}
+
+double RealEstateAgency::getCurMonolithicDemand() const {
+    return monolithic_house_demand_;
+}
+
+double RealEstateAgency::getCurPanelDemand() const {
+    return panel_house_demand_;
+}
+
+double RealEstateAgency::getCurBrickDemand() const {
+    return brick_house_demand_;
 }
 
 

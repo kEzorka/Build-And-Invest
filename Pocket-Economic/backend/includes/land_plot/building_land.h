@@ -33,12 +33,22 @@ public:
 
 	void build(Realty* realty, const int& x, const int& y);
 
+	void makeMonolithicHouseSupplyFalse();
+	void makePanelHouseSupplyFalse();
+	void makeBrickHouseSupplyFalse();
+
+	bool hasMonolithicHouseSupply() const;
+	bool hasPanelHouseSupply() const;
+	bool hasBrickHouseSupply() const;
+
 private:
 	std::vector<std::vector<Realty*>> cells_;
 	std::vector<House*> houses_;
 	std::vector<Supermarket*> supermarkets_;
 
-
+	bool has_monolithic_house_supply = false;
+	bool has_panel_house_supply = false;
+	bool has_brick_house_supply = false;
 	RealEstateAgency* land_estate_agency_ = nullptr;
 	GroceryAgency* grocery_agency_ = nullptr;
 };

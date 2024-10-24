@@ -35,9 +35,45 @@ void BuildingLand::build(Realty* realty, const int& x, const int& y) {
     Supermarket* supermarket = dynamic_cast<Supermarket*>(realty);
     if (house != nullptr) {
         houses_.push_back(house);
+        std::vector<House::FlatType*> flat_type = house->getFlatTypesArr();
+        if (!flat_type.empty()) {
+            if (flat_type[0]->getFreeFlats() != 0) {
+                if (house->getHouseType() == House::HouseType::MonoliticHouse) {
+                    has_monolithic_house_supply = true;
+                } else if (house->getHouseType() == House::HouseType::PanelHouse) {
+                    has_panel_house_supply = true;
+                } else if (house->getHouseType() == House::HouseType::BrickHouse) {
+                    has_brick_house_supply = true;
+                }
+            }
+        }
     } else if (supermarket != nullptr) {
         supermarkets_.push_back(supermarket);
     }
+}
+
+void BuildingLand::makeMonolithicHouseSupplyFalse() {
+    has_monolithic_house_supply = false;
+}
+
+void BuildingLand::makePanelHouseSupplyFalse() {
+    has_panel_house_supply = false;
+}
+
+void BuildingLand::makeBrickHouseSupplyFalse() {
+    has_brick_house_supply = false;
+}
+
+bool BuildingLand::hasMonolithicHouseSupply() const {
+    return has_monolithic_house_supply;
+}
+
+bool BuildingLand::hasPanelHouseSupply() const {
+    return has_panel_house_supply;
+}
+
+bool BuildingLand::hasBrickHouseSupply() const {
+    return has_brick_house_supply;
 }
 
 size_t BuildingLand::getSquareArr() const {
