@@ -2,11 +2,12 @@
 #include "../../includes/agencies/real_estate_agency.h"
 #include "../../includes/agencies/grocery_agency.h"
 
+#include "../../includes/standard_classes.h"
+
 BuildingLand::BuildingLand(std::vector<std::vector<Realty*>> cells,
-    const std::string& name_of_land, const int64_t& cost_of_land) 
+    const std::string& name_of_land) 
     : cells_(cells) {
     name_of_land_ = name_of_land;
-    cost_of_land_ = cost_of_land;
 }
 
 void BuildingLand::setSquareArr(const size_t& x, const size_t& y) {
@@ -22,11 +23,11 @@ void BuildingLand::setOwner(Player* owner) {
     if (land_estate_agency_ != nullptr) {
         delete land_estate_agency_;
     }
-    land_estate_agency_ = new RealEstateAgency();
+    land_estate_agency_ = new RealEstateAgency(*(standard_classes->real_estate_agency_standard_));
     if (grocery_agency_ != nullptr) {
         delete grocery_agency_;
     }
-    grocery_agency_ = new GroceryAgency();
+    grocery_agency_ = new GroceryAgency(*(standard_classes->grocery_agency_standard_));
 }
 
 void BuildingLand::build(Realty* realty, const int& x, const int& y) {

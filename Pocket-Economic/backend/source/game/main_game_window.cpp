@@ -3,10 +3,10 @@
 void Game::nextGameStep() {
     news_window_.fresh_news_arr_.clear();
     ++month_;
-    global_real_estate_agency_.updateDemand();
+    global_real_estate_agency_->updateDemand();
     for (Player*& player : players_arr_) {
         player->getIncome(month_ - 1);
-        player->getRealEstateAgency()->giveDemandForGlobalRealEsateAgency(global_real_estate_agency_);
+        player->getRealEstateAgency()->giveDemandForGlobalRealEsateAgency(*global_real_estate_agency_);
         
         player->updateSpendingMoneyForAdvertForNewStep();
         std::vector<House*> vec_house = player->getHousesArr();
@@ -76,9 +76,9 @@ void Game::nextGameStep() {
         }
     }
 
-    if (global_real_estate_agency_.getCurMonolithicDemand() != 0 ||
-        global_real_estate_agency_.getCurPanelDemand() != 0 ||
-        global_real_estate_agency_.getCurBrickDemand() != 0) {
+    if (global_real_estate_agency_->getCurMonolithicDemand() != 0 ||
+        global_real_estate_agency_->getCurPanelDemand() != 0 ||
+        global_real_estate_agency_->getCurBrickDemand() != 0) {
         bool has_player_demand = false;
         std::vector<Player*> has_supply_players_arr;
         for (Player*& player : players_arr_) {
@@ -86,37 +86,30 @@ void Game::nextGameStep() {
                 has_supply_players_arr.push_back(player);
             }
         }
-        while ((global_real_estate_agency_.getCurMonolithicDemand() != 0 ||
-            global_real_estate_agency_.getCurPanelDemand() != 0 ||
-            global_real_estate_agency_.getCurBrickDemand() != 0) &&
+        while ((global_real_estate_agency_->getCurMonolithicDemand() != 0 ||
+            global_real_estate_agency_->getCurPanelDemand() != 0 ||
+            global_real_estate_agency_->getCurBrickDemand() != 0) &&
             !has_supply_players_arr.empty()) {
 
             int rand_player_pos = RandNum() % has_supply_players_arr.size();
             has_supply_players_arr[rand_player_pos]->getRealEstateAgency()->
-                setMonoliticHouseDemand(global_real_estate_agency_.getCurMonolithicDemand());
-            global_real_estate_agency_.setMonoliticHouseDemand(0);
+                setMonoliticHouseDemand(global_real_estate_agency_->getCurMonolithicDemand());
+            global_real_estate_agency_->setMonoliticHouseDemand(0);
             has_supply_players_arr[rand_player_pos]->getRealEstateAgency()->
-                setPanelHouseDemand(global_real_estate_agency_.getCurPanelDemand());
-            global_real_estate_agency_.setPanelHouseDemand(0);
+                setPanelHouseDemand(global_real_estate_agency_->getCurPanelDemand());
+            global_real_estate_agency_->setPanelHouseDemand(0);
             has_supply_players_arr[rand_player_pos]->getRealEstateAgency()->
-                setBrickHouseDemand(global_real_estate_agency_.getCurBrickDemand());
-            global_real_estate_agency_.setBrickHouseDemand(0);
+                setBrickHouseDemand(global_real_estate_agency_->getCurBrickDemand());
+            global_real_estate_agency_->setBrickHouseDemand(0);
             has_supply_players_arr[rand_player_pos]->getIncome(month_ - 1);
 
             has_supply_players_arr[rand_player_pos]->getRealEstateAgency()
-                ->giveDemandForGlobalRealEsateAgency(global_real_estate_agency_);
+                ->giveDemandForGlobalRealEsateAgency(*global_real_estate_agency_);
 
             has_supply_players_arr.erase(has_supply_players_arr.begin() + rand_player_pos);
         }
     }
 }
-
-////////////////////////////////
-//
-// днаюбхрэ яерепш церепш б цеил
-// ядекюрэ онддепфйс пегнпрнб
-//
-////////////////////////////////
 
 void Game::makeLandPlotsArr() {
     //
@@ -281,7 +274,7 @@ void Game::buildHouse(Player* player, BuildingLand* building_land, const House::
     if (building_land->getRealty(building_pos_x, building_pos_y) != nullptr) {
         throw std::runtime_error("this place for house has already builted up");
     }
-    House* house = player->buildHouse(house_type, building_agency_);
+    House* house = player->buildHouse(house_type, *building_agency_);
     house->setNumberOfRealty(building_pos_y * building_land->getSizeX() + building_pos_x);
     building_land->build(house, building_pos_x, building_pos_y);
     news_window_.buy_news_arr_.push_back(std::make_pair(player,
@@ -299,7 +292,7 @@ void Game::buildSupermarket(Player* player, BuildingLand* building_land, const H
     if (building_land->getRealty(building_pos_x, building_pos_y) != nullptr) {
         throw std::runtime_error("this place for supermarket has already builted up");
     }
-    Supermarket* supermarket = player->buildSupermarket(building_agency_);
+    Supermarket* supermarket = player->buildSupermarket(*building_agency_);
     supermarket->setNumberOfRealty(building_pos_y * building_land->getSizeX() + building_pos_x);
     building_land->build(supermarket, building_pos_x, building_pos_y);
     news_window_.buy_news_arr_.push_back(std::make_pair(player,
@@ -329,7 +322,7 @@ void Game::buyBuildingLand(Player* player, const int& pos_x, const int& pos_y)  
         return;
         //throw std::runtime_error("can not buy land: pos_x more than land plots");
     }
-    player->buyBuildingLand(dynamic_cast<BuildingLand*>(land_plots_arr_[pos_x][pos_y]), land_agency_);
+    player->buyBuildingLand(dynamic_cast<BuildingLand*>(land_plots_arr_[pos_x][pos_y]), *land_agency_);
     news_window_.buy_news_arr_.push_back(std::make_pair(player,
         "bought land plot in " + land_plots_arr_[pos_x][pos_y]->getNameOfLand() + "!"
     ));
@@ -341,28 +334,36 @@ void Game::buyResort(Player* player, const int& pos_x, const int& pos_y) {
     } else if (pos_x > land_plots_arr_[pos_y].size()) {
         throw std::runtime_error("can not buy land: pos_x more than land plots");
     }
-    player->buyResort(dynamic_cast<Resort*>(land_plots_arr_[pos_x][pos_y]), land_agency_);
+    player->buyResort(dynamic_cast<Resort*>(land_plots_arr_[pos_x][pos_y]), *land_agency_);
     news_window_.buy_news_arr_.push_back(std::make_pair(player,
         "bought resort in " + land_plots_arr_[pos_x][pos_y]->getNameOfLand() + "!"
     ));
 }
 
 void Game::buyHouseAdvert(Player* player, const int& cnt_of_advert) const {
-    player->buyHouseAdvert(cnt_of_advert, advert_agency_);
+    player->buyHouseAdvert(cnt_of_advert, *advert_agency_);
 }
 
 void Game::buySupermarketAdvert(Player* player, const int& cnt_of_advert) const {
-    player->buySupermarketAdvert(cnt_of_advert, advert_agency_);
+    player->buySupermarketAdvert(cnt_of_advert, *advert_agency_);
 }
 
 double Game::getMonolithicIncome(Player* player) const {
-    return player->getRealEstateAgency()->getCurMonolithicIncome();
+    return player->getMonolithicIncome();
 }
 
 double Game::getPanelIncome(Player* player) const {
-    return player->getRealEstateAgency()->getCurPanelIncome();
+    return player->getPanelIncome();
 }
 
 double Game::getBrickIncome(Player* player) const {
-    return player->getRealEstateAgency()->getCurBrickIncome();
+    return player->getBrickIncome();
+}
+
+double Game::getSupermarketIncome(Player* player) const {
+    return player->getSupermarketIncome();
+}
+
+double Game::getHypermarketIncome(Player* player) const {
+    return player->getHypermarketIncome();
 }

@@ -113,6 +113,7 @@ protected:
         painter.drawRect(QRect(0, 0, 25, 25));
         update();
     }
+
 private:
     Grid* grid_ = new Grid();
     Player_Owner* player = new Player_Owner();

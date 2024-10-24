@@ -8,7 +8,7 @@ class BuildingLand : public virtual LandPlot {
 public:
 	BuildingLand() = default;
 	BuildingLand(std::vector<std::vector<Realty*>> cells,
-		const std::string& name_of_land = "", const int64_t& cost_of_land = 0);
+		const std::string& name_of_land = "");
 	BuildingLand(const BuildingLand&) = default;
 	BuildingLand(BuildingLand&&) = default;
 	BuildingLand& operator=(const BuildingLand&) = default;

@@ -31,11 +31,19 @@ double GroceryAgency::getCurHypermarketIncome() const {
     return income_hypermarket;
 }
 
+double GroceryAgency::getDefaultSupermarketDemand() const {
+    return default_supermarket_demand_;
+}
+
+double GroceryAgency::getDefaultHypermarketDemand() const {
+    return default_hypermarket_demand_;
+}
+
 void GroceryAgency::setDefaultSupermarketDemand(const double& demand) {
     default_supermarket_demand_ = demand;
 }
 
-void GroceryAgency::setDefaultHypermrkaetDemand(const double& demand) {
+void GroceryAgency::setDefaultHypermarketDemand(const double& demand) {
     default_hypermarket_demand_ = demand;
 }
 

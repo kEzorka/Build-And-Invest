@@ -11,52 +11,72 @@
 
 class Player {
 public:
-	Player();
-	Player(const int64_t& money, const std::string& color);
-	void setNickname(const std::string& nickname);
-	void setMoney(const int64_t& money);
-	void setColor(const std::string& color);
-	void updateSpendingMoneyForAdvertForNewStep();
+    Player();
+    Player(const int64_t& money, const std::string& color);
+    virtual void setNickname(const std::string& nickname);
+    virtual void setMoney(const int64_t& money);
+    virtual void setColor(const std::string& color);
+    virtual void updateSpendingMoneyForAdvertForNewStep();
 
 
-	void buyHouseAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency);
-	void buySupermarketAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency);
+    virtual void buyHouseAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency);
+    virtual void buySupermarketAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency);
 
-	Supermarket* buildSupermarket(const BuildingAgency& real_estate_agency);
-	House* buildHouse(const House::HouseType& house_type, const BuildingAgency& real_estate_ageny);
-	void buyBuildingLand(BuildingLand* land_plot, const LandAgency& land_agency);
-	void buyResort(Resort* land_plot, const LandAgency& land_agency);
+    virtual Supermarket* buildSupermarket(const BuildingAgency& real_estate_agency);
+    virtual House* buildHouse(const House::HouseType& house_type, const BuildingAgency& real_estate_ageny);
+    virtual void buyBuildingLand(BuildingLand* land_plot, const LandAgency& land_agency);
+    virtual void buyResort(Resort* land_plot, const LandAgency& land_agency);
 
 
 
-	std::string getNickname() const;
-	std::vector<Supermarket*> getSupermarketsArr() const;
-	std::vector<House*> getHousesArr() const;
-	std::vector<LandPlot*> getLandPlotsArr() const;
-	int64_t getMoney() const;
-	std::string getColor();
-	int64_t getCoefOfHouseAdvertThisMonth() const;
-	int64_t getCoefOfSupermarketAdvertThisMonth() const;
-	RealEstateAgency* getRealEstateAgency() const;
+    virtual std::string getNickname() const;
+    virtual std::vector<Supermarket*> getSupermarketsArr() const;
+    virtual std::vector<House*> getHousesArr() const;
+    virtual std::vector<LandPlot*> getLandPlotsArr() const;
+    virtual int64_t getMoney() const;
+    virtual std::string getColor();
+    virtual int64_t getCoefOfHouseAdvertThisMonth() const;
+    virtual int64_t getCoefOfSupermarketAdvertThisMonth() const;
+    virtual RealEstateAgency* getRealEstateAgency() const;
 
-	void getIncome(const int& month);
+    virtual double getMonolithicIncome() const;
+    virtual double getPanelIncome() const;
+    virtual double getBrickIncome() const;
+    virtual double getSupermarketIncome() const;
+    virtual double getHypermarketIncome() const;
 
-	bool hasSupply() const;
+    virtual void getIncome(const int& month);
 
-private:
-	std::string nickname_ = "";
+    virtual bool hasSupply() const;
 
-	std::vector<House*> house_arr_;
-	std::vector<Supermarket*> supermarket_arr_;
-	std::vector<LandPlot*> land_plot_arr_;
-	int64_t money_ = 0;
+    virtual void updateResort(Resort* resort);
 
-	int64_t coef_of_advert_houses_this_month_ = 0;
-	int64_t coef_of_advert_houses_next_month_ = 0;
+protected:
+    void updateIncome();
 
-	int64_t coef_of_advert_supermarket_this_month_ = 0;
+    std::string nickname_ = "";
 
-	RealEstateAgency* player_estate_agency_ = nullptr;
+    std::vector<House*> house_arr_;
+    std::vector<Supermarket*> supermarket_arr_;
+    std::vector<LandPlot*> land_plot_arr_;
+    int64_t money_ = 0;
 
-	std::string color_ = "";
+    int64_t coef_of_advert_houses_this_month_ = 0;
+    int64_t coef_of_advert_houses_next_month_ = 0;
+
+    int64_t coef_of_advert_supermarket_this_month_ = 0;
+
+    RealEstateAgency* player_estate_agency_ = nullptr;
+
+    std::string color_ = "";
+
+    double income_monolithic_house_ = 0;
+    double income_panel_house_ = 0;
+    double income_brick_house_ = 0;
+    double income_supermarket_house_ = 0;
+    double income_hypermarket_house_ = 0;
+
+    bool bought_land_ = false;
+    bool bought_house_ = false;
+    bool bought_supermarket_ = false;
 };

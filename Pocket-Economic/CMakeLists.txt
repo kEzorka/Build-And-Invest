@@ -27,6 +27,12 @@ set(PROJECT_SOURCES
 
     
 
+    backend/bots/includes/bot.h
+    backend/bots/includes/first_bot.h
+
+    backend/bots/source/bot.cpp
+    backend/bots/source/first_bot.cpp
+
     backend/includes/agencies/advert_agency.h
     backend/includes/agencies/building_agency.h
     backend/includes/agencies/grocery_agency.h
@@ -48,6 +54,7 @@ set(PROJECT_SOURCES
     backend/includes/realty/supermarket.h
 
     backend/includes/player.h
+    backend/includes/standard_classes.h
 
 
 
@@ -61,6 +68,7 @@ set(PROJECT_SOURCES
     backend/source/game/game.cpp
     backend/source/game/main_game_window.cpp
     backend/source/game/news_window.cpp
+    backend/source/game/starting_window.cpp
 
     backend/source/land_plot/building_land.cpp
     backend/source/land_plot/land_plot.cpp

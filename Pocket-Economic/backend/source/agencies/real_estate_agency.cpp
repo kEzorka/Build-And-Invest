@@ -84,9 +84,9 @@ double RealEstateAgency::getDefaultBrickHouseDemand() const {
 }
 
 int64_t RealEstateAgency::getIncome(Player* player, BuildingLand* building_land, const int& month) {
-    income_monolithic_house = 0;
-    income_panel_house = 0;
-    income_brick_house = 0;
+    income_monolithic_house_ = 0;
+    income_panel_house_ = 0;
+    income_brick_house_ = 0;
     
 
     for (House*& house : building_land->getHouses()) {
@@ -95,11 +95,11 @@ int64_t RealEstateAgency::getIncome(Player* player, BuildingLand* building_land,
             int free_flats = flat_type_arr[0]->getFreeFlats();
             if (house->getHouseType() == House::HouseType::MonoliticHouse) {
                 if (free_flats <= monolithic_house_demand_) {
-                    income_monolithic_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
+                    income_monolithic_house_ += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
                     flat_type_arr[0]->setFreeFlatsCnt(0);
                     monolithic_house_demand_ -= free_flats;
                 } else {
-                    income_monolithic_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
+                    income_monolithic_house_ += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
                         * monolithic_house_demand_;
                     flat_type_arr[0]->setFreeFlatsCnt(free_flats - monolithic_house_demand_);
                     monolithic_house_demand_ = 0;
@@ -107,11 +107,11 @@ int64_t RealEstateAgency::getIncome(Player* player, BuildingLand* building_land,
                 }
             } else if (house->getHouseType() == House::HouseType::PanelHouse) {
                 if (free_flats <= panel_house_demand_) {
-                    income_panel_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
+                    income_panel_house_ += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
                     flat_type_arr[0]->setFreeFlatsCnt(0);
                     panel_house_demand_ -= free_flats;
                 } else {
-                    income_panel_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
+                    income_panel_house_ += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
                         * panel_house_demand_;
                     flat_type_arr[0]->setFreeFlatsCnt(free_flats - panel_house_demand_);
                     panel_house_demand_ = 0;
@@ -119,11 +119,11 @@ int64_t RealEstateAgency::getIncome(Player* player, BuildingLand* building_land,
                 }
             } else if (house->getHouseType() == House::HouseType::BrickHouse) {
                 if (free_flats <= brick_house_demand_) {
-                    income_brick_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
+                    income_brick_house_ += flat_type_arr[0]->getFlat()->getCostOfSquareMeter() * free_flats;
                     flat_type_arr[0]->setFreeFlatsCnt(0);
                     brick_house_demand_ -= free_flats;
                 } else {
-                    income_brick_house += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
+                    income_brick_house_ += flat_type_arr[0]->getFlat()->getCostOfSquareMeter()
                         * brick_house_demand_;
                     flat_type_arr[0]->setFreeFlatsCnt(free_flats - brick_house_demand_);
                     brick_house_demand_ = 0;
@@ -133,7 +133,7 @@ int64_t RealEstateAgency::getIncome(Player* player, BuildingLand* building_land,
         }
     }
 
-    return income_monolithic_house + income_panel_house + income_brick_house;
+    return income_monolithic_house_ + income_panel_house_ + income_brick_house_;
 }
 
 void RealEstateAgency::makeDemand(Player* player, BuildingLand* building_land, const int& month) {
@@ -224,15 +224,15 @@ void RealEstateAgency::giveDemandForGlobalRealEsateAgency(RealEstateAgency& real
 }
 
 double RealEstateAgency::getCurMonolithicIncome() const {
-    return income_monolithic_house;
+    return income_monolithic_house_;
 }
 
 double RealEstateAgency::getCurPanelIncome() const {
-    return income_panel_house;
+    return income_panel_house_;
 }
 
 double RealEstateAgency::getCurBrickIncome() const {
-    return income_brick_house;
+    return income_brick_house_;
 }
 
 double RealEstateAgency::getCurMonolithicDemand() const {

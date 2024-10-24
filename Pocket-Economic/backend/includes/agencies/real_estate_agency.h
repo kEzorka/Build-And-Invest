@@ -53,7 +53,7 @@ private:
 	double default_panel_house_demand_ = 1.5;
 	double default_brick_house_demand_ = 1;
 
-	double income_monolithic_house = 0;
-	double income_panel_house = 0;
-	double income_brick_house = 0;
+	double income_monolithic_house_ = 0;
+	double income_panel_house_ = 0;
+	double income_brick_house_ = 0;
 };

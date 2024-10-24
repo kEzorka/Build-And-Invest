@@ -48,11 +48,17 @@ public:
 	int64_t getCostOfOneSupermarketProduct() const;
 	int64_t getCostOfOneHypermarketProduct() const;
 
+	House* getMonolithicHouseStandard() const;
+	House* getPanelHouseStandard() const;
+	House* getBrickHouseStandard() const;
+	Supermarket* getSupermarketStandard() const;
+	Supermarket* getHypermarketStandard() const;
+
 private:
-	House monolithic_house_standard_;
-	House panel_house_standard_;
-	House brick_house_standard_;
-	Supermarket supermarket_standard_;
-	Supermarket hypermarket_standard_;
+	House* monolithic_house_standard_ = nullptr;
+	House* panel_house_standard_ = nullptr;
+	House* brick_house_standard_ = nullptr;
+	Supermarket* supermarket_standard_ = nullptr;
+	Supermarket* hypermarket_standard_ = nullptr;
 
 };
