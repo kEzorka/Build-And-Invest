@@ -145,6 +145,8 @@ public:
     void NewsIsShown();
     void PreparePlayersInfo();
     void PlayersInfoIsShown();
+    void MakeProfile(QLabel* profile);
+    void CloseAllInfoWindows();
 
     bool eventFilter(QObject*, QEvent* event);
 
@@ -190,9 +192,24 @@ private:
 
     QPixmap background_pix = QPixmap("../../../Pocket-Economic/frontend/assets/background_full_mini.png").scaled(1600, 900, Qt::KeepAspectRatio);
 
-    QPixmap house1_btn_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-front-red.png");
-    QPixmap house2_btn_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-front-red.png");
-    QPixmap house3_btn_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-front-red.png");
+    QPixmap house1_front_red_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-front-red.png");
+    QPixmap house1_front_orange_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-front-orange.png");
+    QPixmap house1_front_yellow_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-front-yellow.png");
+    QPixmap house1_front_blue_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-front-blue.png");
+    QPixmap house1_front_violet_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-front-violet.png");
+
+    QPixmap house2_front_red_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-front-red.png");
+    QPixmap house2_front_orange_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-front-orange.png");
+    QPixmap house2_front_yellow_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-front-yellow.png");
+    QPixmap house2_front_blue_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-front-blue.png");
+    QPixmap house2_front_violet_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-front-violet.png");
+
+    QPixmap house3_front_red_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-front-red.png");
+    QPixmap house3_front_orange_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-front-orange.png");
+    QPixmap house3_front_yellow_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-front-yellow.png");
+    QPixmap house3_front_blue_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-front-blue.png");
+    QPixmap house3_front_violet_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-front-violet.png");
+
     QPixmap shop1_btn_pix = QPixmap("../../../Pocket-Economic/frontend/assets/shops/shop1-front.png");
     QPixmap shop2_btn_pix = QPixmap("../../../Pocket-Economic/frontend/assets/shops/shop2-front.png");
 
@@ -289,6 +306,7 @@ private:
     QLabel* land_resort_information_txt = new QLabel();
     QLabel* land_resort_information_owner_txt = new QLabel();
     QPushButton* close_land_resort_information_btn = new QPushButton();
+    QPushButton* land_resort_information_advertising_btn = new QPushButton();
 
     QLabel* news = new QLabel();
     QString news_txt_style;
@@ -322,5 +340,19 @@ private:
 
     std::vector<QPushButton*> players_info_icons = std::vector<QPushButton*>(5);
     std::vector<QLabel*> players_info_profiles = std::vector<QLabel*>(5);
+    QLabel* players_info_place_for_profile = new QLabel();
+    QLabel* red_profile = new QLabel(), * orange_profile = new QLabel(), * yellow_profile = new QLabel(), * blue_profile = new QLabel(), * violet_profile = new QLabel();
+    QVBoxLayout* main_layout_color_profile = new QVBoxLayout();
 
+    QColor red_color = QColor(205, 0, 0);
+    QColor orange_color = QColor(232, 116, 0);
+    QColor yellow_color = QColor(180, 168, 0);
+    QColor blue_color = QColor(0, 0, 224);
+    QColor violet_color = QColor(133, 0, 208);
+
+    QString red_css = "#cd0000;";
+    QString orange_css = "#e87400;";
+    QString yellow_css = "#b4a800;";
+    QString blue_css = "#0000e0;";
+    QString violet_css = "#8500d0;";
 };
