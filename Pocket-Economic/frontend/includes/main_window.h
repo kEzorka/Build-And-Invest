@@ -126,10 +126,14 @@ public:
     PocketEconomic(QWidget* parent = nullptr);
     ~PocketEconomic() = default;
 
+    void InputCosts();
+    void InputSupplies();
+    void InputPlayers();
+    void MakeMainWindow();
     void MakeButtons();
     void Styling();
     void AddHouse();
-    void SetBuilding(QLabel* roof, QPixmap& pix);
+    void SetBuilding(QLabel* roof);
     void RotateBuilding(QLabel* roof);
     void SetLandsCoors();
     void PrepareBuildings();
@@ -147,6 +151,8 @@ public:
     void PlayersInfoIsShown();
     void MakeProfile(QLabel* profile);
     void CloseAllInfoWindows();
+    void NextStep();
+    void ChangePlayer();
 
     bool eventFilter(QObject*, QEvent* event);
 
@@ -213,9 +219,24 @@ private:
     QPixmap shop1_btn_pix = QPixmap("../../../Pocket-Economic/frontend/assets/shops/shop1-front.png");
     QPixmap shop2_btn_pix = QPixmap("../../../Pocket-Economic/frontend/assets/shops/shop2-front.png");
 
-    QPixmap house1_roof_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-top-red.png").scaled(25, 25, Qt::KeepAspectRatio);
-    QPixmap house2_roof_pix = QPixmap(QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-top-red.png").scaled(25, 25, Qt::KeepAspectRatio)).transformed(QTransform().rotate(180));
-    QPixmap house3_roof_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-top-red.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house1_roof_red_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-top-red.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house1_roof_orange_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-top-orange.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house1_roof_yellow_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-top-yellow.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house1_roof_blue_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-top-blue.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house1_roof_violet_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house1/house1-top-violet.png").scaled(25, 25, Qt::KeepAspectRatio);
+    
+    QPixmap house2_roof_red_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-top-red.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house2_roof_orange_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-top-orange.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house2_roof_yellow_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-top-yellow.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house2_roof_blue_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-top-blue.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house2_roof_violet_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house2/house2-top-violet.png").scaled(25, 25, Qt::KeepAspectRatio);
+
+    QPixmap house3_roof_red_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-top-red.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house3_roof_orange_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-top-orange.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house3_roof_yellow_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-top-yellow.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house3_roof_blue_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-top-blue.png").scaled(25, 25, Qt::KeepAspectRatio);
+    QPixmap house3_roof_violet_pix = QPixmap("../../../Pocket-Economic/frontend/assets/house3/house3-top-violet.png").scaled(25, 25, Qt::KeepAspectRatio);
+
     QPixmap shop1_roof_pix = QPixmap("../../../Pocket-Economic/frontend/assets/shops/shop1-top.png").scaled(25, 25, Qt::KeepAspectRatio);
     QPixmap shop2_roof_pix = QPixmap(QPixmap("../../../Pocket-Economic/frontend/assets/shops/shop2-top.png").scaled(25, 25, Qt::KeepAspectRatio)).transformed(QTransform().rotate(180));
 
@@ -264,49 +285,14 @@ private:
     std::vector<QLabel*> shop_buidings_pictures = std::vector<QLabel*>(5);
     std::vector<std::vector<QLabel*>> shop_building_infos = std::vector<std::vector<QLabel*>>(5);
     QString shopping_style;
-    /*QHBoxLayout* shop_house1_layout = new QHBoxLayout();
-    QVBoxLayout* shop_house1_info_layout = new QVBoxLayout();
-    QLabel* shop_house1_picture = new QLabel();
-    QLabel* shop_house1_info_name = new QLabel();
-    QLabel* shop_house1_info_income = new QLabel();
-    QLabel* shop_house1_info_cost = new QLabel();
-
-    QHBoxLayout* shop_house2_layout = new QHBoxLayout();
-    QVBoxLayout* shop_house2_info_layout = new QVBoxLayout();
-    QLabel* shop_house2_picture = new QLabel();
-    QLabel* shop_house2_info_name = new QLabel();
-    QLabel* shop_house2_info_income = new QLabel();
-    QLabel* shop_house2_info_cost = new QLabel();
-
-    QHBoxLayout* shop_house3_layout = new QHBoxLayout();
-    QVBoxLayout* shop_house3_info_layout = new QVBoxLayout();
-    QLabel* shop_house3_picture = new QLabel();
-    QLabel* shop_house3_info_name = new QLabel();
-    QLabel* shop_house3_info_income = new QLabel();
-    QLabel* shop_house3_info_cost = new QLabel();
-
-    QHBoxLayout* shop_shop1_layout = new QHBoxLayout();
-    QVBoxLayout* shop_shop1_info_layout = new QVBoxLayout();
-    QLabel* shop_shop1_picture = new QLabel();
-    QLabel* shop_shop1_info_name = new QLabel();
-    QLabel* shop_shop1_info_income = new QLabel();
-    QLabel* shop_shop1_info_cost = new QLabel();
-
-    QHBoxLayout* shop_shop2_layout = new QHBoxLayout();
-    QVBoxLayout* shop_shop2_info_layout = new QVBoxLayout();
-    QLabel* shop_shop2_picture = new QLabel();
-    QLabel* shop_shop2_info_name = new QLabel();
-    QLabel* shop_shop2_info_income = new QLabel();
-    QLabel* shop_shop2_info_cost = new QLabel();
-
-    QPushButton* close_shop_btn = new QPushButton();*/
-
+    
 
     QLabel* land_resort_information = new QLabel();
     QLabel* land_resort_information_txt = new QLabel();
     QLabel* land_resort_information_owner_txt = new QLabel();
     QPushButton* close_land_resort_information_btn = new QPushButton();
     QPushButton* land_resort_information_advertising_btn = new QPushButton();
+    QPushButton* land_resort_information_updating_resort_btn = new QPushButton();
 
     QLabel* news = new QLabel();
     QString news_txt_style;
@@ -314,30 +300,12 @@ private:
     std::vector<std::pair<std::string, std::string>> tmp_news;
     QVBoxLayout* news_layout = new QVBoxLayout();
 
-
-    //QLabel* players_info = new QLabel();
-    //QHBoxLayout* players_info_layout = new QHBoxLayout();
-    //QString players_info_txt_style;
-    //QTableWidget* players_nicknames_table = new QTableWidget();/*
-    //QPixmap players_info_profile_icon = QPixmap("../../../Pocket-Economic/frontend/assets/profile_icon.png").scaled(100, 100, Qt::KeepAspectRatio);*/
-    //QPixmap players_info_profile_icon = QPixmap("../../../Pocket-Economic/frontend/assets/profile_icon.png");
-    //std::vector<QLabel*> players_info_icons = std::vector<QLabel*>(5);
-    //std::vector<std::vector<QLabel*>> players_info_nicknames_infos = std::vector<std::vector<QLabel*>>(5);
-    //std::vector<std::pair<std::string, std::string>> tmp_players_info;
-
-    //QTableWidget* players_info_table = new QTableWidget();
-
     QLabel* players_info = new QLabel();
     QHBoxLayout* players_info_layout = new QHBoxLayout();
     QVBoxLayout* players_info_vertical_layout = new QVBoxLayout();
     QString players_info_txt_style;
     QPixmap players_info_profile_icon = QPixmap("../../../Pocket-Economic/frontend/assets/profile_icon.png").scaled(70, 70, Qt::KeepAspectRatio);
-   /* std::vector<QVBoxLayout*> players_info_layouts = std::vector<QVBoxLayout*>(5);
-    std::vector<QLabel*> players_info_icons = std::vector<QLabel*>(5);
-    std::vector<std::vector<QLabel*>> players_info_nicknames_infos = std::vector<std::vector<QLabel*>>(5);
-    std::vector<std::pair<std::string, std::string>> tmp_players_info;*/
-
-
+   
     std::vector<QPushButton*> players_info_icons = std::vector<QPushButton*>(5);
     std::vector<QLabel*> players_info_profiles = std::vector<QLabel*>(5);
     QLabel* players_info_place_for_profile = new QLabel();
@@ -355,4 +323,17 @@ private:
     QString yellow_css = "#b4a800;";
     QString blue_css = "#0000e0;";
     QString violet_css = "#8500d0;";
+
+
+    QString personal_info_red_border_style;
+    QString personal_info_orange_border_style;
+    QString personal_info_yellow_border_style;
+    QString personal_info_blue_border_style;
+    QString personal_info_violet_border_style;
+    QString personal_info_good_value_style;
+    QString personal_info_bad_value_style;
+
+    QPushButton* next_step_btn = new QPushButton();
+    QLabel* month = new QLabel();
 };
+
