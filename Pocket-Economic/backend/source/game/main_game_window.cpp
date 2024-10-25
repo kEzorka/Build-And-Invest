@@ -227,16 +227,16 @@ void Game::makeLandPlotsArr() {
     //
     std::vector<LandPlot*> forth_street;
     forth_street.push_back(new LandPlot()); //3.0
-    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(4, std::vector<Realty*>(4, nullptr)), "Cedarwood")); //3.1
-    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(4, std::vector<Realty*>(9, nullptr)), "Willow Creek")); //3.2
+    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(5, std::vector<Realty*>(4, nullptr)), "Cedarwood")); //3.1
+    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(5, std::vector<Realty*>(9, nullptr)), "Willow Creek")); //3.2
     buildNonBuildRealty(nullptr, dynamic_cast<BuildingLand*>(forth_street.back()), 0, 8);
-    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(4, std::vector<Realty*>(4, nullptr)), "Golden Valley")); //3.3
-    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(4, std::vector<Realty*>(9, nullptr)), "Northfield")); //3.4
+    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(5, std::vector<Realty*>(4, nullptr)), "Golden Valley")); //3.3
+    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(5, std::vector<Realty*>(9, nullptr)), "Northfield")); //3.4
     buildNonBuildRealty(nullptr, dynamic_cast<BuildingLand*>(forth_street.back()), 0, 8);
-    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(4, std::vector<Realty*>(4, nullptr)), "Southgate")); //3.5
-    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(4, std::vector<Realty*>(9, nullptr)), "Eastwood")); //3.6
+    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(5, std::vector<Realty*>(4, nullptr)), "Southgate")); //3.5
+    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(5, std::vector<Realty*>(9, nullptr)), "Eastwood")); //3.6
     buildNonBuildRealty(nullptr, dynamic_cast<BuildingLand*>(forth_street.back()), 0, 8);
-    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(4, std::vector<Realty*>(4, nullptr)), "Westlake")); //3.7
+    forth_street.push_back(new BuildingLand(std::vector<std::vector<Realty*>>(5, std::vector<Realty*>(4, nullptr)), "Westlake")); //3.7
     land_plots_arr_.emplace_back(forth_street);
 
 

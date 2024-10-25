@@ -5,7 +5,8 @@ int64_t AdvertAgency::buyHouseAdvert(Player* player_owner, const int& cnt_of_adv
 	int64_t player_money = player_owner->getMoney();
 	int64_t cost_of_advert = cost_of_one_house_advert_ * cnt_of_advert;
 	if (player_money < cost_of_advert) {
-		throw std::runtime_error("player does not have enough money to buy so many advert");
+		//throw std::runtime_error("player does not have enough money to buy so many advert");
+		return -1;
 	}
 	player_owner->setMoney(player_money - cost_of_advert);
 	return cost_of_advert;
@@ -15,7 +16,8 @@ int64_t AdvertAgency::buySupermarketAdvert(Player* player_owner, const int& cnt_
 	int64_t player_money = player_owner->getMoney();
 	int64_t cost_of_advert = cost_of_one_supermarket_advert_ * cnt_of_advert;
 	if (player_money < cost_of_advert) {
-		throw std::runtime_error("player does not have enough money to buy so many advert");
+		//throw std::runtime_error("player does not have enough money to buy so many advert");
+		return -1;
 	}
 	player_owner->setMoney(player_money - cost_of_advert);
 	return cost_of_advert;

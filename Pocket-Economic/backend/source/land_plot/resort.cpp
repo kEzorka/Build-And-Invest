@@ -15,10 +15,12 @@ int64_t Resort::getIncome() const {
 
 void Resort::update() {
     if (update_stage_ >= 3) {
-        throw std::runtime_error("can't update resort");
+        //throw std::runtime_error("can't update resort");
+        return;
     }
     if (cost_of_next_update_ > owner_->getMoney()) {
-        throw std::runtime_error("player doesnt have enough money to nuy this land");
+        //throw std::runtime_error("player doesnt have enough money to nuy this land");
+        return;
     }
     owner_->setMoney(owner_->getMoney() - cost_of_next_update_);
     ++update_stage_;

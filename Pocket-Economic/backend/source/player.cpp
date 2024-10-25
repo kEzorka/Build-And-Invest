@@ -47,17 +47,23 @@ bool Player::isBot() {
 
 void Player::buyHouseAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency) {
     int64_t cost_of_advert = advert_agency.buyHouseAdvert(this, cnt_of_advert);
+    if (cost_of_advert == -1) {
+        return;
+    }
     coef_of_advert_houses_this_month_ += cnt_of_advert * advert_agency.getBoostOfHouseSalesValue();
     coef_of_advert_houses_next_month_ += cnt_of_advert * advert_agency.getBoostOfHouseSalesValue();
 }
 
 void Player::buySupermarketAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency) {
     int64_t cost_of_advert = advert_agency.buySupermarketAdvert(this, cnt_of_advert);
+    if (cost_of_advert == -1) {
+        return;
+    }
     coef_of_advert_supermarket_this_month_ +=
         cnt_of_advert * advert_agency.getBoostOfSupermarketSalesValue();
 }
 
-Supermarket* Player::buildSupermarket(const Supermarket::SupermarketType& supermarket_type, 
+Supermarket* Player::buildSupermarket(const Supermarket::SupermarketType& supermarket_type,
     const BuildingAgency& building_agency) {
     Supermarket* supermarket = building_agency.buySupermarket(this, supermarket_type);
     supermarket_arr_.push_back(supermarket);
@@ -71,17 +77,19 @@ House* Player::buildHouse(const House::HouseType& house_type, const BuildingAgen
 }
 
 void Player::buyBuildingLand(BuildingLand* land_plot, const LandAgency& land_agency) {
-    land_agency.buyBuildingLand(this, land_plot->getSizeX(), land_plot->getSizeY());
-    land_plot->setOwner(this);
-    land_plot_arr_.push_back(land_plot);
+    if (land_agency.buyBuildingLand(this, land_plot->getSizeX(), land_plot->getSizeY())) {
+        land_plot->setOwner(this);
+        land_plot_arr_.push_back(land_plot);
+    }
 }
 
 void Player::buyResort(Resort* land_plot, const LandAgency& land_agency) {
-    land_agency.buyResort(this);
-    land_plot->setOwner(this);
-    land_plot_arr_.push_back(land_plot);
-    land_plot->setCostOfNextUpdate(land_agency.getCostOfResort() * 4);
-    land_plot->setCurIncome(land_agency.getCostOfResort());
+    if (land_agency.buyResort(this)) {
+        land_plot->setOwner(this);
+        land_plot_arr_.push_back(land_plot);
+        land_plot->setCostOfNextUpdate(land_agency.getCostOfResort() * 4);
+        land_plot->setCurIncome(land_agency.getCostOfResort());
+    }
 }
 
 
