@@ -114,7 +114,6 @@ std::vector<LandPlot*> Player::getLandPlotsArr() const {
 int64_t Player::getMoney() const {
     return money_;
 }
-
 void Player::getIncome(const int& month) {
     global_income_ = 0;
     int64_t house_income = 0;
@@ -130,7 +129,8 @@ void Player::getIncome(const int& month) {
             house_income += building_land->getRealEstateAgency()->getIncome(this, building_land, month);
             building_land->getRealEstateAgency()->giveDemandForPlayer(this);
             supermarket_income += building_land->getGroceryAgency()->getIncome(this, building_land, month);
-        } else if (resort != nullptr) {
+        }
+        else if (resort != nullptr) {
             resort_income += resort->getIncome();
         }
     }
@@ -157,6 +157,7 @@ void Player::getIncome(const int& month) {
 
     updateIncome();
 }
+
 
 bool Player::hasSupply() const {
     return player_estate_agency_->getCurMonolithicDemand() != 0 ||
