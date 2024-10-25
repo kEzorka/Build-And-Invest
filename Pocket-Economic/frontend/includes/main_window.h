@@ -1,6 +1,7 @@
 #pragma once
 
 #include "qt_headers.h"
+#include "../../backend/includes/game/game.h"
 
 class Player_Owner {
 public:
@@ -166,10 +167,47 @@ private:
     QWidget* window = new QWidget();
 
     QWidget* costs_window = new QWidget();
-    QPushButton* costs_ok = new QPushButton("Continue");
+    QPushButton* input_costs_settings_ok = new QPushButton("Continue");
+
+    QGridLayout* input_costs_settings_layout = new QGridLayout();
+    QLabel* input_costs_settings_first_title = new QLabel("Costs of square meter of houses");
+    QLabel* input_costs_settings_second_title = new QLabel("Costs of building houses");
+    QLabel* input_costs_settings_third_title = new QLabel("Costs of one unit of goods in supermarkets");
+    QLabel* input_costs_settings_forth_title = new QLabel("Costs of building supermarkets");
+    QLabel* input_costs_settings_fifth_title = new QLabel("Cost of one square of land");
+    QLabel* input_costs_settings_sixth_title = new QLabel("Cost of a resort");
+    QLineEdit* input_costs_settings_house1_sqr = new QLineEdit();
+    QLineEdit* input_costs_settings_house2_sqr = new QLineEdit();
+    QLineEdit* input_costs_settings_house3_sqr = new QLineEdit();
+    QLineEdit* input_costs_settings_house1_build = new QLineEdit();
+    QLineEdit* input_costs_settings_house2_build = new QLineEdit();
+    QLineEdit* input_costs_settings_house3_build = new QLineEdit();
+    QLineEdit* input_costs_settings_shop1_product = new QLineEdit();
+    QLineEdit* input_costs_settings_shop2_product = new QLineEdit();
+    QLineEdit* input_costs_settings_shop1_build = new QLineEdit();
+    QLineEdit* input_costs_settings_shop2_build = new QLineEdit();
+    QLineEdit* input_costs_settings_cell_cost = new QLineEdit();
+    QLineEdit* input_costs_settings_resort_cost = new QLineEdit();
+
+
+
+
+
 
     QWidget* supplies_window = new QWidget();
     QPushButton* supplies_ok = new QPushButton("Continue");
+    QGridLayout* input_supplies_layout = new QGridLayout();
+    QLabel* input_supplies_first_title = new QLabel("Initial demand for houses");
+    QLabel* input_supplies_second_title = new QLabel("Initial demand for supermarkets");
+    QLineEdit* input_supplies_house1_supply = new QLineEdit();
+    QLineEdit* input_supplies_house2_supply = new QLineEdit();
+    QLineEdit* input_supplies_house3_supply = new QLineEdit();
+    QLineEdit* input_supplies_shop1_supply = new QLineEdit();
+    QLineEdit* input_supplies_shop2_supply = new QLineEdit();
+
+
+
+
 
 
     QWidget* input_players_window = new QWidget();
@@ -366,5 +404,7 @@ private:
 
     QPushButton* next_step_btn = new QPushButton();
     QLabel* month = new QLabel();
-};
 
+
+    Game* game = nullptr;
+};
