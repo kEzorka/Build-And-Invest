@@ -4,7 +4,6 @@
 #include <algorithm>
 //#include "qdebug.h"
 
-
 extern StandardClasses* standard_classes = nullptr;
 
 void Game::start() {

@@ -30,7 +30,7 @@ public:
 
 protected:
     int64_t building_cost_ = 0;
-    int64_t building_time_ = 0;
+    int64_t building_time_ = 4; //in month
     Player* owner_ = nullptr;
     LandPlot* land_plot_ = nullptr;
     int number_of_realty_ = 0;

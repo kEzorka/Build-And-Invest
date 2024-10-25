@@ -1689,6 +1689,85 @@ void PocketEconomic::InputCostsSettings() {
 
 void PocketEconomic::InputCostsContinue() {
     QObject::connect(input_costs_settings_ok, &QPushButton::clicked, [&]() {
+        try {
+            game->setCostOfSquareMeterMonolithic(
+                std::stoi(input_costs_settings_house1_sqr->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setCostOfSquareMeterPanel(
+                std::stoi(input_costs_settings_house2_sqr->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setCostOfSquareMeterBrick(
+                std::stoi(input_costs_settings_house3_sqr->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+
+
+        try {
+            game->setCostOfBuildingMonolithicHouse(
+                std::stoi(input_costs_settings_house1_build->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setCostOfBuildingPanelHouse(
+                std::stoi(input_costs_settings_house2_build->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setCostOfBuildingBrickHouse(
+                std::stoi(input_costs_settings_house3_build->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+
+
+        try {
+            game->setCostOfOneProductSupermarket(
+                std::stoi(input_costs_settings_shop1_product->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setCostOfOneProductSupermarket(
+                std::stoi(input_costs_settings_shop2_product->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+
+
+        try {
+            game->setCostOfBuildingSupermarket(
+                std::stoi(input_costs_settings_shop1_build->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setCostOfBuildingHypermarket(
+                std::stoi(input_costs_settings_shop2_build->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+
+
+        try {
+            game->setCostOfLandCell(
+                std::stoi(input_costs_settings_cell_cost->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setCostOfResort(
+                std::stoi(input_costs_settings_resort_cost->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
 
 
         costs_window->close();
@@ -1740,23 +1819,28 @@ void PocketEconomic::InputSuppliesSettings() {
     input_supplies_layout->addWidget(input_supplies_first_title, 0, 0, 1, 6);
     input_supplies_layout->addWidget(input_supplies_second_title, 2, 0, 1, 6);
 
-    input_supplies_house1_supply->setPlaceholderText("");
-    input_supplies_layout->addWidget(input_supplies_house1_supply, 1, 0, 1, 2);
-    input_supplies_house1_supply->setFixedSize(QSize(450, 25));
-    input_supplies_house2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    input_supplies_layout->addWidget(input_supplies_house2_supply, 1, 2, 1, 2);
-    input_supplies_house2_supply->setFixedSize(QSize(450, 25));
-    input_supplies_house3_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    input_supplies_layout->addWidget(input_supplies_house3_supply, 1, 4, 1, 2);
-    input_supplies_house3_supply->setFixedSize(QSize(450, 25));
- 
+    input_supplies_house1_demand->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getDefaultMonolithicHouseDemand())));
+    input_supplies_layout->addWidget(input_supplies_house1_demand, 1, 0, 1, 2);
+    input_supplies_house1_demand->setFixedSize(QSize(450, 25));
+    input_supplies_house2_demand->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getDefaultPanelHouseDemand())));
+    input_supplies_layout->addWidget(input_supplies_house2_demand, 1, 2, 1, 2);
+    input_supplies_house2_demand->setFixedSize(QSize(450, 25));
+    input_supplies_house3_demand->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getDefaultBrickHouseDemand())));
+    input_supplies_layout->addWidget(input_supplies_house3_demand, 1, 4, 1, 2);
+    input_supplies_house3_demand->setFixedSize(QSize(450, 25));
+    
 
-    input_supplies_shop1_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    input_supplies_layout->addWidget(input_supplies_shop1_supply, 3, 0, 1, 2);
-    input_supplies_shop1_supply->setFixedSize(QSize(450, 25));
-    input_supplies_shop2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    input_supplies_layout->addWidget(input_supplies_shop2_supply, 3, 2, 1, 2);
-    input_supplies_shop2_supply->setFixedSize(QSize(450, 25));
+    input_supplies_shop1_demand->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getDefaultSupermarketDemand())));
+    input_supplies_layout->addWidget(input_supplies_shop1_demand, 3, 0, 1, 2);
+    input_supplies_shop1_demand->setFixedSize(QSize(450, 25));
+    input_supplies_shop2_demand->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getDefaultHypermarketDemand())));
+    input_supplies_layout->addWidget(input_supplies_shop2_demand, 3, 2, 1, 2);
+    input_supplies_shop2_demand->setFixedSize(QSize(450, 25));
 
 
     supplies_ok->setFixedSize(QSize(450, 50));
@@ -1766,7 +1850,42 @@ void PocketEconomic::InputSuppliesSettings() {
 
 void PocketEconomic::InputSuppliesContinue() {
     QObject::connect(supplies_ok, &QPushButton::clicked, [&]() {
+
+        try {
+            game->setDefaultMonolithicHouseDemand(
+                std::stoi(input_supplies_house1_demand->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setDefaultPanelHouseDemand(
+                std::stoi(input_supplies_house2_demand->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setDefaultBrickHouseDemand(
+                std::stoi(input_supplies_house3_demand->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+
+        try {
+            game->setDefaultSupermarketDemand(
+                std::stoi(input_supplies_shop1_demand->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+        try {
+            game->setDefaultHypermarketDemand(
+                std::stoi(input_supplies_shop2_demand->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+
         supplies_window->close();
+
+
         InputPlayers();
         });
 }
@@ -1777,9 +1896,9 @@ void PocketEconomic::InputPlayers() {
     input_players_window->showFullScreen();
 }
 
-void  PocketEconomic::InputPlayersSettings() {
+void PocketEconomic::InputPlayersSettings() {
     QGridLayout* layout = new QGridLayout();
-    QLabel* first_title = new QLabel("Players");
+    QLabel* first_title = new QLabel("Players club");
     input_players_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
     input_players_window->setWindowTitle("PocketEconomic");
     input_players_window->setStyleSheet("background-color: white");
@@ -1911,12 +2030,14 @@ void PocketEconomic::InputPlayersContinue() {
             }
             input_players_window->close();
             MakeMainWindow();
+
         }
         });
 
     QObject::connect(add_player, &QPushButton::clicked, [&]() {
-        if (players + bots < 5 && players < 5) {
-            players++;
+        if (players_cnt_on_players_window + bots_cnt_on_players_window < 5
+            && players_cnt_on_players_window < 5) {
+            players_cnt_on_players_window++;
             if (!player1->isVisible()) {
                 player1->setVisible(true);
                 player1->clear();
@@ -1945,8 +2066,9 @@ void PocketEconomic::InputPlayersContinue() {
         }
         });
     QObject::connect(remove_player, &QPushButton::clicked, [&]() {
-        if (players + bots > 0 && players > 0) {
-            players--;
+        if (players_cnt_on_players_window + bots_cnt_on_players_window > 0
+            && players_cnt_on_players_window > 0) {
+            players_cnt_on_players_window--;
             if (player5->isVisible()) {
                 player5->setVisible(false);
                 player5->clear();
@@ -1977,8 +2099,9 @@ void PocketEconomic::InputPlayersContinue() {
 
 
     QObject::connect(add_bot, &QPushButton::clicked, [&]() {
-        if (players + bots < 5 && bots < 5) {
-            bots++;
+        if (players_cnt_on_players_window + bots_cnt_on_players_window < 5
+            && bots_cnt_on_players_window < 5) {
+            bots_cnt_on_players_window++;
             if (!bot1->isVisible()) {
                 bot1->setVisible(true);
             }
@@ -1997,8 +2120,9 @@ void PocketEconomic::InputPlayersContinue() {
         }
         });
     QObject::connect(remove_bot, &QPushButton::clicked, [&]() {
-        if (players + bots > 0 && bots > 0) {
-            bots--;
+        if (players_cnt_on_players_window + bots_cnt_on_players_window > 0 
+            && bots_cnt_on_players_window > 0) {
+            bots_cnt_on_players_window--;
             if (bot5->isVisible()) {
                 bot5->setVisible(false);
             }

@@ -201,11 +201,11 @@ private:
     QGridLayout* input_supplies_layout = new QGridLayout();
     QLabel* input_supplies_first_title = new QLabel("Initial demand for houses");
     QLabel* input_supplies_second_title = new QLabel("Initial demand for supermarkets");
-    QLineEdit* input_supplies_house1_supply = new QLineEdit();
-    QLineEdit* input_supplies_house2_supply = new QLineEdit();
-    QLineEdit* input_supplies_house3_supply = new QLineEdit();
-    QLineEdit* input_supplies_shop1_supply = new QLineEdit();
-    QLineEdit* input_supplies_shop2_supply = new QLineEdit();
+    QLineEdit* input_supplies_house1_demand = new QLineEdit();
+    QLineEdit* input_supplies_house2_demand = new QLineEdit();
+    QLineEdit* input_supplies_house3_demand = new QLineEdit();
+    QLineEdit* input_supplies_shop1_demand = new QLineEdit();
+    QLineEdit* input_supplies_shop2_demand = new QLineEdit();
 
 
 
@@ -230,7 +230,7 @@ private:
     QLabel* bot3 = new QLabel("  Bot 3");
     QLabel* bot4 = new QLabel("  Bot 4");
     QLabel* bot5 = new QLabel("  Bot 5");
-    int players = 0, bots = 0;
+    int players_cnt_on_players_window = 0, bots_cnt_on_players_window = 0;
 
     int fullscreen_width = QRect(QGuiApplication::primaryScreen()->geometry()).width();
     int fullscreen_height = QRect(QGuiApplication::primaryScreen()->geometry()).height();

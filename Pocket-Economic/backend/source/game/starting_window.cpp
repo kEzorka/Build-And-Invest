@@ -91,6 +91,12 @@ void Game::setCostOfLandCell(const int64_t& cost) {
 
 void Game::setCostOfResort(const int64_t& cost) {
     land_agency_->setCostOfResort(cost);
+    Resort* resort_ptr = dynamic_cast<Resort*>(land_plots_arr_[0][0]);
+    resort_ptr->setCurIncome(cost * 0.15);
+    resort_ptr = dynamic_cast<Resort*>(land_plots_arr_[1][6]);
+    resort_ptr->setCurIncome(cost * 0.15);
+    resort_ptr = dynamic_cast<Resort*>(land_plots_arr_[4][5]);
+    resort_ptr->setCurIncome(cost * 0.15);
 }
 
 int64_t Game::getCostOfLandCell() const {
