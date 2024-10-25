@@ -719,8 +719,8 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
     int x_pos = x, y_pos = y;
     for (int i = 0; i < grid->lands.size(); ++i) {
         Grid::land_struct* land = &grid->lands[i];
-        if (land->x < x && x < land->x + land->amount_x * grid->cell_size &&
-            land->y < y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
+        if (land->x <= x && x < land->x + land->amount_x * grid->cell_size &&
+            land->y <= y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
             if (land->owner.color == player_owner->Nobody) {
                 offer_pic->setPixmap(land_pix);
                 offer_txt->setText("Buy a land!");
@@ -749,7 +749,8 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 land_resort_information_advertising_btn->setVisible(false);
                 land_resort_information_updating_resort_btn->setVisible(false);
                 if (land->owner.color != player_owner->color) {
-                    land_resort_information_owner_txt->setText("someone"); // add name from backend
+                    //std::string cur_player_nickname_offer = game->getCurPlayer()->getNickname();
+                    land_resort_information_owner_txt->setText("someone");
                 } else {
                     land_resort_information_owner_txt->setText("you");
                 }
@@ -776,8 +777,8 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
         }
     }
     for (Grid::land_struct& resort : grid->resorts) {
-        if (resort.x < x && x < resort.x + resort.amount_x * grid->cell_size &&
-            resort.y < y + 50 && y + 50 < resort.y + resort.amount_y * grid->cell_size) {
+        if (resort.x <= x && x < resort.x + resort.amount_x * grid->cell_size &&
+            resort.y <= y + 50 && y + 50 < resort.y + resort.amount_y * grid->cell_size) {
             if (resort.owner.color == player_owner->Nobody) {
                 if (x + offer->size().width() >= fullscreen_width) x_pos -= offer->size().width();
                 if (y + offer->size().height() >= fullscreen_height - house1_btn->size().height()) y_pos -= offer->size().height();
@@ -878,14 +879,22 @@ void PocketEconomic::OfferIsShown() {
     QObject::connect(buy_offer_btn, &QPushButton::clicked, [&]() {
         offer->setVisible(false);
         is_offer_shown = false;
-        (grid->chosen_land.first)->owner = *player_owner;
+        try {
+            // buy LandOrResort
 
-        // buy LandOrResort
+            grid->chosen_land.first->owner = *player_owner;
+            if (grid->chosen_land.second) grid->chosen_land.second->owner = *player_owner;
+            background_picture_->setPixmap(background_pix);
+        }
+        catch (const std::exception& e) {
+            std::string exception;
+            exception += "Exception: ";
+            exception += e.what();
+            MsgBox->setText(QString::fromStdString(exception));
+            MsgBox->exec();
+        }
 
-        if (grid->chosen_land.second) (grid->chosen_land.second)->owner = *player_owner;
-        background_picture_->setPixmap(background_pix);
-        return;
-        });
+    });
 }
 
 void PocketEconomic::CapitalAndIncome() {
