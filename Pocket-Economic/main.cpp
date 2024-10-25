@@ -3,7 +3,8 @@
 
 int main(int argc, char* argv[]) {
     setlocale(0, "");
-    QApplication app(argc, argv);
+    srand(time(NULL));
+    QApplication a(argc, argv);
     PocketEconomic w;
     /*Game game;
     game.start();*/
