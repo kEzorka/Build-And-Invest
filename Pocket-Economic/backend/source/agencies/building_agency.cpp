@@ -20,26 +20,26 @@ void BuildingAgency::makeStandarts() {
 	panel_house_standard_->pushFlatType(panel_flat_type);
 	brick_house_standard_->pushFlatType(brick_flat_type);
 
-	monolithic_house_standard_->setBuildingCost(0);
-	panel_house_standard_->setBuildingCost(0);
-	brick_house_standard_->setBuildingCost(0);
+	monolithic_house_standard_->setBuildingCost(6'000'000);
+	panel_house_standard_->setBuildingCost(7'000'000);
+	brick_house_standard_->setBuildingCost(8'000'000);
 
-	monolithic_house_standard_->setBuildingTime(0);
-	panel_house_standard_->setBuildingTime(0);
-	brick_house_standard_->setBuildingTime(0);
+	monolithic_house_standard_->setBuildingTime(4);
+	panel_house_standard_->setBuildingTime(4);
+	brick_house_standard_->setBuildingTime(4);
 
 	monolithic_house_standard_->setHouseType(House::HouseType::MonoliticHouse);
 	panel_house_standard_->setHouseType(House::HouseType::PanelHouse);
 	brick_house_standard_->setHouseType(House::HouseType::BrickHouse);
 
 
-	supermarket_standard_->setBuildingCost(0);
-	supermarket_standard_->setBuildingTime(0);
+	supermarket_standard_->setBuildingCost(4'000'000);
+	supermarket_standard_->setBuildingTime(4);
 	supermarket_standard_->setSupermarketType(Supermarket::SupermarketType::Supermarket);
 	supermarket_standard_->setCostOfOneProduct(10'000);
 
-	hypermarket_standard_->setBuildingCost(0);
-	hypermarket_standard_->setBuildingTime(0);
+	hypermarket_standard_->setBuildingCost(5'000'000);
+	hypermarket_standard_->setBuildingTime(4);
 	hypermarket_standard_->setSupermarketType(Supermarket::SupermarketType::Hypermarket);
 	hypermarket_standard_->setCostOfOneProduct(40'000);
 }

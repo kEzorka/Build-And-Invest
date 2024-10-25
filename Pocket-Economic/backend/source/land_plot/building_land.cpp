@@ -4,6 +4,8 @@
 
 #include "../../includes/standard_classes.h"
 
+extern StandardClasses* standard_classes;
+
 BuildingLand::BuildingLand(std::vector<std::vector<Realty*>> cells,
     const std::string& name_of_land) 
     : cells_(cells) {

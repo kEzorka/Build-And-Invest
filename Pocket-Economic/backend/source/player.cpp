@@ -4,6 +4,9 @@
 #include "../includes/standard_classes.h"
 #include "../bots/includes/bot.h"
 
+
+extern StandardClasses* standard_classes;
+
 Player::Player() {
     player_estate_agency_ = new RealEstateAgency(*(standard_classes->real_estate_agency_standard_));
 }
