@@ -1,11 +1,11 @@
-#include "../includes/first_bot.h"
+#include "../includes/second_bot.h"
 #include "../../includes/game/game.h"
 
-FirstBot::FirstBot() {
-    nickname_ = "Bot1";
+SecondBot::SecondBot() {
+    nickname_ = "Bot2";
 }
 
-void FirstBot::step(Game* game) {
+void SecondBot::step(Game* game) {
     if (game->month_ % 6 == 1) {
         bool bougth_land = false;
         for (size_t row = 0; row < game->land_plots_arr_.size(); ++row) {
@@ -33,7 +33,7 @@ void FirstBot::step(Game* game) {
             for (size_t row = 0; row < building_land->getCells().size(); ++row) {
                 for (size_t column = 0; column < building_land->getCells()[row].size(); ++column) {
                     if (building_land->getCells()[row][column] == nullptr && !buy_house) {
-                        game->buildHouse(this, building_land, House::HouseType::MonoliticHouse, row, column);
+                        game->buildHouse(this, building_land, House::HouseType::PanelHouse, row, column);
                         buy_house = true;
                     } else if (building_land->getCells()[row][column] == nullptr && !buy_supermarket) {
                         game->buildSupermarket(this, building_land,

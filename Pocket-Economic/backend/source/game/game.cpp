@@ -20,6 +20,10 @@ void Game::start() {
     standard_classes->real_estate_agency_standard_ = new RealEstateAgency();
 
     building_agency_->makeStandarts();
+
+    news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+        "Congratulations, our game has started!                                                                 "));
+    nextGameStep();
 }
 
 bool Game::finished() const {
@@ -127,6 +131,10 @@ bool Game::nextPlayer() {
         return true;
     }
     cur_player_ = players_arr_[cur_player_pos_in_arr_];
+    if (cur_player_->isBot()) {
+        Bot* bot_ptr = dynamic_cast<Bot*>(cur_player_);
+        bot_ptr->step(this);
+    }
     return false;
 }
 
@@ -143,6 +151,26 @@ void Game::setMovesCnt(const int& moves) {
 
 void Game::pushPlayer(Player* player) {
     players_arr_.push_back(player);
+}
+
+void Game::pushBot() {
+    int64_t rand_num = RandNum() % 5;
+    if (rand_num == 0) {
+        Player* new_bot = new FirstBot();
+        players_arr_.push_back(new_bot);
+    } else if (rand_num == 1) {
+        Player* new_bot = new SecondBot();
+        players_arr_.push_back(new_bot);
+    } else if (rand_num == 2) {
+        Player* new_bot = new ThirdBot();
+        players_arr_.push_back(new_bot);
+    } else if (rand_num == 3) {
+        Player* new_bot = new FourthBot();
+        players_arr_.push_back(new_bot);
+    } else if (rand_num == 4) {
+        Player* new_bot = new FifthBot();
+        players_arr_.push_back(new_bot);
+    }
 }
 
 

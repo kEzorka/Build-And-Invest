@@ -29,9 +29,17 @@ set(PROJECT_SOURCES
 
     backend/bots/includes/bot.h
     backend/bots/includes/first_bot.h
+    backend/bots/includes/second_bot.h
+    backend/bots/includes/third_bot.h
+    backend/bots/includes/fourth_bot.h
+    backend/bots/includes/fifth_bot.h
 
     backend/bots/source/bot.cpp
     backend/bots/source/first_bot.cpp
+    backend/bots/source/second_bot.cpp
+    backend/bots/source/third_bot.cpp
+    backend/bots/source/fourth_bot.cpp
+    backend/bots/source/fifth_bot.cpp
 
     backend/includes/agencies/advert_agency.h
     backend/includes/agencies/building_agency.h

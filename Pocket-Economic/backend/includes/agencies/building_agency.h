@@ -7,7 +7,8 @@
 class BuildingAgency {
 public:
 	House* buyHouse(Player* player, const House::HouseType& house_type) const;
-	Supermarket* buySupermarket(Player* player) const;
+	Supermarket* buySupermarket(Player* player,
+		const Supermarket::SupermarketType& supermarket_type) const;
 	void makeStandarts();
 
 	void setMonolithicHouseBuildingTime(const int64_t& building_time);

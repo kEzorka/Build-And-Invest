@@ -3,6 +3,43 @@
 void Game::nextGameStep() {
     news_window_.fresh_news_arr_.clear();
     ++month_;
+    if (month_ % 12 == 0) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "January has started!                                                                                   "));
+    } else if (month_ % 12 == 1) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "February has started!                                                                                   "));
+    } else if (month_ % 12 == 2) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "March has started!                                                                                   "));
+    } else if (month_ % 12 == 3) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "April has started!                                                                                   "));
+    } else if (month_ % 12 == 4) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "May has started!                                                                                   "));
+    } else if (month_ % 12 == 5) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "June has started!                                                                                   "));
+    } else if (month_ % 12 == 6) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "July has started!                                                                                   "));
+    } else if (month_ % 12 == 7) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "August has started!                                                                                   "));
+    } else if (month_ % 12 == 8) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "September has started!                                                                                   "));
+    } else if (month_ % 12 == 9) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "October has started!                                                                                   "));
+    } else if (month_ % 12 == 10) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "November has started!                                                                                   "));
+    } else if (month_ % 12 == 11) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "December has started!                                                                                   "));
+    }
     global_real_estate_agency_->updateDemand();
     for (Player*& player : players_arr_) {
         player->getIncome(month_ - 1);
@@ -254,29 +291,29 @@ void Game::makeCalamitiesArr() {
 
 
 void Game::buildNonBuildRealty(Player* player, BuildingLand* building_land,
-    const int& building_pos_x, const int& building_pos_y) {
+    const int& row, const int& column) {
     if (building_land == nullptr) {
         throw std::runtime_error("build land for non building realty is nullptr");
     }
-    if (building_land->getRealty(building_pos_x, building_pos_y) != nullptr) {
+    if (building_land->getRealty(row, column) != nullptr) {
         throw std::runtime_error("this place for non building realty has already builted up");
     }
     NonBuildRealty* realty = new NonBuildRealty();
     realty->setOwner(player);
-    building_land->build(realty, building_pos_x, building_pos_y);
+    building_land->build(realty, row, column);
 }
 
 void Game::buildHouse(Player* player, BuildingLand* building_land, const House::HouseType& house_type,
-    const int& building_pos_x, const int& building_pos_y) {
+    const int& row, const int& column) {
     if (building_land == nullptr) {
         throw std::runtime_error("build land for house is nullptr");
     }
-    if (building_land->getRealty(building_pos_x, building_pos_y) != nullptr) {
+    if (building_land->getRealty(row, column) != nullptr) {
         throw std::runtime_error("this place for house has already builted up");
     }
     House* house = player->buildHouse(house_type, *building_agency_);
-    house->setNumberOfRealty(building_pos_y * building_land->getSizeX() + building_pos_x);
-    building_land->build(house, building_pos_x, building_pos_y);
+    house->setNumberOfRealty(row * building_land->getSizeX() + column);
+    building_land->build(house, row, column);
     news_window_.buy_news_arr_.push_back(std::make_pair(player,
         "started building the house " + std::to_string(house->getNumberOfRealty())
         + " in " + house->getLandPlot()->getNameOfLand() + "."
@@ -284,17 +321,18 @@ void Game::buildHouse(Player* player, BuildingLand* building_land, const House::
     ));
 }
 
-void Game::buildSupermarket(Player* player, BuildingLand* building_land, const House::HouseType& house_type,
-    const int& building_pos_x, const int& building_pos_y) {
+void Game::buildSupermarket(Player* player, BuildingLand* building_land,
+    const Supermarket::SupermarketType& supermarket_type,
+    const int& row, const int& column) {
     if (building_land == nullptr) {
         throw std::runtime_error("build land for supermarket is nullptr");
     }
-    if (building_land->getRealty(building_pos_x, building_pos_y) != nullptr) {
+    if (building_land->getRealty(row, column) != nullptr) {
         throw std::runtime_error("this place for supermarket has already builted up");
     }
-    Supermarket* supermarket = player->buildSupermarket(*building_agency_);
-    supermarket->setNumberOfRealty(building_pos_y * building_land->getSizeX() + building_pos_x);
-    building_land->build(supermarket, building_pos_x, building_pos_y);
+    Supermarket* supermarket = player->buildSupermarket(supermarket_type, *building_agency_);
+    supermarket->setNumberOfRealty(row * building_land->getSizeX() + column);
+    building_land->build(supermarket, row, column);
     news_window_.buy_news_arr_.push_back(std::make_pair(player,
         "started building the supermarket " + std::to_string(supermarket->getNumberOfRealty())
         + " in " + supermarket->getLandPlot()->getNameOfLand() + "."
@@ -302,41 +340,41 @@ void Game::buildSupermarket(Player* player, BuildingLand* building_land, const H
     ));
 }
 
-void Game::buyLand(Player* player, const int& pos_x, const int& pos_y) {
-    if (pos_y == 0 && pos_x != 0) {
+void Game::buyLand(Player* player, const int& row, const int& column) {
+    if (column == 0 && row != 0) {
         return;
     }
 
-    if (dynamic_cast<BuildingLand*>(land_plots_arr_[pos_x][pos_y]) != nullptr) {
-        buyBuildingLand(player, pos_x, pos_y);
-    } else if (dynamic_cast<Resort*>(land_plots_arr_[pos_x][pos_y]) != nullptr) {
-        buyResort(player, pos_x, pos_y);
+    if (dynamic_cast<BuildingLand*>(land_plots_arr_[row][column]) != nullptr) {
+        buyBuildingLand(player, row, column);
+    } else if (dynamic_cast<Resort*>(land_plots_arr_[row][column]) != nullptr) {
+        buyResort(player, row, column);
     }
 }
 
-void Game::buyBuildingLand(Player* player, const int& pos_x, const int& pos_y)  {
-    if (pos_y > land_plots_arr_.size()) {
+void Game::buyBuildingLand(Player* player, const int& row, const int& column)  {
+    if (row > land_plots_arr_.size()) {
         return;
         //throw std::runtime_error("can not buy land: pos_y more than land plots");
-    } else if (pos_x > land_plots_arr_[pos_y].size()) {
+    } else if (column > land_plots_arr_[row].size()) {
         return;
         //throw std::runtime_error("can not buy land: pos_x more than land plots");
     }
-    player->buyBuildingLand(dynamic_cast<BuildingLand*>(land_plots_arr_[pos_x][pos_y]), *land_agency_);
+    player->buyBuildingLand(dynamic_cast<BuildingLand*>(land_plots_arr_[row][column]), *land_agency_);
     news_window_.buy_news_arr_.push_back(std::make_pair(player,
-        "bought land plot in " + land_plots_arr_[pos_x][pos_y]->getNameOfLand() + "!"
+        "bought land plot in " + land_plots_arr_[row][column]->getNameOfLand() + "!"
     ));
 }
 
-void Game::buyResort(Player* player, const int& pos_x, const int& pos_y) {
-    if (pos_y > land_plots_arr_.size()) {
+void Game::buyResort(Player* player, const int& row, const int& column) {
+    if (row > land_plots_arr_.size()) {
         throw std::runtime_error("can not buy land: pos_y more than land plots");
-    } else if (pos_x > land_plots_arr_[pos_y].size()) {
+    } else if (column > land_plots_arr_[row].size()) {
         throw std::runtime_error("can not buy land: pos_x more than land plots");
     }
-    player->buyResort(dynamic_cast<Resort*>(land_plots_arr_[pos_x][pos_y]), *land_agency_);
+    player->buyResort(dynamic_cast<Resort*>(land_plots_arr_[row][column]), *land_agency_);
     news_window_.buy_news_arr_.push_back(std::make_pair(player,
-        "bought resort in " + land_plots_arr_[pos_x][pos_y]->getNameOfLand() + "!"
+        "bought resort in " + land_plots_arr_[row][column]->getNameOfLand() + "!"
     ));
 }
 

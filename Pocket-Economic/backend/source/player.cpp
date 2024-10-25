@@ -2,6 +2,7 @@
 #include "../includes/agencies/real_estate_agency.h"
 #include "../includes/agencies/grocery_agency.h"
 #include "../includes/standard_classes.h"
+#include "../bots/includes/bot.h"
 
 Player::Player() {
     player_estate_agency_ = new RealEstateAgency(*(standard_classes->real_estate_agency_standard_));
@@ -30,6 +31,14 @@ void Player::updateSpendingMoneyForAdvertForNewStep() {
     coef_of_advert_supermarket_this_month_ = 0;
 }
 
+bool Player::isBot() {
+    Bot* bot_ptr = dynamic_cast<Bot*>(this);
+    if (bot_ptr != nullptr) {
+        return true;
+    }
+    return false;
+}
+
 
 
 
@@ -45,8 +54,9 @@ void Player::buySupermarketAdvert(const int& cnt_of_advert, const AdvertAgency& 
         cnt_of_advert * advert_agency.getBoostOfSupermarketSalesValue();
 }
 
-Supermarket* Player::buildSupermarket(const BuildingAgency& building_agency) {
-    Supermarket* supermarket = building_agency.buySupermarket(this);
+Supermarket* Player::buildSupermarket(const Supermarket::SupermarketType& supermarket_type, 
+    const BuildingAgency& building_agency) {
+    Supermarket* supermarket = building_agency.buySupermarket(this, supermarket_type);
     supermarket_arr_.push_back(supermarket);
     return supermarket;
 }

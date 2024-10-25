@@ -253,16 +253,33 @@ House* BuildingAgency::buyHouse(Player* player, const House::HouseType& house_ty
 	return house;
 }
 
-Supermarket* BuildingAgency::buySupermarket(Player* player) const {
+Supermarket* BuildingAgency::buySupermarket(Player* player, 
+	const Supermarket::SupermarketType& supermarket_type) const {
 	int64_t building_cost;
 	int64_t player_money = player->getMoney();
 	Supermarket* supermarket = nullptr;
-	building_cost = supermarket_standard_->getBuildingCost();
-	if (player_money < building_cost) {
-		throw std::runtime_error("player does not have enough money to buy this supermarket");
+
+	switch (supermarket_type) {
+	case Supermarket::SupermarketType::Supermarket: {
+		building_cost = supermarket_standard_->getBuildingCost();
+		if (player_money < building_cost) {
+			throw std::runtime_error("player does not have enough money to buy this house");
+		}
+		player->setMoney(player_money - building_cost);
+		supermarket = new Supermarket(*supermarket_standard_);
+		break;
 	}
-	player->setMoney(player_money - building_cost);
-	supermarket = new Supermarket(*supermarket_standard_);
+	case Supermarket::SupermarketType::Hypermarket: {
+		building_cost = hypermarket_standard_->getBuildingCost();
+		if (player_money < building_cost) {
+			throw std::runtime_error("player does not have enough money to buy this house");
+		}
+		player->setMoney(player_money - building_cost);
+		supermarket = new Supermarket(*hypermarket_standard_);
+		break;
+	}
+	}
+
 	if (supermarket != nullptr) {
 		supermarket->setOwner(player);
 	}

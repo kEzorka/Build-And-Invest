@@ -18,11 +18,14 @@ public:
     virtual void setColor(const std::string& color);
     virtual void updateSpendingMoneyForAdvertForNewStep();
 
+    bool isBot();
+
 
     virtual void buyHouseAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency);
     virtual void buySupermarketAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency);
 
-    virtual Supermarket* buildSupermarket(const BuildingAgency& real_estate_agency);
+    virtual Supermarket* buildSupermarket(const Supermarket::SupermarketType& supermarket_type, 
+        const BuildingAgency& real_estate_agency);
     virtual House* buildHouse(const House::HouseType& house_type, const BuildingAgency& real_estate_ageny);
     virtual void buyBuildingLand(BuildingLand* land_plot, const LandAgency& land_agency);
     virtual void buyResort(Resort* land_plot, const LandAgency& land_agency);
@@ -75,8 +78,4 @@ protected:
     double income_brick_house_ = 0;
     double income_supermarket_house_ = 0;
     double income_hypermarket_house_ = 0;
-
-    bool bought_land_ = false;
-    bool bought_house_ = false;
-    bool bought_supermarket_ = false;
 };

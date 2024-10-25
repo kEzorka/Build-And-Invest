@@ -5,9 +5,9 @@
 
 class Game;
 
-class FirstBot : virtual public Bot {
+class FourthBot : virtual public Bot {
 public:
-	FirstBot();
+	FourthBot();
 
 	virtual void step(Game* game) override;
 

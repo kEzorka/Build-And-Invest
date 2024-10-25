@@ -8,14 +8,23 @@
 #include "news_window.h"
 #include "main_game_window.h"
 #include "../standard_classes.h"
-//#include "../../bots/includes/bot.h"
+#include "../../bots/includes/first_bot.h"
+#include "../../bots/includes/second_bot.h"
+#include "../../bots/includes/third_bot.h"
+#include "../../bots/includes/fourth_bot.h"
+#include "../../bots/includes/fifth_bot.h"
 
 static std::mt19937 RandNum = std::mt19937{ static_cast<std::mt19937::result_type>(
     std::chrono::steady_clock::now().time_since_epoch().count()) };
 
 class Game {
 public:
-    //friend Bot;
+    friend FirstBot;
+    friend SecondBot;
+    friend ThirdBot;
+    friend FourthBot;
+    friend FifthBot;
+    friend Bot;
 
     void start();
 
@@ -35,6 +44,7 @@ public:
     void setMovesCnt(const int& moves);
 
     void pushPlayer(Player* player);
+    void pushBot();
     
     std::vector<Player*> getPlayersArr() const;	
     Player* getCurPlayer() const;
@@ -47,7 +57,8 @@ public:
 
     void buildHouse(Player* player, BuildingLand* building_land, const House::HouseType& house_type,
         const int& building_pos_x, const int& building_pos_y);
-    void buildSupermarket(Player* player, BuildingLand* building_land, const House::HouseType& house_type,
+    void buildSupermarket(Player* player, BuildingLand* building_land,
+        const Supermarket::SupermarketType& house_type,
         const int& building_pos_x, const int& building_pos_y);
     void buyLand(Player* player, const int& pos_x, const int& pos_y);
     void buyBuildingLand(Player* player, const int& pos_x, const int& pos_y);
