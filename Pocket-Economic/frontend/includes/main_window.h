@@ -28,6 +28,8 @@ public:
         int amount_x = -1;
         int amount_y = -1;
         std::vector<std::vector<bool>> free_space;
+        int row = -1;
+        int column = -1;
         Player_Owner owner;
     };
     int cell_size = 25;
@@ -406,5 +408,6 @@ private:
     QLabel* month = new QLabel();
 
 
+    QLabel* results = new QLabel();
     Game* game = nullptr;
 };

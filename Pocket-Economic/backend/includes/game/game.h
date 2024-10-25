@@ -68,7 +68,7 @@ public:
     void buySupermarketAdvert(Player* player, const int& cnt_of_advert) const;
 
 
-
+    std::vector<std::vector<LandPlot*>> getLandsArr() const;
 
 
     double getMonolithicIncome(Player* player) const;

@@ -386,6 +386,10 @@ void Game::buySupermarketAdvert(Player* player, const int& cnt_of_advert) const 
     player->buySupermarketAdvert(cnt_of_advert, *advert_agency_);
 }
 
+std::vector<std::vector<LandPlot*>> Game::getLandsArr() const {
+    return land_plots_arr_;
+}
+
 double Game::getMonolithicIncome(Player* player) const {
     return player->getMonolithicIncome();
 }

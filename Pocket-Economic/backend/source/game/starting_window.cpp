@@ -2,6 +2,9 @@
 #include "../../includes/game/game.h"
 #include "../../includes/agencies/grocery_agency.h"
 
+
+extern StandardClasses* standard_classes;
+
 void Game::setDefaultMonolithicHouseDemand(const double& demand) {
     standard_classes->real_estate_agency_standard_->setDefaultMonoliticDemand(demand);
 }
