@@ -38,6 +38,7 @@ void BuildingLand::build(Realty* realty, const int& x, const int& y) {
     Supermarket* supermarket = dynamic_cast<Supermarket*>(realty);
     if (house != nullptr) {
         houses_.push_back(house);
+        house->setLandPlot(this);
         std::vector<House::FlatType*> flat_type = house->getFlatTypesArr();
         if (!flat_type.empty()) {
             if (flat_type[0]->getFreeFlats() != 0) {
@@ -52,6 +53,7 @@ void BuildingLand::build(Realty* realty, const int& x, const int& y) {
         }
     } else if (supermarket != nullptr) {
         supermarkets_.push_back(supermarket);
+        supermarket->setLandPlot(this);
     }
 }
 

@@ -480,51 +480,60 @@ void PocketEconomic::SetLandsCoors() {
 }
 
 void PocketEconomic::AddHouse() {
-    if (!game->getCurPlayer()->isBot()) {
         QObject::connect(house1_btn, &QPushButton::clicked, [&]() {
-            CloseAllInfoWindows();
-            house1_buying_in_process ^= 1;
-            house1_roof->setVisible(house1_buying_in_process);
-            grid->isBuyingProcess = house1_buying_in_process;
-            if (house1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-            else QGuiApplication::restoreOverrideCursor();
+            if (!game->getCurPlayer()->isBot()) {
+                CloseAllInfoWindows();
+                house1_buying_in_process ^= 1;
+                house1_roof->setVisible(house1_buying_in_process);
+                grid->isBuyingProcess = house1_buying_in_process;
+                if (house1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+                else QGuiApplication::restoreOverrideCursor();
+            }
             });
         QObject::connect(house2_btn, &QPushButton::clicked, [&]() {
-            CloseAllInfoWindows();
-            house2_buying_in_process ^= 1;
-            house2_roof->setVisible(house2_buying_in_process);
-            grid->isBuyingProcess = house2_buying_in_process;
-            if (house2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-            else QGuiApplication::restoreOverrideCursor();
+            if (!game->getCurPlayer()->isBot()) {
+                CloseAllInfoWindows();
+                house2_buying_in_process ^= 1;
+                house2_roof->setVisible(house2_buying_in_process);
+                grid->isBuyingProcess = house2_buying_in_process;
+                if (house2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+                else QGuiApplication::restoreOverrideCursor();
+            }
             });
         QObject::connect(house3_btn, &QPushButton::clicked, [&]() {
-            CloseAllInfoWindows();
-            house3_buying_in_process ^= 1;
-            house3_roof->setVisible(house3_buying_in_process);
-            grid->isBuyingProcess = house3_buying_in_process;
-            if (house3_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-            else QGuiApplication::restoreOverrideCursor();
+            if (!game->getCurPlayer()->isBot()) {
+                CloseAllInfoWindows();
+                house3_buying_in_process ^= 1;
+                house3_roof->setVisible(house3_buying_in_process);
+                grid->isBuyingProcess = house3_buying_in_process;
+                if (house3_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+                else QGuiApplication::restoreOverrideCursor();
+            }
             });
         QObject::connect(shop1_btn, &QPushButton::clicked, [&]() {
-            CloseAllInfoWindows();
-            shop1_buying_in_process ^= 1;
-            shop1_roof->setVisible(shop1_buying_in_process);
-            grid->isBuyingProcess = shop1_buying_in_process;
-            if (shop1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-            else QGuiApplication::restoreOverrideCursor();
+            if (!game->getCurPlayer()->isBot()) {
+                CloseAllInfoWindows();
+                shop1_buying_in_process ^= 1;
+                shop1_roof->setVisible(shop1_buying_in_process);
+                grid->isBuyingProcess = shop1_buying_in_process;
+                if (shop1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+                else QGuiApplication::restoreOverrideCursor();
+            }
             });
         QObject::connect(shop2_btn, &QPushButton::clicked, [&]() {
-            CloseAllInfoWindows();
-            shop2_buying_in_process ^= 1;
-            shop2_roof->setVisible(shop2_buying_in_process);
-            grid->isBuyingProcess = shop2_buying_in_process;
-            if (shop2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-            else QGuiApplication::restoreOverrideCursor();
+            if (!game->getCurPlayer()->isBot()) {
+                CloseAllInfoWindows();
+                shop2_buying_in_process ^= 1;
+                shop2_roof->setVisible(shop2_buying_in_process);
+                grid->isBuyingProcess = shop2_buying_in_process;
+                if (shop2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+                else QGuiApplication::restoreOverrideCursor();
+            }
             });
-    }
-    QObject::connect(close_btn, &QPushButton::clicked, [&]() {
-        window->close();
-        });
+
+        QObject::connect(close_btn, &QPushButton::clicked, [&]() {
+                window->close();
+            });
 }
 
 void PocketEconomic::SetBuilding(QLabel* roof) {
@@ -541,12 +550,12 @@ void PocketEconomic::SetBuilding(QLabel* roof) {
 
         for (int i = 0; i < grid->lands.size(); ++i) {
             Grid::land_struct* land = &grid->lands[i];
-            if (land->x < x && x < land->x + land->amount_x * grid->cell_size &&
-                land->y < y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
+            if (land->x <= x && x <= land->x + land->amount_x * grid->cell_size &&
+                land->y <= y + 50 && y + 50 <= land->y + land->amount_y * grid->cell_size) {
                 int row = land->row;
-                int column = land->column;
-                int row_small = (x - land->x) / grid->cell_size;
-                int column_small = (y - land->y) / grid->cell_size;
+                int column = land->column + 1;
+                int column_small = (x - land->x) / grid->cell_size;
+                int row_small = (y + 50 - land->y) / grid->cell_size;
                 if (roof == house1_roof) {
                     game->buildHouse(game->getCurPlayer(), dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]), House::HouseType::MonoliticHouse, row_small, column_small);
                 }
@@ -710,8 +719,7 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 background_picture_->setPixmap(background_pix);
                 OfferIsShown();
                 return;
-            }
-            else {
+            } else {
                 land_resort_information_txt->setText("This land belongs to");
                 land_resort_information_advertising_btn->setVisible(false);
                 land_resort_information_updating_resort_btn->setVisible(false);
@@ -849,6 +857,9 @@ void PocketEconomic::OfferIsShown() {
         offer->setVisible(false);
         is_offer_shown = false;
         (grid->chosen_land.first)->owner = *player;
+
+        // buy LandOrResort
+
         if (grid->chosen_land.second) (grid->chosen_land.second)->owner = *player;
         background_picture_->setPixmap(background_pix);
         return;
@@ -1465,9 +1476,9 @@ void PocketEconomic::ChangePlayer() {
         house2_roof->setPixmap(house2_roof_red_pix);
         house3_btn->setIcon(house3_front_red_pix);
         house3_roof->setPixmap(house3_roof_red_pix);
-        shop_buidings_pictures[0]->setPixmap(house1_front_red_pix);
-        shop_buidings_pictures[1]->setPixmap(house2_front_red_pix);
-        shop_buidings_pictures[2]->setPixmap(house3_front_red_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_red_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_red_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_red_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_red_border_style);
     }
@@ -1478,9 +1489,9 @@ void PocketEconomic::ChangePlayer() {
         house2_roof->setPixmap(house2_roof_orange_pix);
         house3_btn->setIcon(house3_front_orange_pix);
         house3_roof->setPixmap(house3_roof_orange_pix);
-        shop_buidings_pictures[0]->setPixmap(house1_front_orange_pix);
-        shop_buidings_pictures[1]->setPixmap(house2_front_orange_pix);
-        shop_buidings_pictures[2]->setPixmap(house3_front_orange_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_orange_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_orange_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_orange_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_orange_border_style);
     }
@@ -1491,9 +1502,9 @@ void PocketEconomic::ChangePlayer() {
         house2_roof->setPixmap(house2_roof_yellow_pix);
         house3_btn->setIcon(house3_front_yellow_pix);
         house3_roof->setPixmap(house3_roof_yellow_pix);
-        shop_buidings_pictures[0]->setPixmap(house1_front_yellow_pix);
-        shop_buidings_pictures[1]->setPixmap(house2_front_yellow_pix);
-        shop_buidings_pictures[2]->setPixmap(house3_front_yellow_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_yellow_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_yellow_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_yellow_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_yellow_border_style);
     }
@@ -1504,9 +1515,9 @@ void PocketEconomic::ChangePlayer() {
         house2_roof->setPixmap(house2_roof_blue_pix);
         house3_btn->setIcon(house3_front_blue_pix);
         house3_roof->setPixmap(house3_roof_blue_pix);
-        shop_buidings_pictures[0]->setPixmap(house1_front_blue_pix);
-        shop_buidings_pictures[1]->setPixmap(house2_front_blue_pix);
-        shop_buidings_pictures[2]->setPixmap(house3_front_blue_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_blue_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_blue_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_blue_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_blue_border_style);
     }
@@ -1517,9 +1528,9 @@ void PocketEconomic::ChangePlayer() {
         house2_roof->setPixmap(house2_roof_violet_pix);
         house3_btn->setIcon(house3_front_violet_pix);
         house3_roof->setPixmap(house3_roof_violet_pix);
-        shop_buidings_pictures[0]->setPixmap(house1_front_violet_pix);
-        shop_buidings_pictures[1]->setPixmap(house2_front_violet_pix);
-        shop_buidings_pictures[2]->setPixmap(house3_front_violet_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_violet_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_violet_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_violet_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_violet_border_style);
     }
@@ -1995,9 +2006,10 @@ void PocketEconomic::InputPlayersSettings() {
 
 void PocketEconomic::InputPlayersContinue() {
     QObject::connect(input_players_ok, &QPushButton::clicked, [&]() {
-        if (players + bots >= 2 && players + bots <= 5) {
+        if (players_cnt_on_players_window + bots_cnt_on_players_window >= 2
+            && players_cnt_on_players_window + bots_cnt_on_players_window <= 5) {
           /* */
-            for (int i = 0; i < players + bots; ++i) {
+            for (int i = 0; i < players_cnt_on_players_window + bots_cnt_on_players_window; ++i) {
                 player->availiable[i] = true;
             }
             if (player1->isVisible()) {
@@ -2025,12 +2037,12 @@ void PocketEconomic::InputPlayersContinue() {
                 new_player->setNickname(player5->text().toStdString());
                 game->pushPlayer(new_player);
             }
-            for (int i = 0; i < bots; ++i) {
+            for (int i = 0; i < bots_cnt_on_players_window; ++i) {
                 game->pushBot();
             }
             input_players_window->close();
             MakeMainWindow();
-
+            game->begin();
         }
         });
 

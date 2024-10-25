@@ -33,6 +33,7 @@ public:
     std::string getResults();
 
     bool nextPlayer();
+    void begin();
     //////////////////
     //
     // return TRUE if it's next step of the game
@@ -133,7 +134,7 @@ public:
     int64_t getTimeOfBuildingHypermarket() const;
 
 private:
-    int default_money_for_player_ = 10'000'000;
+    int default_money_for_player_ = 20'000'000;
     int moves_in_the_game_ = INF;
 
     void nextGameStep();

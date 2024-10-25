@@ -312,13 +312,22 @@ void Game::buildHouse(Player* player, BuildingLand* building_land, const House::
         throw std::runtime_error("this place for house has already builted up");
     }
     House* house = player->buildHouse(house_type, *building_agency_);
-    house->setNumberOfRealty(row * building_land->getSizeX() + column);
-    building_land->build(house, row, column);
-    news_window_.buy_news_arr_.push_back(std::make_pair(player,
-        "started building the house " + std::to_string(house->getNumberOfRealty())
-        + " in " + house->getLandPlot()->getNameOfLand() + "."
-        + " It will take " + std::to_string(house->getBuildingTime()) + " month!"
-    ));
+    if (house != nullptr) {
+        house->setNumberOfRealty(row * building_land->getSizeX() + column);
+        building_land->build(house, row, column);
+
+        news_window_.buy_news_arr_.push_back(std::make_pair(player,
+            "started building the house "
+        ));
+        news_window_.buy_news_arr_.back().second += std::to_string(house->getNumberOfRealty());
+
+        news_window_.buy_news_arr_.back().second += " in ";
+        news_window_.buy_news_arr_.back().second += house->getLandPlot()->getNameOfLand();
+        news_window_.buy_news_arr_.back().second += ".";
+        news_window_.buy_news_arr_.back().second += " It will take ";
+        news_window_.buy_news_arr_.back().second += std::to_string(house->getBuildingTime());
+        news_window_.buy_news_arr_.back().second += " month!";
+    }
 }
 
 void Game::buildSupermarket(Player* player, BuildingLand* building_land,
@@ -331,13 +340,15 @@ void Game::buildSupermarket(Player* player, BuildingLand* building_land,
         throw std::runtime_error("this place for supermarket has already builted up");
     }
     Supermarket* supermarket = player->buildSupermarket(supermarket_type, *building_agency_);
-    supermarket->setNumberOfRealty(row * building_land->getSizeX() + column);
-    building_land->build(supermarket, row, column);
-    news_window_.buy_news_arr_.push_back(std::make_pair(player,
-        "started building the supermarket " + std::to_string(supermarket->getNumberOfRealty())
-        + " in " + supermarket->getLandPlot()->getNameOfLand() + "."
-        + " It will take " + std::to_string(supermarket->getBuildingTime()) + " month!"
-    ));
+    if (supermarket != nullptr) {
+        supermarket->setNumberOfRealty(row * building_land->getSizeX() + column);
+        building_land->build(supermarket, row, column);
+        news_window_.buy_news_arr_.push_back(std::make_pair(player,
+            "started building the supermarket " + std::to_string(supermarket->getNumberOfRealty())
+            + " in " + supermarket->getLandPlot()->getNameOfLand() + "."
+            + " It will take " + std::to_string(supermarket->getBuildingTime()) + " month!"
+        ));
+    }
 }
 
 void Game::buyLand(Player* player, const int& row, const int& column) {

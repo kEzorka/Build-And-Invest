@@ -140,6 +140,10 @@ bool Game::nextPlayer() {
     return false;
 }
 
+void Game::begin() {
+    cur_player_ = players_arr_[0];
+}
+
 
 
 
@@ -153,24 +157,30 @@ void Game::setMovesCnt(const int& moves) {
 
 void Game::pushPlayer(Player* player) {
     players_arr_.push_back(player);
+    player->setMoney(default_money_for_player_);
 }
 
 void Game::pushBot() {
     int64_t rand_num = RandNum() % 5;
     if (rand_num == 0) {
         Player* new_bot = new FirstBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     } else if (rand_num == 1) {
         Player* new_bot = new SecondBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     } else if (rand_num == 2) {
         Player* new_bot = new ThirdBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     } else if (rand_num == 3) {
         Player* new_bot = new FourthBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     } else if (rand_num == 4) {
         Player* new_bot = new FifthBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     }
 }
