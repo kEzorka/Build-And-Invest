@@ -26,12 +26,12 @@ public:
 	virtual double getDefaultPanelHouseDemand() const final;
 	virtual double getDefaultBrickHouseDemand() const final;
 
-	int64_t getIncome(Player* player, BuildingLand* building_land, const int& month);
+	int64_t getIncome(Player* player_owner, BuildingLand* building_land, const int& month);
 
-	void makeDemand(Player* player, BuildingLand* building_land, const int& month);
+	void makeDemand(Player* player_owner, BuildingLand* building_land, const int& month);
 
 	void updateDemand();
-	void giveDemandForPlayer(Player* player);
+	void giveDemandForPlayer(Player* player_owner);
 	void giveDemandForGlobalRealEsateAgency(RealEstateAgency& real_estate_agency);
 
 	double getCurMonolithicIncome() const;

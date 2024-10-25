@@ -44,7 +44,7 @@ public:
     void setStartMoneyCnt(const int& money);
     void setMovesCnt(const int& moves);
 
-    void pushPlayer(Player* player);
+    void pushPlayer(Player* player_owner);
     void pushBot();
     
     std::vector<Player*> getPlayersArr() const;	
@@ -56,27 +56,27 @@ public:
     const int INF = -1;
 
 
-    void buildHouse(Player* player, BuildingLand* building_land, const House::HouseType& house_type,
+    void buildHouse(Player* player_owner, BuildingLand* building_land, const House::HouseType& house_type,
         const int& building_pos_x, const int& building_pos_y);
-    void buildSupermarket(Player* player, BuildingLand* building_land,
+    void buildSupermarket(Player* player_owner, BuildingLand* building_land,
         const Supermarket::SupermarketType& house_type,
         const int& building_pos_x, const int& building_pos_y);
-    void buyLand(Player* player, const int& pos_x, const int& pos_y);
-    void buyBuildingLand(Player* player, const int& pos_x, const int& pos_y);
-    void buyResort(Player* player, const int& pos_x, const int& pos_y);
+    void buyLand(Player* player_owner, const int& pos_x, const int& pos_y);
+    void buyBuildingLand(Player* player_owner, const int& pos_x, const int& pos_y);
+    void buyResort(Player* player_owner, const int& pos_x, const int& pos_y);
 
-    void buyHouseAdvert(Player* player, const int& cnt_of_advert) const;
-    void buySupermarketAdvert(Player* player, const int& cnt_of_advert) const;
+    void buyHouseAdvert(Player* player_owner, const int& cnt_of_advert) const;
+    void buySupermarketAdvert(Player* player_owner, const int& cnt_of_advert) const;
 
 
     std::vector<std::vector<LandPlot*>> getLandsArr() const;
 
 
-    double getMonolithicIncome(Player* player) const;
-    double getPanelIncome(Player* player) const;
-    double getBrickIncome(Player* player) const;
-    double getSupermarketIncome(Player* player) const;
-    double getHypermarketIncome(Player* player) const;
+    double getMonolithicIncome(Player* player_owner) const;
+    double getPanelIncome(Player* player_owner) const;
+    double getBrickIncome(Player* player_owner) const;
+    double getSupermarketIncome(Player* player_owner) const;
+    double getHypermarketIncome(Player* player_owner) const;
 
 
     void setDefaultMonolithicHouseDemand(const double& demand);
@@ -142,7 +142,7 @@ private:
     void makeLandPlotsArr();
 
 
-    void buildNonBuildRealty(Player* player, BuildingLand* building_land, const int& x, const int& y);
+    void buildNonBuildRealty(Player* player_owner, BuildingLand* building_land, const int& x, const int& y);
 
 
     NewsWindow news_window_;

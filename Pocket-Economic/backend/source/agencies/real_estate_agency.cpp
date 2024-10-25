@@ -83,7 +83,7 @@ double RealEstateAgency::getDefaultBrickHouseDemand() const {
     return default_brick_house_demand_;
 }
 
-int64_t RealEstateAgency::getIncome(Player* player, BuildingLand* building_land, const int& month) {
+int64_t RealEstateAgency::getIncome(Player* player_owner, BuildingLand* building_land, const int& month) {
     income_monolithic_house_ = 0;
     income_panel_house_ = 0;
     income_brick_house_ = 0;
@@ -136,10 +136,10 @@ int64_t RealEstateAgency::getIncome(Player* player, BuildingLand* building_land,
     return income_monolithic_house_ + income_panel_house_ + income_brick_house_;
 }
 
-void RealEstateAgency::makeDemand(Player* player, BuildingLand* building_land, const int& month) {
+void RealEstateAgency::makeDemand(Player* player_owner, BuildingLand* building_land, const int& month) {
     double coef_by_month = getCoefByMonth(month);
     double coef_by_supermarkets = 1 + building_land->getSupermarkets().size() * 0.3;
-    double coef_by_advert = 1 + player->getCoefOfHouseAdvertThisMonth() / 100.0;
+    double coef_by_advert = 1 + player_owner->getCoefOfHouseAdvertThisMonth() / 100.0;
     double monolitic_demand_coef = default_monolitic_house_demand_
         * coef_by_month * coef_by_supermarkets * coef_by_advert;
     double panel_demand_coef = default_panel_house_demand_
@@ -189,19 +189,19 @@ void RealEstateAgency::updateDemand() {
     brick_house_demand_ /= 10;
 }
 
-void RealEstateAgency::giveDemandForPlayer(Player* player) {
+void RealEstateAgency::giveDemandForPlayer(Player* player_owner) {
     if (monolithic_house_demand_ != 0) {
-        player->getRealEstateAgency()->addMonoliticHouseDemand(monolithic_house_demand_);
+        player_owner->getRealEstateAgency()->addMonoliticHouseDemand(monolithic_house_demand_);
         monolithic_house_demand_ = 0;
     }
 
     if (panel_house_demand_ != 0) {
-        player->getRealEstateAgency()->addPanelHouseDemand(panel_house_demand_);
+        player_owner->getRealEstateAgency()->addPanelHouseDemand(panel_house_demand_);
         panel_house_demand_ = 0;
     }
 
     if (brick_house_demand_ != 0) {
-        player->getRealEstateAgency()->addBrickHouseDemand(brick_house_demand_);
+        player_owner->getRealEstateAgency()->addBrickHouseDemand(brick_house_demand_);
         brick_house_demand_ = 0;
     }
 }

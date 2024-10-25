@@ -1,10 +1,10 @@
 #include "../../includes/agencies/grocery_agency.h"
 
-int64_t GroceryAgency::getIncome(Player* player, BuildingLand* building_land, const int& month) {
+int64_t GroceryAgency::getIncome(Player* player_owner, BuildingLand* building_land, const int& month) {
 
     double coef_by_month = getCoefByMonth(month);
     double coef_by_houses = 1 + building_land->getHouses().size() * 0.8;
-    double coef_by_advert = 1 + player->getCoefOfSupermarketAdvertThisMonth() / 100.0;
+    double coef_by_advert = 1 + player_owner->getCoefOfSupermarketAdvertThisMonth() / 100.0;
     double supermarket_demand_coef = default_supermarket_demand_
         * coef_by_month * coef_by_houses * coef_by_advert;
     double hypermarket_demand_coef = default_hypermarket_demand_

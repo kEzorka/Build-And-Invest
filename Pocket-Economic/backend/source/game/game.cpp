@@ -36,9 +36,9 @@ bool Game::finished() const {
 std::string Game::getResults() {
     std::string results_str;
     std::vector<std::pair<int64_t, Player*>> results_for_player;
-    for (Player*& player : players_arr_) {
-        results_for_player.push_back(std::make_pair(0, player));
-        for (House*& house : player->getHousesArr()) {
+    for (Player*& player_owner : players_arr_) {
+        results_for_player.push_back(std::make_pair(0, player_owner));
+        for (House*& house : player_owner->getHousesArr()) {
             if (!house->isBuilt()) {
                 results_for_player.back().first += house->getBuildingCost();
             } else {
@@ -58,7 +58,7 @@ std::string Game::getResults() {
             }
         }
 
-        for (Supermarket*& supermarket : player->getSupermarketsArr()) {
+        for (Supermarket*& supermarket : player_owner->getSupermarketsArr()) {
             if (supermarket->getSupermarketType() == Supermarket::SupermarketType::Supermarket) {
                 results_for_player.back().first += 1.6 * building_agency_->getSupermarketBuildingCost();
             } else if (supermarket->getSupermarketType() == Supermarket::SupermarketType::Hypermarket) {
@@ -66,14 +66,14 @@ std::string Game::getResults() {
             }
         }
 
-        for (LandPlot*& land_plot : player->getLandPlotsArr()) {
+        for (LandPlot*& land_plot : player_owner->getLandPlotsArr()) {
             Resort* resort = dynamic_cast<Resort*>(land_plot);
             if (resort != nullptr) {
                 results_for_player.back().first += resort->getIncome() * 2;
             }
         }
 
-        results_for_player.back().first += player->getMoney();
+        results_for_player.back().first += player_owner->getMoney();
     }
 
     std::sort(results_for_player.begin(), results_for_player.end());
@@ -155,9 +155,9 @@ void Game::setMovesCnt(const int& moves) {
     moves_in_the_game_ = moves;
 }
 
-void Game::pushPlayer(Player* player) {
-    players_arr_.push_back(player);
-    player->setMoney(default_money_for_player_);
+void Game::pushPlayer(Player* player_owner) {
+    players_arr_.push_back(player_owner);
+    player_owner->setMoney(default_money_for_player_);
 }
 
 void Game::pushBot() {
