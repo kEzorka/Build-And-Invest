@@ -47,6 +47,9 @@ public:
     virtual double getBrickIncome() const;
     virtual double getSupermarketIncome() const;
     virtual double getHypermarketIncome() const;
+    virtual double getGlobalIncome() const;
+
+
 
     virtual void getIncome(const int& month);
 
@@ -78,4 +81,6 @@ protected:
     double income_brick_house_ = 0;
     double income_supermarket_house_ = 0;
     double income_hypermarket_house_ = 0;
+    double global_income_ = 0;
+
 };

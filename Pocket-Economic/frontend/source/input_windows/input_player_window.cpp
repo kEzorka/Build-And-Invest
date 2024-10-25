@@ -131,35 +131,45 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
             }
             if (player1->isVisible()) {
                 Player* new_player = new Player();
-                new_player->setNickname(player1->text().toStdString());
+                std::string name = player1->text().toStdString();
+                if (name.empty()) name = "Player 1";
+                new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
             if (player2->isVisible()) {
                 Player* new_player = new Player();
-                new_player->setNickname(player2->text().toStdString());
+                std::string name = player2->text().toStdString();
+                if (name.empty()) name = "Player 2";
+                new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
             if (player3->isVisible()) {
                 Player* new_player = new Player();
-                new_player->setNickname(player3->text().toStdString());
+                std::string name = player3->text().toStdString();
+                if (name.empty()) name = "Player 3";
+                new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
             if (player4->isVisible()) {
                 Player* new_player = new Player();
-                new_player->setNickname(player4->text().toStdString());
+                std::string name = player4->text().toStdString();
+                if (name.empty()) name = "Player 4";
+                new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
             if (player5->isVisible()) {
                 Player* new_player = new Player();
-                new_player->setNickname(player5->text().toStdString());
+                std::string name = player5->text().toStdString();
+                if (name.empty()) name = "Player 5";
+                new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
             for (int i = 0; i < bots_cnt_on_players_window; ++i) {
                 game->pushBot();
             }
             input_players_window->close();
-            pocket_economic_->MakeMainWindow();
             game->begin();
+            pocket_economic_->MakeMainWindow();
         }
         });
 

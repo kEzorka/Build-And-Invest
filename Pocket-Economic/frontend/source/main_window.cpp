@@ -577,7 +577,7 @@ void PocketEconomic::SetBuilding(QLabel* roof) {
 
         for (int i = 0; i < grid->lands.size(); ++i) {
             Grid::land_struct* land = &grid->lands[i];
-            if (land->x <= x && x <= land->x + land->amount_x * grid->cell_size &&
+            if (land->x <= x && x < land->x + land->amount_x * grid->cell_size &&
                 land->y <= y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
                 int row = land->row;
                 int column = land->column;
@@ -730,7 +730,23 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 land_resort_information_advertising_btn->setVisible(false);
                 land_resort_information_updating_resort_btn->setVisible(false);
                 if (land->owner.color != player_owner->color) {
-                    land_resort_information_owner_txt->setText("someone"); // add name from backend
+                    std::string name = "someone";
+                    if (land->owner.color == player_owner->Red) {
+                        name = game->getPlayersArr()[0]->getNickname();
+                    }
+                    else if (land->owner.color == player_owner->Orange) {
+                        name = game->getPlayersArr()[1]->getNickname();
+                    }
+                    if (land->owner.color == player_owner->Yellow) {
+                        name = game->getPlayersArr()[2]->getNickname();
+                    }
+                    if (land->owner.color == player_owner->Blue) {
+                        name = game->getPlayersArr()[3]->getNickname();
+                    }
+                    if (land->owner.color == player_owner->Violet) {
+                        name = game->getPlayersArr()[4]->getNickname();
+                    }
+                    land_resort_information_owner_txt->setText(QString::fromStdString(name)); 
                 } else {
                     land_resort_information_owner_txt->setText("you");
                 }
@@ -778,7 +794,23 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 land_resort_information_advertising_btn->setVisible(false);
                 land_resort_information_updating_resort_btn->setVisible(false);
                 if (resort.owner.color != player_owner->color) {
-                    land_resort_information_owner_txt->setText("someone"); // add name from backend
+                    std::string name = "someone";
+                    if (resort.owner.color == player_owner->Red) {
+                        name = game->getPlayersArr()[0]->getNickname();
+                    }
+                    else if (resort.owner.color == player_owner->Orange) {
+                        name = game->getPlayersArr()[1]->getNickname();
+                    }
+                    if (resort.owner.color == player_owner->Yellow) {
+                        name = game->getPlayersArr()[2]->getNickname();
+                    }
+                    if (resort.owner.color == player_owner->Blue) {
+                        name = game->getPlayersArr()[3]->getNickname();
+                    }
+                    if (resort.owner.color == player_owner->Violet) {
+                        name = game->getPlayersArr()[4]->getNickname();
+                    }
+                    land_resort_information_owner_txt->setText(QString::fromStdString(name)); 
                     land_resort_information_advertising_btn->setVisible(false);
                     land_resort_information_updating_resort_btn->setVisible(false);
                 } else {
@@ -881,6 +913,7 @@ void PocketEconomic::CapitalAndIncome() {
     income_layout->setAlignment(Qt::AlignLeft);
 
     capital->setText("Capital: ");
+    
     capital_number->setText("70M");
     capital_layout->addWidget(capital);
     capital_layout->addWidget(capital_number);
@@ -1186,7 +1219,9 @@ void PocketEconomic::PreparePlayersInfo() {
         QLabel* player = new QLabel(QString::fromStdString("Player " + std::to_string(i + 1)));
         player->setStyleSheet(news_txt_style);
         info->addWidget(player);
-        QLabel* nickname = new QLabel("Nickname");
+        std::string name_nick = "Nickname";
+        if (player_owner->availiable[i]) name_nick = game->getPlayersArr()[i]->getNickname();
+        QLabel* nickname = new QLabel(QString::fromStdString(name_nick));
         nickname->setStyleSheet(news_txt_style);
         info->addWidget(nickname);
     }
@@ -1214,13 +1249,28 @@ void PocketEconomic::PreparePlayersInfo() {
 }
 
 void PocketEconomic::MakeProfile(QLabel* profile) {
-    //delete players_info_place_for_profile->layout();
     bool need_to_change = false;
-    if (profile == red_profile && player_owner->availiable[0]) need_to_change = true;
-    else if (profile == orange_profile && player_owner->availiable[1]) need_to_change = true;
-    else if (profile == yellow_profile && player_owner->availiable[2]) need_to_change = true;
-    else if (profile == blue_profile && player_owner->availiable[3]) need_to_change = true;
-    else if (profile == violet_profile && player_owner->availiable[4]) need_to_change = true;
+    int player_index = 0;
+    if (profile == red_profile && player_owner->availiable[0]) {
+        need_to_change = true;
+        player_index = 0;
+    }
+    else if (profile == orange_profile && player_owner->availiable[1]) {
+        need_to_change = true;
+        player_index = 1;
+    }
+    else if (profile == yellow_profile && player_owner->availiable[2]) {
+        need_to_change = true;
+        player_index = 2;
+    }
+    else if (profile == blue_profile && player_owner->availiable[3]) {
+        need_to_change = true;
+        player_index = 3;
+    }
+    else if (profile == violet_profile && player_owner->availiable[4]) {
+        need_to_change = true;
+        player_index = 4;
+    }
     if (need_to_change) {
         if (players_info_place_for_profile->layout()) {
             for (int i = 0; i < players_info_place_for_profile->layout()->count(); ++i)
@@ -1236,7 +1286,6 @@ void PocketEconomic::MakeProfile(QLabel* profile) {
         else if (profile == yellow_profile) color = yellow_color;
         else if (profile == blue_profile) color = blue_color;
         else if (profile == violet_profile) color = violet_color;
-        std::vector<int> info_tmp = { 1, 1, 1, 5, 1 };
         QLayout* layout = players_info_place_for_profile->layout();
         profile->setStyleSheet("background-color: white; border-width: 1px;");
         profile->setLayout(layout);
@@ -1261,8 +1310,13 @@ void PocketEconomic::MakeProfile(QLabel* profile) {
         table->verticalHeader()->hide();
 
         QString income = "Income: ", capital = "Capital: ";
-        capital += QString::fromStdString("70M");
-        income += QString::fromStdString("-30M");
+        int64_t money = game->getPlayersArr()[player_index]->getMoney() / 1000;
+        std::string add = std::to_string(money);
+        capital += QString::fromStdString(add);
+        money = game->getPlayersArr()[player_index]->getGlobalIncome() / 1000;
+        add = std::to_string(money);
+        if (money < 0) add = '-' + add;
+        income += QString::fromStdString(add);
 
         table->setSpan(0, 0, 2, 2);
         table->setItem(0, 0, new QTableWidgetItem(capital));
@@ -1280,44 +1334,65 @@ void PocketEconomic::MakeProfile(QLabel* profile) {
         table->item(5, 0)->setBackground(color);
         table->item(5, 0)->setForeground(QColor(255, 255, 255));
         int row = 6;
-        for (int i = 0; i < 3; ++i) {
-            if (info_tmp[i]) {
-                table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString("House " + std::to_string(i + 1))));
-                QString income_house = "Income: ";
-                income_house += "+50M";
-                table->setItem(row + 1, 1, new QTableWidgetItem(income_house));
-                QString amount_house = "Amount: ";
-                amount_house += std::to_string(info_tmp[i]);
-                table->setItem(row + 2, 1, new QTableWidgetItem(amount_house));
-                table->setSpan(row, 0, 3, 1);
-                QIcon icon;
-                if (i == 0) {
-                    if (profile == red_profile) icon = QIcon(house1_front_red_pix);
-                    else if (profile == orange_profile) icon = QIcon(house1_front_orange_pix);
-                    else if (profile == yellow_profile) icon = QIcon(house1_front_yellow_pix);
-                    else if (profile == blue_profile) icon = QIcon(house1_front_blue_pix);
-                    else if (profile == violet_profile) icon = QIcon(house1_front_violet_pix);
-                } else if (i == 1) {
-                    if (profile == red_profile) icon = QIcon(house2_front_red_pix);
-                    else if (profile == orange_profile) icon = QIcon(house2_front_orange_pix);
-                    else if (profile == yellow_profile) icon = QIcon(house2_front_yellow_pix);
-                    else if (profile == blue_profile) icon = QIcon(house2_front_blue_pix);
-                    else if (profile == violet_profile) icon = QIcon(house2_front_violet_pix);
-                } else {
-                    if (profile == red_profile) icon = QIcon(house3_front_red_pix);
-                    else if (profile == orange_profile) icon = QIcon(house3_front_orange_pix);
-                    else if (profile == yellow_profile) icon = QIcon(house3_front_yellow_pix);
-                    else if (profile == blue_profile) icon = QIcon(house3_front_blue_pix);
-                    else if (profile == violet_profile) icon = QIcon(house3_front_violet_pix);
-                }
-                table->setItem(row, 0, new QTableWidgetItem(icon, ""));
 
-                table->setItem(row + 3, 0, new QTableWidgetItem());
-                table->setSpan(row + 3, 0, 1, 2);
-                row += 4;
 
-            }
+        game->getPlayersArr()[player_index]->getHousesArr();
+        int house1_cnt = 0, house2_cnt = 0, house3_cnt = 0, shop1_cnt = 0, shop2_cnt = 0;
+        std::vector<int64_t> buildings_cnt(5, 0);
+        for (auto& building : game->getPlayersArr()[player_index]->getHousesArr()) {
+            if (building->getHouseType() == House::HouseType::MonoliticHouse) buildings_cnt[0]++;
+            else if (building->getHouseType() == House::HouseType::MonoliticHouse) buildings_cnt[1]++;
+            else if (building->getHouseType() == House::HouseType::MonoliticHouse) buildings_cnt[2]++;
         }
+        for (auto& building : game->getPlayersArr()[player_index]->getSupermarketsArr()) {
+            if (building->getSupermarketType() == Supermarket::SupermarketType::Supermarket) buildings_cnt[3]++;
+            else if (building->getSupermarketType() == Supermarket::SupermarketType::Hypermarket) buildings_cnt[4]++;
+        }
+
+        for (int i = 0; i < 3; ++i) {
+            table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString("House " + std::to_string(i + 1))));
+            QString income_house = "Income: ";
+            int64_t money = 0;
+            if (i == 0) money = game->getPlayersArr()[player_index]->getMonolithicIncome() / 1000;
+            else if (i == 1) money = game->getPlayersArr()[player_index]->getPanelIncome() / 1000;
+            else money = game->getPlayersArr()[player_index]->getBrickIncome() / 1000;
+            income_house += std::to_string(money) + "K";
+            table->setItem(row + 1, 1, new QTableWidgetItem(income_house));
+            QString amount_house = "Amount: ";
+            amount_house += std::to_string(buildings_cnt[i]);
+            table->setItem(row + 2, 1, new QTableWidgetItem(amount_house));
+            table->setSpan(row, 0, 3, 1);
+            QIcon icon;
+            if (i == 0) {
+                if (profile == red_profile) icon = QIcon(house1_front_red_pix);
+                else if (profile == orange_profile) icon = QIcon(house1_front_orange_pix);
+                else if (profile == yellow_profile) icon = QIcon(house1_front_yellow_pix);
+                else if (profile == blue_profile) icon = QIcon(house1_front_blue_pix);
+                else if (profile == violet_profile) icon = QIcon(house1_front_violet_pix);
+            }
+            else if (i == 1) {
+                if (profile == red_profile) icon = QIcon(house2_front_red_pix);
+                else if (profile == orange_profile) icon = QIcon(house2_front_orange_pix);
+                else if (profile == yellow_profile) icon = QIcon(house2_front_yellow_pix);
+                else if (profile == blue_profile) icon = QIcon(house2_front_blue_pix);
+                else if (profile == violet_profile) icon = QIcon(house2_front_violet_pix);
+            }
+            else {
+                if (profile == red_profile) icon = QIcon(house3_front_red_pix);
+                else if (profile == orange_profile) icon = QIcon(house3_front_orange_pix);
+                else if (profile == yellow_profile) icon = QIcon(house3_front_yellow_pix);
+                else if (profile == blue_profile) icon = QIcon(house3_front_blue_pix);
+                else if (profile == violet_profile) icon = QIcon(house3_front_violet_pix);
+            }
+            table->setItem(row, 0, new QTableWidgetItem(icon, ""));
+
+            table->setItem(row + 3, 0, new QTableWidgetItem());
+            table->setSpan(row + 3, 0, 1, 2);
+            row += 4;
+
+
+        }
+
         table->setSpan(row - 1, 0, 1, 2);
         table->setItem(row - 1, 0, new QTableWidgetItem());
         table->setSpan(row, 0, 1, 2);
@@ -1326,26 +1401,28 @@ void PocketEconomic::MakeProfile(QLabel* profile) {
         table->item(row, 0)->setForeground(QColor(255, 255, 255));
         row++;
         for (int i = 3; i < 5; ++i) {
-            if (info_tmp[i]) {
-                table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString("Supermarket " + std::to_string(i - 2))));
-                QString income_house = "Income: ";
-                income_house += "+50M";
-                table->setItem(row + 1, 1, new QTableWidgetItem(income_house));
-                QString amount_house = "Amount: ";
-                amount_house += std::to_string(info_tmp[i]);
-                table->setItem(row + 2, 1, new QTableWidgetItem(amount_house));
-                table->setSpan(row, 0, 3, 1);
+            table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString("Supermarket " + std::to_string(i - 2))));
+            QString income_shop = "Income: ";
+            int64_t money = 0;
+            if (i == 3) money = game->getPlayersArr()[player_index]->getSupermarketIncome() / 1000;
+            else money = game->getPlayersArr()[player_index]->getHypermarketIncome() / 1000;
+            income_shop += std::to_string(money) + "K";
+            table->setItem(row + 1, 1, new QTableWidgetItem(income_shop));
+            QString amount_house = "Amount: ";
+            amount_house += std::to_string(buildings_cnt[i]);
+            table->setItem(row + 2, 1, new QTableWidgetItem(amount_house));
+            table->setSpan(row, 0, 3, 1);
 
-                QIcon icon;
-                if (i == 3) icon = QIcon(shop1_btn_pix);
-                else icon = QIcon(shop2_btn_pix);
-                table->setItem(row, 0, new QTableWidgetItem(icon, ""));
+            QIcon icon;
+            if (i == 3) icon = QIcon(shop1_btn_pix);
+            else icon = QIcon(shop2_btn_pix);
+            table->setItem(row, 0, new QTableWidgetItem(icon, ""));
 
-                table->setItem(row + 3, 0, new QTableWidgetItem());
-                table->setSpan(row + 3, 0, 1, 2);
-                row += 4;
+            table->setItem(row + 3, 0, new QTableWidgetItem());
+            table->setSpan(row + 3, 0, 1, 2);
+            row += 4;
 
-            }
+
         }
     }
 }
@@ -1524,16 +1601,18 @@ void PocketEconomic::ChangePlayer() {
     house2_btn->setIconSize(QSize(45, 45));
     house3_btn->setIconSize(QSize(45, 45));
 
-    std::string new_capital = std::to_string(rand() % 100 - rand() % 10) + "M"; ///////////////////////// backend
-    if (new_capital[0] == '-') {
+    int64_t money = game->getCurPlayer()->getMoney() / 1000;
+    std::string new_capital = std::to_string(money) + "K";
+    if (money < 0) {
         capital_number->setStyleSheet(personal_info_bad_value_style);
     } else {
         capital_number->setStyleSheet(personal_info_good_value_style);
     }
     capital_number->setText(QString::fromStdString(new_capital));
 
-    std::string new_income = std::to_string(rand() % 100 - rand() % 10) + "M"; ///////////////////////// backend
-    if (new_income[0] == '-') {
+    money = game->getCurPlayer()->getGlobalIncome() / 1000;
+    std::string new_income = std::to_string(money) + "M"; 
+    if (money < 0) {
         income_number->setStyleSheet(personal_info_bad_value_style);
     } else {
         new_income = '+' + new_income;
