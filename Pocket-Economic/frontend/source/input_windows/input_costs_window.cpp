@@ -10,8 +10,12 @@ void PocketEconomic::InputCostsWindow::InputCosts() {
 void PocketEconomic::InputCostsWindow::InputCostsSettings() {
     costs_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
     costs_window->setWindowTitle("PocketEconomic");
-    costs_window->setStyleSheet("background-color: #1e1e1e");
+    //costs_window->setStyleSheet("background-color: #1e1e1e");
     costs_window->setLayout(input_costs_settings_layout);
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(30, 30, 30));
+    costs_window->setAutoFillBackground(true);
+    costs_window->setPalette(pal);
 
     QString style =
         "QPushButton {"
@@ -30,12 +34,15 @@ void PocketEconomic::InputCostsWindow::InputCostsSettings() {
         "}"
 
         "QLabel { "
+        "  color: white;"
         "  font-size: 20px;"
-        "  background-color: #1e1e1e;"
         "}"
         "QLineEdit { "
-        "  font-size: 16px;"
         "  color: white;"
+        "  background-color: #2d2d2d;"
+        "  border: 1px solid gray;"
+        "  padding: 0 8px;"
+        "  font-size: 16px;"
         "}";
     costs_window->setStyleSheet(style);
 
@@ -104,14 +111,6 @@ void PocketEconomic::InputCostsWindow::InputCostsSettings() {
     input_costs_settings_ok->setFixedSize(QSize(450, 50));
     input_costs_settings_layout->addWidget(input_costs_settings_ok, 12, 2, 1, 2);
 
-}
-
-void PocketEconomic::InputCostsWindow::setGame(Game* gamer) {
-    game = gamer;
-}
-
-void PocketEconomic::InputCostsWindow::setInputDemandWindow(InputDemandWindow* input_demand_window) {
-    input_demand_window_ = input_demand_window;
 }
 
 void PocketEconomic::InputCostsWindow::InputCostsContinue() {
@@ -202,5 +201,12 @@ void PocketEconomic::InputCostsWindow::InputCostsContinue() {
 
 
         input_demand_window_->InputSupplies();
-    });
+        });
+}
+void PocketEconomic::InputCostsWindow::setGame(Game* gamer) {
+    game = gamer;
+}
+
+void PocketEconomic::InputCostsWindow::setInputDemandWindow(InputDemandWindow* input_demand_window) {
+    input_demand_window_ = input_demand_window;
 }

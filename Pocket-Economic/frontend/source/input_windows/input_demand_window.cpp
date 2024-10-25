@@ -10,8 +10,14 @@ void PocketEconomic::InputDemandWindow::InputSupplies() {
 void PocketEconomic::InputDemandWindow::InputSuppliesSettings() {
     supplies_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
     supplies_window->setWindowTitle("PocketEconomic");
-    supplies_window->setStyleSheet("background-color: white");
+    //supplies_window->setStyleSheet("background-color: white");
     supplies_window->setLayout(input_supplies_layout);
+    //supplies_window->setLayout(input_costs_settings_layout);
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(30, 30, 30));
+    supplies_window->setAutoFillBackground(true);
+    supplies_window->setPalette(pal);
+
     QString style =
         "QPushButton {"
         "  color: white;"
@@ -29,12 +35,15 @@ void PocketEconomic::InputDemandWindow::InputSuppliesSettings() {
         "}"
 
         "QLabel { "
+        "  color: white;"
         "  font-size: 20px;"
-        "  background-color: #1e1e1e;"
         "}"
         "QLineEdit { "
+        "  color: white;"
+        "  background-color: #2d2d2d;"
+        "  border: 1px solid gray;"
+        "  padding: 0 8px;"
         "  font-size: 16px;"
-        "  color: white; "
         "}";
     supplies_window->setStyleSheet(style);
 
@@ -68,14 +77,6 @@ void PocketEconomic::InputDemandWindow::InputSuppliesSettings() {
     supplies_ok->setFixedSize(QSize(450, 50));
     input_supplies_layout->addWidget(supplies_ok, 5, 2, 2, 2);
 
-}
-
-void PocketEconomic::InputDemandWindow::setGame(Game* gamer) {
-    game = gamer;
-}
-
-void PocketEconomic::InputDemandWindow::setInputPlayerWindow(InputPlayerWindow* input_player_window) {
-    input_player_window_ = input_player_window;
 }
 
 void PocketEconomic::InputDemandWindow::InputSuppliesContinue() {
@@ -117,5 +118,13 @@ void PocketEconomic::InputDemandWindow::InputSuppliesContinue() {
 
 
         input_player_window_->InputPlayers();
-    });
+        });
+}
+
+void PocketEconomic::InputDemandWindow::setGame(Game* gamer) {
+    game = gamer;
+}
+
+void PocketEconomic::InputDemandWindow::setInputPlayerWindow(InputPlayerWindow* input_player_window) {
+    input_player_window_ = input_player_window;
 }

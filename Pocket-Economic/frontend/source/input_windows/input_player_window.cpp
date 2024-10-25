@@ -1,11 +1,5 @@
 #include "../../includes/input_windows/input_player_window.h"
 
-void PocketEconomic::InputPlayerWindow::InputPlayers() {
-    InputPlayersSettings();
-    InputPlayersContinue();
-    input_players_window->showFullScreen();
-}
-
 void PocketEconomic::InputPlayerWindow::setGame(Game* gamer) {
     game = gamer;
 }
@@ -18,13 +12,24 @@ void PocketEconomic::InputPlayerWindow::setPlayerOwner(PlayerOwner* player_owner
     player_owner = player_ownerer;
 }
 
+void PocketEconomic::InputPlayerWindow::InputPlayers() {
+    InputPlayersSettings();
+    InputPlayersContinue();
+    input_players_window->showFullScreen();
+}
+
 void PocketEconomic::InputPlayerWindow::InputPlayersSettings() {
     QGridLayout* layout = new QGridLayout();
     QLabel* first_title = new QLabel("Players club");
     input_players_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
     input_players_window->setWindowTitle("PocketEconomic");
-    input_players_window->setStyleSheet("background-color: white");
+    //input_players_window->setStyleSheet("background-color: white");
     input_players_window->setLayout(layout);
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(30, 30, 30));
+    input_players_window->setAutoFillBackground(true);
+    input_players_window->setPalette(pal);
+
     QString style =
         "QPushButton {"
         "  color: white;"
@@ -42,15 +47,16 @@ void PocketEconomic::InputPlayerWindow::InputPlayersSettings() {
         "}"
 
         "QLabel { "
+        "  color: white;"
         "  font-size: 20px;"
-        "  background-color: #1e1e1e;"
         "}"
         "QLineEdit { "
+        "  color: white;"
+        "  background-color: #2d2d2d;"
+        "  border: 1px solid gray;"
+        "  padding: 0 8px;"
         "  font-size: 16px;"
-        "  color: white; "
         "}";
-
-    // #2d2d2d
     bot1->setStyleSheet("font-size: 16px; background-color: #2d2d2d; color: white;");
     bot2->setStyleSheet(bot1->styleSheet());
     bot3->setStyleSheet(bot1->styleSheet());
@@ -119,6 +125,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
     QObject::connect(input_players_ok, &QPushButton::clicked, [&]() {
         if (players_cnt_on_players_window + bots_cnt_on_players_window >= 2
             && players_cnt_on_players_window + bots_cnt_on_players_window <= 5) {
+            /* */
             for (int i = 0; i < players_cnt_on_players_window + bots_cnt_on_players_window; ++i) {
                 player_owner->availiable[i] = true;
             }
@@ -154,7 +161,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
             pocket_economic_->MakeMainWindow();
             game->begin();
         }
-    });
+        });
 
     QObject::connect(add_player, &QPushButton::clicked, [&]() {
         if (players_cnt_on_players_window + bots_cnt_on_players_window < 5
