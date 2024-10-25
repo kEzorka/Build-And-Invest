@@ -5,8 +5,8 @@ class Player;
 
 class AdvertAgency {
 public:
-	int64_t buyHouseAdvert(Player* player, const int& cnt_of_advert) const;
-	int64_t buySupermarketAdvert(Player* player, const int& cnt_of_advert) const;
+	int64_t buyHouseAdvert(Player* player_owner, const int& cnt_of_advert) const;
+	int64_t buySupermarketAdvert(Player* player_owner, const int& cnt_of_advert) const;
 	//////////////////////////////////
 	//
 	// return how many money does the player spent for advert

@@ -6,8 +6,8 @@
 
 class BuildingAgency {
 public:
-	House* buyHouse(Player* player, const House::HouseType& house_type) const;
-	Supermarket* buySupermarket(Player* player,
+	House* buyHouse(Player* player_owner, const House::HouseType& house_type) const;
+	Supermarket* buySupermarket(Player* player_owner,
 		const Supermarket::SupermarketType& supermarket_type) const;
 	void makeStandarts();
 
