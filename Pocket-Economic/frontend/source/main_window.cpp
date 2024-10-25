@@ -565,46 +565,64 @@ void PocketEconomic::AddHouse() {
 
 void PocketEconomic::SetBuilding(QLabel* roof) {
     QPixmap pix = roof->pixmap();
-    if (dynamic_cast<RoofLabel*>(roof)->object_can_be_built_here) {
-        int x = dynamic_cast<RoofLabel*>(roof)->chosen_x;
-        int y = dynamic_cast<RoofLabel*>(roof)->chosen_y;
-        bought_objects_[index_bought_buildings_]->setGeometry(x, y, roof->size().width(), roof->size().height());
-        bought_objects_[index_bought_buildings_]->setAlignment(roof->alignment());
-        bought_objects_[index_bought_buildings_]->setPixmap(roof->pixmap());
-        bought_objects_[index_bought_buildings_]->setVisible(true);
-        bought_objects_[index_bought_buildings_]->setMouseTracking(true);
-        index_bought_buildings_++;
+    try {
+        if (dynamic_cast<RoofLabel*>(roof)->object_can_be_built_here) {
+            int x = dynamic_cast<RoofLabel*>(roof)->chosen_x;
+            int y = dynamic_cast<RoofLabel*>(roof)->chosen_y;
 
-        for (int i = 0; i < grid->lands.size(); ++i) {
-            Grid::land_struct* land = &grid->lands[i];
-            if (land->x <= x && x < land->x + land->amount_x * grid->cell_size &&
-                land->y <= y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
-                int row = land->row;
-                int column = land->column;
-                int column_small = (x - land->x) / grid->cell_size;
-                int row_small = (y + 50 - land->y) / grid->cell_size;
-                land->free_space[column_small][row_small] = false;
-                if (roof == house1_roof) {
-                    game->buildHouse(game->getCurPlayer(), dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]), House::HouseType::MonoliticHouse, row_small, column_small);
-                } else if (roof == house2_roof) {
-                    game->buildHouse(game->getCurPlayer(), dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]), House::HouseType::PanelHouse, row_small, column_small);
-                } else if (roof == house3_roof) {
-                    game->buildHouse(game->getCurPlayer(), dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]), House::HouseType::BrickHouse, row_small, column_small);
-                } else if (roof == shop1_roof) {
-                    game->buildSupermarket(game->getCurPlayer(), dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]), Supermarket::SupermarketType::Supermarket, row_small, column_small);
-                } else if (roof == shop2_roof) {
-                    game->buildSupermarket(game->getCurPlayer(), dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]), Supermarket::SupermarketType::Hypermarket, row_small, column_small);
+            for (int i = 0; i < grid->lands.size(); ++i) {
+                Grid::land_struct* land = &grid->lands[i];
+                if (land->x <= x && x < land->x + land->amount_x * grid->cell_size &&
+                    land->y <= y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
+                    int row = land->row;
+                    int column = land->column;
+                    int column_small = (x - land->x) / grid->cell_size;
+                    int row_small = (y + 50 - land->y) / grid->cell_size;
+                    land->free_space[column_small][row_small] = false;
+                    if (roof == house1_roof) {
+                        game->buildHouse(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            House::HouseType::MonoliticHouse, row_small, column_small);
+                    } else if (roof == house2_roof) {
+                        game->buildHouse(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            House::HouseType::PanelHouse, row_small, column_small);
+                    } else if (roof == house3_roof) {
+                        game->buildHouse(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            House::HouseType::BrickHouse, row_small, column_small);
+                    } else if (roof == shop1_roof) {
+                        game->buildSupermarket(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            Supermarket::SupermarketType::Supermarket, row_small, column_small);
+                    } else if (roof == shop2_roof) {
+                        game->buildSupermarket(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            Supermarket::SupermarketType::Hypermarket, row_small, column_small);
+                    }
                 }
             }
+            bought_objects_[index_bought_buildings_]->setGeometry(x, y, roof->size().width(), roof->size().height());
+            bought_objects_[index_bought_buildings_]->setAlignment(roof->alignment());
+            bought_objects_[index_bought_buildings_]->setPixmap(roof->pixmap());
+            bought_objects_[index_bought_buildings_]->setVisible(true);
+            bought_objects_[index_bought_buildings_]->setMouseTracking(true);
+            index_bought_buildings_++;
         }
     }
+    catch (const std::exception& e) {
+        std::string exception;
+        exception += "Exception: ";
+        exception += e.what();
+        MsgBox->setText(QString::fromStdString(exception));
+        MsgBox->exec();
+    }
+
     roof->setVisible(false);
     roof->setPixmap(pix);
 
-
-    grid->isBuyingProcess = false;
-
     dynamic_cast<RoofLabel*>(roof)->object_can_be_built_here = false;
+    grid->isBuyingProcess = false;
 
     QGuiApplication::restoreOverrideCursor();
 }
@@ -701,13 +719,14 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
     int x_pos = x, y_pos = y;
     for (int i = 0; i < grid->lands.size(); ++i) {
         Grid::land_struct* land = &grid->lands[i];
-        if (land->x < x && x < land->x + land->amount_x * grid->cell_size &&
-            land->y < y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
+        if (land->x <= x && x < land->x + land->amount_x * grid->cell_size &&
+            land->y <= y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
             if (land->owner.color == player_owner->Nobody) {
                 offer_pic->setPixmap(land_pix);
                 offer_txt->setText("Buy a land!");
                 offer->setVisible(true);
                 is_offer_shown = true;
+                
                 if (land->amount_x == 8) {
                     grid->chosen_land = { land, &grid->lands[i + 3] };
                 } else if (land->amount_x == 1 && land->amount_y == 4) {
@@ -730,6 +749,7 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 land_resort_information_advertising_btn->setVisible(false);
                 land_resort_information_updating_resort_btn->setVisible(false);
                 if (land->owner.color != player_owner->color) {
+
                     std::string name = "someone";
                     if (land->owner.color == player_owner->Red) {
                         name = game->getPlayersArr()[0]->getNickname();
@@ -773,8 +793,8 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
         }
     }
     for (Grid::land_struct& resort : grid->resorts) {
-        if (resort.x < x && x < resort.x + resort.amount_x * grid->cell_size &&
-            resort.y < y + 50 && y + 50 < resort.y + resort.amount_y * grid->cell_size) {
+        if (resort.x <= x && x < resort.x + resort.amount_x * grid->cell_size &&
+            resort.y <= y + 50 && y + 50 < resort.y + resort.amount_y * grid->cell_size) {
             if (resort.owner.color == player_owner->Nobody) {
                 if (x + offer->size().width() >= fullscreen_width) x_pos -= offer->size().width();
                 if (y + offer->size().height() >= fullscreen_height - house1_btn->size().height()) y_pos -= offer->size().height();
@@ -891,14 +911,22 @@ void PocketEconomic::OfferIsShown() {
     QObject::connect(buy_offer_btn, &QPushButton::clicked, [&]() {
         offer->setVisible(false);
         is_offer_shown = false;
-        (grid->chosen_land.first)->owner = *player_owner;
+        try {
+            // buy LandOrResort
 
-        // buy LandOrResort
+            grid->chosen_land.first->owner = *player_owner;
+            if (grid->chosen_land.second) grid->chosen_land.second->owner = *player_owner;
+            background_picture_->setPixmap(background_pix);
+        }
+        catch (const std::exception& e) {
+            std::string exception;
+            exception += "Exception: ";
+            exception += e.what();
+            MsgBox->setText(QString::fromStdString(exception));
+            MsgBox->exec();
+        }
 
-        if (grid->chosen_land.second) (grid->chosen_land.second)->owner = *player_owner;
-        background_picture_->setPixmap(background_pix);
-        return;
-        });
+    });
 }
 
 void PocketEconomic::CapitalAndIncome() {

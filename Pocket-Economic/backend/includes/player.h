@@ -49,8 +49,6 @@ public:
     virtual double getHypermarketIncome() const;
     virtual double getGlobalIncome() const;
 
-
-
     virtual void getIncome(const int& month);
 
     virtual bool hasSupply() const;
@@ -82,5 +80,4 @@ protected:
     double income_supermarket_house_ = 0;
     double income_hypermarket_house_ = 0;
     double global_income_ = 0;
-
 };

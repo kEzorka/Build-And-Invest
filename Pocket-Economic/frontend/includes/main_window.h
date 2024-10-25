@@ -236,4 +236,6 @@ private:
 
     QLabel* results = new QLabel();
     Game* game = nullptr;
+
+    QMessageBox* MsgBox = new QMessageBox();
 };

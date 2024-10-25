@@ -12,7 +12,7 @@ public:
 private:
     PlayerOwner* player_owner = nullptr;
     PocketEconomic* pocket_economic_ = nullptr;
-    Game* game;
+    Game* game = nullptr;
     
     int fullscreen_width = QRect(QGuiApplication::primaryScreen()->geometry()).width();
     int fullscreen_height = QRect(QGuiApplication::primaryScreen()->geometry()).height();
