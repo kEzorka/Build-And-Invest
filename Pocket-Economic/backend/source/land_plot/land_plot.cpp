@@ -1,8 +1,5 @@
 #include "../../includes/land_plot/land_plot.h"
-
-void LandPlot::setCostOfLand(const int64_t& cost) {
-	cost_of_land_ = cost;
-}
+#include "../../includes/agencies/real_estate_agency.h"
 
 void LandPlot::setOwner(Player* owner) {
 	owner_ = owner;
@@ -12,8 +9,12 @@ void LandPlot::setNameOfLand(const std::string& str) {
 	name_of_land_ = str;
 }
 
-int64_t LandPlot::getCostOfLand() const {
-	return cost_of_land_;
+void LandPlot::updateSupply() {
+
+}
+
+int64_t LandPlot::getIncome() const {
+	return 0;
 }
 
 Player* LandPlot::getOwner() const {

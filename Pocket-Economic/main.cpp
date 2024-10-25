@@ -8,5 +8,5 @@ int main(int argc, char* argv[]) {
     PocketEconomic w;
     /*Game game;
     game.start();*/
-    return a.exec();
+    return app.exec();
 }

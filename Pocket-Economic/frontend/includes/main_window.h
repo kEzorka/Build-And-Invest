@@ -2,7 +2,6 @@
 
 #include "qt_headers.h"
 
-
 class Player_Owner {
 public:
     Player_Owner() {
@@ -118,8 +117,6 @@ private:
     Grid* grid_ = new Grid();
     Player_Owner* player = new Player_Owner();
 };
-
-
 class PocketEconomic : public QMainWindow {
     Q_OBJECT
 
