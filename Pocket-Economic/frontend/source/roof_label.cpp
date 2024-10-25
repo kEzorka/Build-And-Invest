@@ -21,8 +21,8 @@ void RoofLabel::paintEvent(QPaintEvent* e) {
     painter.setRenderHint(QPainter::Antialiasing, true);
     for (Grid::land_struct& land : grid_->lands) {
         auto x = pos().x(), y = pos().y() + 50;
-        if (land.x <= x && x <= land.x + land.amount_x * grid_->cell_size &&
-            land.y <= y && y <= land.y + land.amount_y * grid_->cell_size) {
+        if (land.x < x && x < land.x + land.amount_x * grid_->cell_size &&
+            land.y < y && y < land.y + land.amount_y * grid_->cell_size) {
             if (land.free_space.size()) {
                 int x_in_vector = (x - land.x) / grid_->cell_size;
                 int y_in_vector = (y - land.y) / grid_->cell_size;
