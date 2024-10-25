@@ -4,10 +4,7 @@
 
 
 PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
-    window->setWindowTitle("PocketEconomic");
     InputCosts();
-    //window->showFullScreen();
-    window->showMaximized();
 }
 
 void PocketEconomic::MakeButtons() {
@@ -1450,22 +1447,36 @@ void PocketEconomic::CloseAllInfoWindows() {
 
 void PocketEconomic::NextStep() {
     QObject::connect(next_step_btn, &QPushButton::clicked, [&]() {
-        switch (player->color) {
-        case player->Red:
-            player->color = player->Orange;
-            break;
-        case player->Orange:
-            player->color = player->Yellow;
-            break;
-        case player->Yellow:
-            player->color = player->Blue;
-            break;
-        case player->Blue:
-            player->color = player->Violet;
-            break;
-        case player->Violet:
-            player->color = player->Red;
-            break;
+        auto color = player->color;
+        if (color == player->Red) {
+            if (player->availiable[1]) player->color = player->Orange;
+            else if (player->availiable[2]) player->color = player->Yellow;
+            else if (player->availiable[3]) player->color = player->Blue;
+            else if (player->availiable[4]) player->color = player->Violet;
+        }
+        else if (color == player->Orange) {
+            if (player->availiable[2]) player->color = player->Yellow;
+            else if (player->availiable[3]) player->color = player->Blue;
+            else if (player->availiable[4]) player->color = player->Violet;
+            else if (player->availiable[0]) player->color = player->Red;
+        }
+        else if (color == player->Yellow) {
+            if (player->availiable[3]) player->color = player->Blue;
+            else if (player->availiable[4]) player->color = player->Violet;
+            else if (player->availiable[0]) player->color = player->Red;
+            else if (player->availiable[1]) player->color = player->Orange;
+        }
+        else if (color == player->Blue) {
+            if (player->availiable[4]) player->color = player->Violet;
+            else if (player->availiable[0]) player->color = player->Red;
+            else if (player->availiable[1]) player->color = player->Orange;
+            else if (player->availiable[2]) player->color = player->Yellow;
+        }
+        else if (color == player->Violet) {
+            if (player->availiable[0]) player->color = player->Red;
+            else if (player->availiable[1]) player->color = player->Orange;
+            else if (player->availiable[2]) player->color = player->Yellow;
+            else if (player->availiable[3]) player->color = player->Blue;
         }
         CloseAllInfoWindows();
         ChangePlayer();
@@ -1551,8 +1562,9 @@ void PocketEconomic::ChangePlayer() {
 }
 
 void PocketEconomic::MakeMainWindow() {
-    window->resize(1535, 793);
+    window->resize(fullscreen_width, fullscreen_height);
 
+    window->setWindowTitle("PocketEconomic");
     window->installEventFilter(this);
     background_picture_->setMouseTracking(true);
 
@@ -1576,14 +1588,42 @@ void PocketEconomic::MakeMainWindow() {
     PlayersInfoIsShown();
     NextStep();
     ChangePlayer();
+
+
+    //window->showMaximized();
+    window->showFullScreen();
 }
 
-
 void PocketEconomic::InputCosts() {
+    InputCostsSettings();
+    InputCostsContinue();
+    costs_window->showFullScreen();
+}
+
+void PocketEconomic::InputCostsSettings() {
     QGridLayout* layout = new QGridLayout();
-    window->setWindowTitle("PocketEconomic");
-    window->setStyleSheet("background-color: black");
-    window->setLayout(layout);
+    QLabel* first_title = new QLabel("Costs of square meter of houses");
+    QLabel* second_title = new QLabel("Costs of building houses");
+    QLabel* third_title = new QLabel("Costs of one unit of goods in supermarkets");
+    QLabel* forth_title = new QLabel("Costs of building supermarkets");
+    QLabel* fifth_title = new QLabel("Cost of one square of land");
+    QLabel* sixth_title = new QLabel("Cost of a resort");
+    QLineEdit* house1_sqr = new QLineEdit();
+    QLineEdit* house2_sqr = new QLineEdit();
+    QLineEdit* house3_sqr = new QLineEdit();
+    QLineEdit* house1_build = new QLineEdit();
+    QLineEdit* house2_build = new QLineEdit();
+    QLineEdit* house3_build = new QLineEdit();
+    QLineEdit* shop1_product = new QLineEdit();
+    QLineEdit* shop2_product = new QLineEdit();
+    QLineEdit* shop1_build = new QLineEdit();
+    QLineEdit* shop2_build = new QLineEdit();
+    QLineEdit* cell_cost = new QLineEdit();
+    QLineEdit* resort_cost = new QLineEdit();
+    costs_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
+    costs_window->setWindowTitle("PocketEconomic");
+    costs_window->setStyleSheet("background-color: black");
+    costs_window->setLayout(layout);
     QString style =
         "QPushButton {"
         "  color: white;"
@@ -1599,7 +1639,7 @@ void PocketEconomic::InputCosts() {
         "QPushButton:pressed { "
         "  background-color: black;"
         "}"
-        
+
         "QLabel { "
         "  font-size: 20px;"
         "}"
@@ -1607,88 +1647,361 @@ void PocketEconomic::InputCosts() {
         "  font-size: 16px;"
         "  color: white; "
         "}";
-    window->setStyleSheet(style);
-    layout->addWidget(new QLabel("Costs of square meter of houses"), 0, 0, 1, 6);
-    layout->addWidget(new QLabel("Costs of building houses"), 2, 0, 1, 6);
-    layout->addWidget(new QLabel("Costs of one unit of goods in supermarkets"), 4, 0, 1, 6);
-    layout->addWidget(new QLabel("Costs of building supermarkets"), 6, 0, 1, 6);
-    layout->addWidget(new QLabel("Cost of one square of land"), 8, 0, 1, 2);
-    layout->addWidget(new QLabel("Cost of a resort"), 10, 0, 1, 2);
+    costs_window->setStyleSheet(style);
 
+    layout->addWidget(first_title, 0, 0, 1, 6);
+    layout->addWidget(second_title, 2, 0, 1, 6);
+    layout->addWidget(third_title, 4, 0, 1, 6);
+    layout->addWidget(forth_title, 6, 0, 1, 6);
+    layout->addWidget(fifth_title, 8, 0, 1, 2);
+    layout->addWidget(sixth_title, 10, 0, 1, 2);
 
-    QLineEdit* house1_sqr = new QLineEdit();
     house1_sqr->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(house1_sqr, 1, 0, 1, 2);
     house1_sqr->setFixedSize(QSize(450, 25));
-    QLineEdit* house2_sqr = new QLineEdit();
     house2_sqr->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(house2_sqr, 1, 2, 1, 2);
     house2_sqr->setFixedSize(QSize(450, 25));
-    QLineEdit* house3_sqr = new QLineEdit();
     house3_sqr->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(house3_sqr, 1, 4, 1, 2);
     house3_sqr->setFixedSize(QSize(450, 25));
 
-
-    QLineEdit* house1_build = new QLineEdit();
     house1_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(house1_build, 3, 0, 1, 2);
     house1_build->setFixedSize(QSize(450, 25));
-    QLineEdit* house2_build = new QLineEdit();
     house2_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(house2_build, 3, 2, 1, 2);
     house2_build->setFixedSize(QSize(450, 25));
-    QLineEdit* house3_build = new QLineEdit();
     house3_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(house3_build, 3, 4, 1, 2);
     house3_build->setFixedSize(QSize(450, 25));
 
 
-    QLineEdit* shop1_product = new QLineEdit();
     shop1_product->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(shop1_product, 5, 0, 1, 2);
     shop1_product->setFixedSize(QSize(450, 25));
-    QLineEdit* shop2_product = new QLineEdit();
     shop2_product->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(shop2_product, 5, 2, 1, 2);
     shop2_product->setFixedSize(QSize(450, 25));
 
 
-    QLineEdit* shop1_build = new QLineEdit();
     shop1_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(shop1_build, 7, 0, 1, 2);
     shop1_build->setFixedSize(QSize(450, 25));
-    QLineEdit* shop2_build = new QLineEdit();
     shop2_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(shop2_build, 7, 2, 1, 2);
     shop2_build->setFixedSize(QSize(450, 25));
 
-
-    QLineEdit* cell_cost = new QLineEdit();
     cell_cost->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(cell_cost, 9, 0, 1, 2);
     cell_cost->setFixedSize(QSize(450, 25));
-    QLineEdit* resort_cost = new QLineEdit();
     resort_cost->setPlaceholderText(QString::fromStdString(std::to_string(5)));
     layout->addWidget(resort_cost, 11, 0, 1, 2);
     resort_cost->setFixedSize(QSize(450, 25));
 
-    QPushButton* ok = new QPushButton("Continue");
-    ok->setFixedSize(QSize(450, 50));
-    layout->addWidget(ok, 12, 2, 1, 2);
+    costs_ok->setFixedSize(QSize(450, 50));
+    layout->addWidget(costs_ok, 12, 2, 1, 2);
 
-    QObject::connect(ok, &QPushButton::clicked, [&]() {
-        //layout->disconnect(window);
-        //if (window->layout()) {
-        //    for (int i = 0; i < window->layout()->count(); ++i)
-        //    {
-        //        delete window->layout()->takeAt(i);
-        //    }
-        //    //delete layout;
-        //    window->setLayout(nullptr);
-        //}
-        window->setStyleSheet("");
-        MakeMainWindow();
-        window->update();
+}
+
+void PocketEconomic::InputCostsContinue() {
+    QObject::connect(costs_ok, &QPushButton::clicked, [&]() {
+        costs_window->close();
+        InputSupplies();
         });
+}
+
+
+void PocketEconomic::InputSupplies() {
+    InputSuppliesSettings();
+    InputSuppliesContinue();
+    supplies_window->showFullScreen();
+}
+
+void PocketEconomic::InputSuppliesSettings() {
+    QGridLayout* layout = new QGridLayout();
+    QLabel* first_title = new QLabel("Initial demand for houses");
+    QLabel* second_title = new QLabel("Initial demand for supermarkets");
+    QLineEdit* house1_supply = new QLineEdit();
+    QLineEdit* house2_supply = new QLineEdit();
+    QLineEdit* house3_supply = new QLineEdit();
+    QLineEdit* shop1_supply = new QLineEdit();
+    QLineEdit* shop2_supply = new QLineEdit();
+    supplies_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
+    supplies_window->setWindowTitle("PocketEconomic");
+    supplies_window->setStyleSheet("background-color: white");
+    supplies_window->setLayout(layout);
+    QString style =
+        "QPushButton {"
+        "  color: white;"
+        "  font-size: 16px;"
+        "  border-width: 2px;"
+        "  border-color: #525252;"
+        "  border-style: solid;"
+        "  border-radius: 8px;"
+        "}"
+        "QPushButton:hover { "
+        "  background-color: #0f0f0f;"
+        "}"
+        "QPushButton:pressed { "
+        "  background-color: black;"
+        "}"
+
+        "QLabel { "
+        "  font-size: 20px;"
+        "}"
+        "QLineEdit { "
+        "  font-size: 16px;"
+        "  color: white; "
+        "}";
+    supplies_window->setStyleSheet(style);
+
+    layout->addWidget(first_title, 0, 0, 1, 6);
+    layout->addWidget(second_title, 2, 0, 1, 6);
+
+    house1_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
+    layout->addWidget(house1_supply, 1, 0, 1, 2);
+    house1_supply->setFixedSize(QSize(450, 25));
+    house2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
+    layout->addWidget(house2_supply, 1, 2, 1, 2);
+    house2_supply->setFixedSize(QSize(450, 25));
+    house3_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
+    layout->addWidget(house3_supply, 1, 4, 1, 2);
+    house3_supply->setFixedSize(QSize(450, 25));
+    
+
+    shop1_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
+    layout->addWidget(shop1_supply, 3, 0, 1, 2);
+    shop1_supply->setFixedSize(QSize(450, 25));
+    shop2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
+    layout->addWidget(shop2_supply, 3, 2, 1, 2);
+    shop2_supply->setFixedSize(QSize(450, 25));
+
+
+    supplies_ok->setFixedSize(QSize(450, 50));
+    layout->addWidget(supplies_ok, 5, 2, 2, 2);
+
+}
+
+void PocketEconomic::InputSuppliesContinue() {
+    QObject::connect(supplies_ok, &QPushButton::clicked, [&]() {
+        supplies_window->close();
+        InputPlayers();
+        });
+}
+
+void PocketEconomic::InputPlayers() {
+    InputPlayersSettings();
+    InputPlayersContinue();
+    input_players_window->showFullScreen();
+}
+
+void  PocketEconomic::InputPlayersSettings() {
+    QGridLayout* layout = new QGridLayout();
+    QLabel* first_title = new QLabel("Players");
+    input_players_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
+    input_players_window->setWindowTitle("PocketEconomic");
+    input_players_window->setStyleSheet("background-color: white");
+    input_players_window->setLayout(layout);
+    QString style =
+        "QPushButton {"
+        "  color: white;"
+        "  font-size: 16px;"
+        "  border-width: 2px;"
+        "  border-color: #525252;"
+        "  border-style: solid;"
+        "  border-radius: 8px;"
+        "}"
+        "QPushButton:hover { "
+        "  background-color: #0f0f0f;"
+        "}"
+        "QPushButton:pressed { "
+        "  background-color: black;"
+        "}"
+
+        "QLabel { "
+        "  font-size: 20px;"
+        "}"
+        "QLineEdit { "
+        "  font-size: 16px;"
+        "  color: white; "
+        "}";
+
+    // #2d2d2d
+    bot1->setStyleSheet("font-size: 16px; background-color: #2d2d2d; color: white;");
+    bot2->setStyleSheet(bot1->styleSheet());
+    bot3->setStyleSheet(bot1->styleSheet());
+    bot4->setStyleSheet(bot1->styleSheet());
+    bot5->setStyleSheet(bot1->styleSheet());
+    input_players_window->setStyleSheet(style);
+
+    layout->addWidget(first_title, 0, 0, 1, 2);
+    layout->setAlignment(Qt::AlignHCenter);
+
+    player1->setPlaceholderText("Player 1");
+    layout->addWidget(player1, 1, 3, 1, 2);
+    player1->setFixedSize(QSize(450, 25));
+    player2->setPlaceholderText("Player 2");
+    layout->addWidget(player2, 2, 3, 1, 2);
+    player2->setFixedSize(QSize(450, 25));
+    player3->setPlaceholderText("Player 3");
+    layout->addWidget(player3, 3, 3, 1, 2);
+    player3->setFixedSize(QSize(450, 25));
+    player4->setPlaceholderText("Player 4");
+    layout->addWidget(player4, 4, 3, 1, 2);
+    player4->setFixedSize(QSize(450, 25));
+    player5->setPlaceholderText("Player 5");
+    layout->addWidget(player5, 5, 3, 1, 2);
+    player5->setFixedSize(QSize(450, 25));
+
+    player1->setVisible(false);
+    player2->setVisible(false);
+    player3->setVisible(false);
+    player4->setVisible(false);
+    player5->setVisible(false);
+
+
+    layout->addWidget(bot1, 6, 3, 1, 2);
+    bot1->setFixedSize(QSize(450, 25));
+    layout->addWidget(bot2, 7, 3, 1, 2);
+    bot2->setFixedSize(QSize(450, 25));
+    layout->addWidget(bot3, 8, 3, 1, 2);
+    bot3->setFixedSize(QSize(450, 25));
+    layout->addWidget(bot4, 9, 3, 1, 2);
+    bot4->setFixedSize(QSize(450, 25));
+    layout->addWidget(bot5, 10, 3, 1, 2);
+    bot5->setFixedSize(QSize(450, 25));
+
+
+    bot1->setVisible(false);
+    bot2->setVisible(false);
+    bot3->setVisible(false);
+    bot4->setVisible(false);
+    bot5->setVisible(false);
+
+    input_players_ok->setFixedSize(QSize(450, 50));
+    layout->addWidget(input_players_ok, 11, 3, 1, 2);
+
+    add_player->setFixedSize(QSize(150, 50));
+    layout->addWidget(add_player, 0, 3);
+    remove_player->setFixedSize(QSize(150, 50));
+    layout->addWidget(remove_player, 0, 4);
+    add_bot->setFixedSize(QSize(150, 50));
+    layout->addWidget(add_bot, 0, 5);
+    remove_bot->setFixedSize(QSize(150, 50));
+    layout->addWidget(remove_bot, 0, 6);
+}
+
+void PocketEconomic::InputPlayersContinue() {
+    QObject::connect(input_players_ok, &QPushButton::clicked, [&]() {
+        input_players_window->close();
+        for (int i = 0; i < players + bots; ++i) {
+            player->availiable[i] = true;
+        }
+        MakeMainWindow();
+        });
+
+    QObject::connect(add_player, &QPushButton::clicked, [&]() {
+        if (players + bots < 5 && players < 5) {
+            players++;
+            if (!player1->isVisible()) {
+                player1->setVisible(true);
+                player1->clear();
+                player1->setPlaceholderText("Player 1");
+            }
+            else if (!player2->isVisible()) {
+                player2->setVisible(true);
+                player2->clear();
+                player2->setPlaceholderText("Player 2");
+            }
+            else if (!player3->isVisible()) {
+                player3->setVisible(true);
+                player3->clear();
+                player3->setPlaceholderText("Player 3");
+            }
+            else if (!player4->isVisible()) {
+                player4->setVisible(true);
+                player4->clear();
+                player4->setPlaceholderText("Player 4");
+            }
+            else if (!player5->isVisible()) {
+                player5->setVisible(true);
+                player5->clear();
+                player5->setPlaceholderText("Player 5");
+            }
+        }
+        });
+    QObject::connect(remove_player, &QPushButton::clicked, [&]() {
+        if (players + bots > 0 && players > 0) {
+            players--;
+            if (player5->isVisible()) {
+                player5->setVisible(false);
+                player5->clear();
+                player5->setPlaceholderText("Player 5");
+            }
+            else if (player4->isVisible()) {
+                player4->setVisible(false);
+                player4->clear();
+                player4->setPlaceholderText("Player 4");
+            }
+            else if (player3->isVisible()) {
+                player3->setVisible(false);
+                player3->clear();
+                player3->setPlaceholderText("Player 3");
+            }
+            else if (player2->isVisible()) {
+                player2->setVisible(false);
+                player2->clear();
+                player2->setPlaceholderText("Player 2");
+            }
+            else if (player1->isVisible()) {
+                player1->setVisible(false);
+                player1->clear();
+                player1->setPlaceholderText("Player 1");
+            }
+        }
+        });
+
+
+    QObject::connect(add_bot, &QPushButton::clicked, [&]() {
+        if (players + bots < 5 && bots < 5) {
+            bots++;
+            if (!bot1->isVisible()) {
+                bot1->setVisible(true);
+            }
+            else if (!bot2->isVisible()) {
+                bot2->setVisible(true);
+            }
+            else if (!bot3->isVisible()) {
+                bot3->setVisible(true);
+            }
+            else if (!bot4->isVisible()) {
+                bot4->setVisible(true);
+            }
+            else if (!bot5->isVisible()) {
+                bot5->setVisible(true);
+            }
+        }
+        });
+    QObject::connect(remove_bot, &QPushButton::clicked, [&]() {
+        if (players + bots > 0 && bots > 0) {
+            bots--;
+            if (bot5->isVisible()) {
+                bot5->setVisible(false);
+            }
+            else if (bot4->isVisible()) {
+                bot4->setVisible(false);
+            }
+            else if (bot3->isVisible()) {
+                bot3->setVisible(false);
+            }
+            else if (bot2->isVisible()) {
+                bot2->setVisible(false);
+            }
+            else if (bot1->isVisible()) {
+                bot1->setVisible(false);
+            }
+        }
+        });
+
 }

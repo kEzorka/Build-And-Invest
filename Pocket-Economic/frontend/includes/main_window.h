@@ -17,6 +17,7 @@ public:
         Nobody
     };
     Color color = Nobody;
+    std::vector<bool> availiable = std::vector<bool>(5, false);
 };
 
 class Grid {
@@ -127,8 +128,14 @@ public:
     ~PocketEconomic() = default;
 
     void InputCosts();
+    void InputCostsContinue();
+    void InputCostsSettings();
     void InputSupplies();
+    void InputSuppliesContinue();
+    void InputSuppliesSettings();
     void InputPlayers();
+    void InputPlayersSettings();
+    void InputPlayersContinue();
     void MakeMainWindow();
     void MakeButtons();
     void Styling();
@@ -161,6 +168,32 @@ public:
 private:
     QWidget* window = new QWidget();
 
+    QWidget* costs_window = new QWidget();
+    QPushButton* costs_ok = new QPushButton("Continue");
+
+    QWidget* supplies_window = new QWidget();
+    QPushButton* supplies_ok = new QPushButton("Continue");
+
+
+    QWidget* input_players_window = new QWidget();
+    QPushButton* input_players_ok = new QPushButton("Continue");
+    QPushButton* add_player = new QPushButton("Add player");
+    QPushButton* remove_player = new QPushButton("Remove player");
+    QPushButton* add_bot = new QPushButton("Add bot");
+    QPushButton* remove_bot = new QPushButton("Remove bot");
+    QLineEdit* player1 = new QLineEdit();
+    QLineEdit* player2 = new QLineEdit();
+    QLineEdit* player3 = new QLineEdit();
+    QLineEdit* player4 = new QLineEdit();
+    QLineEdit* player5 = new QLineEdit();
+
+
+    QLabel* bot1 = new QLabel("  Bot 1");
+    QLabel* bot2 = new QLabel("  Bot 2");
+    QLabel* bot3 = new QLabel("  Bot 3");
+    QLabel* bot4 = new QLabel("  Bot 4");
+    QLabel* bot5 = new QLabel("  Bot 5");
+    int players = 0, bots = 0;
 
     int fullscreen_width = QRect(QGuiApplication::primaryScreen()->geometry()).width();
     int fullscreen_height = QRect(QGuiApplication::primaryScreen()->geometry()).height();
