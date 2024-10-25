@@ -439,22 +439,22 @@ void PocketEconomic::SetLandsCoors() {
     int delta_x = 400;
     for (int k = 0; k < 3; ++k) {
         // 1 column
-        grid->lands[k * grid->lands.size() / 4] = { 101 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 0, 3 * k };
-        grid->lands[k * grid->lands.size() / 4 + 1] = { 101 + k * delta_x, 260, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)), 1, 3 * k };
-        grid->lands[k * grid->lands.size() / 4 + 2] = { 101 + k * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 2, 3 * k };
-        grid->lands[k * grid->lands.size() / 4 + 3] = { 101 + k * delta_x, 561, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)), 3,  3 * k };
-        grid->lands[k * grid->lands.size() / 4 + 4] = { 101 + k * delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 4,  3 * k };
+        grid->lands[k * grid->lands.size() / 4] = { 101 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 0, 3 * k + 1 };
+        grid->lands[k * grid->lands.size() / 4 + 1] = { 101 + k * delta_x, 260, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)), 1, 3 * k + 1};
+        grid->lands[k * grid->lands.size() / 4 + 2] = { 101 + k * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 2, 3 * k + 1};
+        grid->lands[k * grid->lands.size() / 4 + 3] = { 101 + k * delta_x, 561, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)), 3,  3 * k + 1};
+        grid->lands[k * grid->lands.size() / 4 + 4] = { 101 + k * delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 4,  3 * k + 1};
 
         // 2 column
-        grid->lands[k * grid->lands.size() / 4 + 5] = { 241 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 0, 1 + 3 * k };
-        grid->lands[k * grid->lands.size() / 4 + 7] = { 240 + k * delta_x, 260, k == 2 ? 0 : 8, 5, std::vector<std::vector<bool>>(k == 2 ? 0 : 8, std::vector<bool>(5, true)), 1, 1 + 3 * k };
-        grid->lands[k * grid->lands.size() / 4 + 6] = { 241 + k * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 2, 1 + 3 * k };
-        grid->lands[k * grid->lands.size() / 4 + 8] = { 240 + k * delta_x, 561, 8, 5, std::vector<std::vector<bool>>(8, std::vector<bool>(5, true)), 3, 1 + 3 * k };
-        grid->lands[k * grid->lands.size() / 4 + 9] = { 241 + k * delta_x, 723, k == 1 ? 0 : 4, 4, std::vector<std::vector<bool>>(k == 1 ? 0 : 4, std::vector<bool>(4, true)), 4, 1 + 3 * k };
+        grid->lands[k * grid->lands.size() / 4 + 5] = { 241 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 0, 2 + 3 * k };
+        grid->lands[k * grid->lands.size() / 4 + 7] = { 240 + k * delta_x, 260, k == 2 ? 0 : 8, 5, std::vector<std::vector<bool>>(k == 2 ? 0 : 8, std::vector<bool>(5, true)), 1, 2 + 3 * k };
+        grid->lands[k * grid->lands.size() / 4 + 6] = { 241 + k * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 2, 2 + 3 * k };
+        grid->lands[k * grid->lands.size() / 4 + 8] = { 240 + k * delta_x, 561, 8, 5, std::vector<std::vector<bool>>(8, std::vector<bool>(5, true)), 3, 2 + 3 * k };
+        grid->lands[k * grid->lands.size() / 4 + 9] = { 241 + k * delta_x, 723, k == 1 ? 0 : 4, 4, std::vector<std::vector<bool>>(k == 1 ? 0 : 4, std::vector<bool>(4, true)), 4, 2 + 3 * k };
 
         // 2.5 column
-        grid->lands[k * grid->lands.size() / 4 + 10] = { 440 + k * delta_x, 285, k == 2 ? 0 : 1, 4, std::vector<std::vector<bool>>(k == 2 ? 0 : 1, std::vector<bool>(4, true)), 1, 1 + k * 3 };
-        grid->lands[k * grid->lands.size() / 4 + 11] = { 440 + k * delta_x, 586, 1, 4, std::vector<std::vector<bool>>(1, std::vector<bool>(4, true)), 3, 1 + k * 3 };
+        grid->lands[k * grid->lands.size() / 4 + 10] = { 440 + k * delta_x, 285, k == 2 ? 0 : 1, 4, std::vector<std::vector<bool>>(k == 2 ? 0 : 1, std::vector<bool>(4, true)), 1, 2 + k * 3 };
+        grid->lands[k * grid->lands.size() / 4 + 11] = { 440 + k * delta_x, 586, 1, 4, std::vector<std::vector<bool>>(1, std::vector<bool>(4, true)), 3, 2 + k * 3 };
 
         // 2.75 column
         grid->lands[k * grid->lands.size() / 4 + 12] = { 389 + k * delta_x, 147, 1, 2, std::vector<std::vector<bool>>(1, std::vector<bool>(2, true)), 0, 2 + k * 3 };
@@ -472,6 +472,8 @@ void PocketEconomic::SetLandsCoors() {
     grid->lands[3 * grid->lands.size() / 4 + 2] = { 101 + 3 * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 2, 9 };
     grid->lands[3 * grid->lands.size() / 4 + 3] = { 101 + 3 * delta_x, 561, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)), 3, 9 };
     grid->lands[3 * grid->lands.size() / 4 + 4] = { 101 + 3 * delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 4, 9 };
+
+
 
     grid->resorts.resize(3);
     grid->resorts[0] = { 0, 122, 3, 4, std::vector<std::vector<bool>>(3, std::vector<bool>(4, true)) };
@@ -1602,8 +1604,12 @@ void PocketEconomic::InputCosts() {
 void PocketEconomic::InputCostsSettings() {
     costs_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
     costs_window->setWindowTitle("PocketEconomic");
-    costs_window->setStyleSheet("background-color: #1e1e1e");
+    //costs_window->setStyleSheet("background-color: #1e1e1e");
     costs_window->setLayout(input_costs_settings_layout);
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(30, 30, 30));
+    costs_window->setAutoFillBackground(true);
+    costs_window->setPalette(pal);
 
     QString style =
         "QPushButton {"
@@ -1623,11 +1629,17 @@ void PocketEconomic::InputCostsSettings() {
 
         "QLabel { "
         "  font-size: 20px;"
-        "  background-color: #1e1e1e;"
         "}"
+        //"QLineEdit { "
+        //"  font-size: 16px;"
+        //"  color: white;"
+        ////"  background-color: white;"
+        //"}"
         "QLineEdit { "
+        "  background-color: #2d2d2d;"
+        "  border: 1px solid gray;"
+        "  padding: 0 8px;"
         "  font-size: 16px;"
-        "  color: white;"
         "}";
     costs_window->setStyleSheet(style);
 
@@ -1799,8 +1811,14 @@ void PocketEconomic::InputSupplies() {
 void PocketEconomic::InputSuppliesSettings() {
     supplies_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
     supplies_window->setWindowTitle("PocketEconomic");
-    supplies_window->setStyleSheet("background-color: white");
+    //supplies_window->setStyleSheet("background-color: white");
     supplies_window->setLayout(input_supplies_layout);
+    supplies_window->setLayout(input_costs_settings_layout);
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(30, 30, 30));
+    supplies_window->setAutoFillBackground(true);
+    supplies_window->setPalette(pal);
+
     QString style =
         "QPushButton {"
         "  color: white;"
@@ -1819,11 +1837,12 @@ void PocketEconomic::InputSuppliesSettings() {
 
         "QLabel { "
         "  font-size: 20px;"
-        "  background-color: #1e1e1e;"
         "}"
         "QLineEdit { "
+        "  background-color: #2d2d2d;"
+        "  border: 1px solid gray;"
+        "  padding: 0 8px;"
         "  font-size: 16px;"
-        "  color: white; "
         "}";
     supplies_window->setStyleSheet(style);
 
@@ -1912,8 +1931,13 @@ void PocketEconomic::InputPlayersSettings() {
     QLabel* first_title = new QLabel("Players club");
     input_players_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
     input_players_window->setWindowTitle("PocketEconomic");
-    input_players_window->setStyleSheet("background-color: white");
+    //input_players_window->setStyleSheet("background-color: white");
     input_players_window->setLayout(layout);
+    QPalette pal = QPalette();
+    pal.setColor(QPalette::Window, QColor(30, 30, 30));
+    input_players_window->setAutoFillBackground(true);
+    input_players_window->setPalette(pal);
+
     QString style =
         "QPushButton {"
         "  color: white;"
@@ -1932,14 +1956,13 @@ void PocketEconomic::InputPlayersSettings() {
 
         "QLabel { "
         "  font-size: 20px;"
-        "  background-color: #1e1e1e;"
         "}"
         "QLineEdit { "
+        "  background-color: #2d2d2d;"
+        "  border: 1px solid gray;"
+        "  padding: 0 8px;"
         "  font-size: 16px;"
-        "  color: white; "
         "}";
-
-    // #2d2d2d
     bot1->setStyleSheet("font-size: 16px; background-color: #2d2d2d; color: white;");
     bot2->setStyleSheet(bot1->styleSheet());
     bot3->setStyleSheet(bot1->styleSheet());
