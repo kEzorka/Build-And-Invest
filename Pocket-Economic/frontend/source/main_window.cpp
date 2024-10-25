@@ -3,6 +3,8 @@
 #include <iostream>
 
 PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
+    game = new Game();
+    game->start();
     InputCosts();
 }
 
@@ -1600,29 +1602,10 @@ void PocketEconomic::InputCosts() {
 }
 
 void PocketEconomic::InputCostsSettings() {
-    QGridLayout* layout = new QGridLayout();
-    QLabel* first_title = new QLabel("Costs of square meter of houses");
-    QLabel* second_title = new QLabel("Costs of building houses");
-    QLabel* third_title = new QLabel("Costs of one unit of goods in supermarkets");
-    QLabel* forth_title = new QLabel("Costs of building supermarkets");
-    QLabel* fifth_title = new QLabel("Cost of one square of land");
-    QLabel* sixth_title = new QLabel("Cost of a resort");
-    QLineEdit* house1_sqr = new QLineEdit();
-    QLineEdit* house2_sqr = new QLineEdit();
-    QLineEdit* house3_sqr = new QLineEdit();
-    QLineEdit* house1_build = new QLineEdit();
-    QLineEdit* house2_build = new QLineEdit();
-    QLineEdit* house3_build = new QLineEdit();
-    QLineEdit* shop1_product = new QLineEdit();
-    QLineEdit* shop2_product = new QLineEdit();
-    QLineEdit* shop1_build = new QLineEdit();
-    QLineEdit* shop2_build = new QLineEdit();
-    QLineEdit* cell_cost = new QLineEdit();
-    QLineEdit* resort_cost = new QLineEdit();
     costs_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
     costs_window->setWindowTitle("PocketEconomic");
     costs_window->setStyleSheet("background-color: black");
-    costs_window->setLayout(layout);
+    costs_window->setLayout(input_costs_settings_layout);
     QString style =
         "QPushButton {"
         "  color: white;"
@@ -1641,71 +1624,89 @@ void PocketEconomic::InputCostsSettings() {
 
         "QLabel { "
         "  font-size: 20px;"
+        //"  background-color: #1e1e1e;"
         "}"
         "QLineEdit { "
         "  font-size: 16px;"
-        "  color: white; "
+        "  color: green;"
         "}";
     costs_window->setStyleSheet(style);
 
-    layout->addWidget(first_title, 0, 0, 1, 6);
-    layout->addWidget(second_title, 2, 0, 1, 6);
-    layout->addWidget(third_title, 4, 0, 1, 6);
-    layout->addWidget(forth_title, 6, 0, 1, 6);
-    layout->addWidget(fifth_title, 8, 0, 1, 2);
-    layout->addWidget(sixth_title, 10, 0, 1, 2);
+    input_costs_settings_layout->addWidget(input_costs_settings_first_title, 0, 0, 1, 6);
+    input_costs_settings_layout->addWidget(input_costs_settings_second_title, 2, 0, 1, 6);
+    input_costs_settings_layout->addWidget(input_costs_settings_third_title, 4, 0, 1, 6);
+    input_costs_settings_layout->addWidget(input_costs_settings_forth_title, 6, 0, 1, 6);
+    input_costs_settings_layout->addWidget(input_costs_settings_fifth_title, 8, 0, 1, 2);
+    input_costs_settings_layout->addWidget(input_costs_settings_sixth_title, 10, 0, 1, 2);
 
-    house1_sqr->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(house1_sqr, 1, 0, 1, 2);
-    house1_sqr->setFixedSize(QSize(450, 25));
-    house2_sqr->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(house2_sqr, 1, 2, 1, 2);
-    house2_sqr->setFixedSize(QSize(450, 25));
-    house3_sqr->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(house3_sqr, 1, 4, 1, 2);
-    house3_sqr->setFixedSize(QSize(450, 25));
+    input_costs_settings_house1_sqr->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfSquareMeterMonolithicHouse())));
+    input_costs_settings_layout->addWidget(input_costs_settings_house1_sqr, 1, 0, 1, 2);
+    input_costs_settings_house1_sqr->setFixedSize(QSize(450, 25));
+    input_costs_settings_house2_sqr->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfSquareMeterPanelHouse())));
+    input_costs_settings_layout->addWidget(input_costs_settings_house2_sqr, 1, 2, 1, 2);
+    input_costs_settings_house2_sqr->setFixedSize(QSize(450, 25));
+    input_costs_settings_house3_sqr->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfSquareMeterBrickHouse())));
+    input_costs_settings_layout->addWidget(input_costs_settings_house3_sqr, 1, 4, 1, 2);
+    input_costs_settings_house3_sqr->setFixedSize(QSize(450, 25));
 
-    house1_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(house1_build, 3, 0, 1, 2);
-    house1_build->setFixedSize(QSize(450, 25));
-    house2_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(house2_build, 3, 2, 1, 2);
-    house2_build->setFixedSize(QSize(450, 25));
-    house3_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(house3_build, 3, 4, 1, 2);
-    house3_build->setFixedSize(QSize(450, 25));
-
-
-    shop1_product->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(shop1_product, 5, 0, 1, 2);
-    shop1_product->setFixedSize(QSize(450, 25));
-    shop2_product->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(shop2_product, 5, 2, 1, 2);
-    shop2_product->setFixedSize(QSize(450, 25));
+    input_costs_settings_house1_build->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfBuildingMonolithicHouse())));
+    input_costs_settings_layout->addWidget(input_costs_settings_house1_build, 3, 0, 1, 2);
+    input_costs_settings_house1_build->setFixedSize(QSize(450, 25));
+    input_costs_settings_house2_build->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfBuildingPanelHouse())));
+    input_costs_settings_layout->addWidget(input_costs_settings_house2_build, 3, 2, 1, 2);
+    input_costs_settings_house2_build->setFixedSize(QSize(450, 25));
+    input_costs_settings_house3_build->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfBuildingBrickHouse())));
+    input_costs_settings_layout->addWidget(input_costs_settings_house3_build, 3, 4, 1, 2);
+    input_costs_settings_house3_build->setFixedSize(QSize(450, 25));
 
 
-    shop1_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(shop1_build, 7, 0, 1, 2);
-    shop1_build->setFixedSize(QSize(450, 25));
-    shop2_build->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(shop2_build, 7, 2, 1, 2);
-    shop2_build->setFixedSize(QSize(450, 25));
+    input_costs_settings_shop1_product->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfOneProductSupermarket())));
+    input_costs_settings_layout->addWidget(input_costs_settings_shop1_product, 5, 0, 1, 2);
+    input_costs_settings_shop1_product->setFixedSize(QSize(450, 25));
+    input_costs_settings_shop2_product->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfOneProductHypermarket())));
+    input_costs_settings_layout->addWidget(input_costs_settings_shop2_product, 5, 2, 1, 2);
+    input_costs_settings_shop2_product->setFixedSize(QSize(450, 25));
 
-    cell_cost->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(cell_cost, 9, 0, 1, 2);
-    cell_cost->setFixedSize(QSize(450, 25));
-    resort_cost->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(resort_cost, 11, 0, 1, 2);
-    resort_cost->setFixedSize(QSize(450, 25));
 
-    costs_ok->setFixedSize(QSize(450, 50));
-    layout->addWidget(costs_ok, 12, 2, 1, 2);
+    input_costs_settings_shop1_build->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfBuildingSupermarket())));
+    input_costs_settings_layout->addWidget(input_costs_settings_shop1_build, 7, 0, 1, 2);
+    input_costs_settings_shop1_build->setFixedSize(QSize(450, 25));
+    input_costs_settings_shop2_build->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfBuildingHypermarket())));
+    input_costs_settings_layout->addWidget(input_costs_settings_shop2_build, 7, 2, 1, 2);
+    input_costs_settings_shop2_build->setFixedSize(QSize(450, 25));
+
+    input_costs_settings_cell_cost->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfLandCell())));
+    input_costs_settings_layout->addWidget(input_costs_settings_cell_cost, 9, 0, 1, 2);
+    input_costs_settings_cell_cost->setFixedSize(QSize(450, 25));
+    input_costs_settings_resort_cost->setPlaceholderText(QString::fromStdString(
+        std::to_string(game->getCostOfResort())));
+    input_costs_settings_layout->addWidget(input_costs_settings_resort_cost, 11, 0, 1, 2);
+    input_costs_settings_resort_cost->setFixedSize(QSize(450, 25));
+
+    input_costs_settings_ok->setFixedSize(QSize(450, 50));
+    input_costs_settings_layout->addWidget(input_costs_settings_ok, 12, 2, 1, 2);
 
 }
 
 void PocketEconomic::InputCostsContinue() {
-    QObject::connect(costs_ok, &QPushButton::clicked, [&]() {
+    QObject::connect(input_costs_settings_ok, &QPushButton::clicked, [&]() {
+
+
         costs_window->close();
+
+
+
         InputSupplies();
         });
 }
@@ -1718,18 +1719,10 @@ void PocketEconomic::InputSupplies() {
 }
 
 void PocketEconomic::InputSuppliesSettings() {
-    QGridLayout* layout = new QGridLayout();
-    QLabel* first_title = new QLabel("Initial demand for houses");
-    QLabel* second_title = new QLabel("Initial demand for supermarkets");
-    QLineEdit* house1_supply = new QLineEdit();
-    QLineEdit* house2_supply = new QLineEdit();
-    QLineEdit* house3_supply = new QLineEdit();
-    QLineEdit* shop1_supply = new QLineEdit();
-    QLineEdit* shop2_supply = new QLineEdit();
     supplies_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
     supplies_window->setWindowTitle("PocketEconomic");
     supplies_window->setStyleSheet("background-color: white");
-    supplies_window->setLayout(layout);
+    supplies_window->setLayout(input_supplies_layout);
     QString style =
         "QPushButton {"
         "  color: white;"
@@ -1755,30 +1748,30 @@ void PocketEconomic::InputSuppliesSettings() {
         "}";
     supplies_window->setStyleSheet(style);
 
-    layout->addWidget(first_title, 0, 0, 1, 6);
-    layout->addWidget(second_title, 2, 0, 1, 6);
+    input_supplies_layout->addWidget(input_supplies_first_title, 0, 0, 1, 6);
+    input_supplies_layout->addWidget(input_supplies_second_title, 2, 0, 1, 6);
 
-    house1_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(house1_supply, 1, 0, 1, 2);
-    house1_supply->setFixedSize(QSize(450, 25));
-    house2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(house2_supply, 1, 2, 1, 2);
-    house2_supply->setFixedSize(QSize(450, 25));
-    house3_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(house3_supply, 1, 4, 1, 2);
-    house3_supply->setFixedSize(QSize(450, 25));
+    input_supplies_house1_supply->setPlaceholderText("");
+    input_supplies_layout->addWidget(input_supplies_house1_supply, 1, 0, 1, 2);
+    input_supplies_house1_supply->setFixedSize(QSize(450, 25));
+    input_supplies_house2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
+    input_supplies_layout->addWidget(input_supplies_house2_supply, 1, 2, 1, 2);
+    input_supplies_house2_supply->setFixedSize(QSize(450, 25));
+    input_supplies_house3_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
+    input_supplies_layout->addWidget(input_supplies_house3_supply, 1, 4, 1, 2);
+    input_supplies_house3_supply->setFixedSize(QSize(450, 25));
     
 
-    shop1_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(shop1_supply, 3, 0, 1, 2);
-    shop1_supply->setFixedSize(QSize(450, 25));
-    shop2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    layout->addWidget(shop2_supply, 3, 2, 1, 2);
-    shop2_supply->setFixedSize(QSize(450, 25));
+    input_supplies_shop1_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
+    input_supplies_layout->addWidget(input_supplies_shop1_supply, 3, 0, 1, 2);
+    input_supplies_shop1_supply->setFixedSize(QSize(450, 25));
+    input_supplies_shop2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
+    input_supplies_layout->addWidget(input_supplies_shop2_supply, 3, 2, 1, 2);
+    input_supplies_shop2_supply->setFixedSize(QSize(450, 25));
 
 
     supplies_ok->setFixedSize(QSize(450, 50));
-    layout->addWidget(supplies_ok, 5, 2, 2, 2);
+    input_supplies_layout->addWidget(supplies_ok, 5, 2, 2, 2);
 
 }
 

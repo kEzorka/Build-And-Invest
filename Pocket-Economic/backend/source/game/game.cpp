@@ -9,6 +9,7 @@ void Game::start() {
     main_game_window_.distrib_calamity_type_ =
         std::uniform_int_distribution<>(0, main_game_window_.calamities_.size() - 1);
     makeLandPlotsArr();
+    standard_classes = new StandardClasses();
 
     land_agency_ = new LandAgency();
     global_real_estate_agency_ = new RealEstateAgency();
