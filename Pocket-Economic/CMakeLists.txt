@@ -26,8 +26,24 @@ set(PROJECT_SOURCES
     frontend/source/main_window.cpp
 
     
+
+    backend/bots/includes/bot.h
+    backend/bots/includes/first_bot.h
+    backend/bots/includes/second_bot.h
+    backend/bots/includes/third_bot.h
+    backend/bots/includes/fourth_bot.h
+    backend/bots/includes/fifth_bot.h
+
+    backend/bots/source/bot.cpp
+    backend/bots/source/first_bot.cpp
+    backend/bots/source/second_bot.cpp
+    backend/bots/source/third_bot.cpp
+    backend/bots/source/fourth_bot.cpp
+    backend/bots/source/fifth_bot.cpp
+
     backend/includes/agencies/advert_agency.h
     backend/includes/agencies/building_agency.h
+    backend/includes/agencies/grocery_agency.h
     backend/includes/agencies/land_agency.h
     backend/includes/agencies/real_estate_agency.h
 
@@ -46,10 +62,13 @@ set(PROJECT_SOURCES
     backend/includes/realty/supermarket.h
 
     backend/includes/player.h
+    backend/includes/standard_classes.h
+
 
 
     backend/source/agencies/advert_agency.cpp
     backend/source/agencies/building_agency.cpp
+    backend/source/agencies/grocery_agency.cpp
     backend/source/agencies/land_agency.cpp
     backend/source/agencies/real_estate_agency.cpp
 
@@ -57,6 +76,7 @@ set(PROJECT_SOURCES
     backend/source/game/game.cpp
     backend/source/game/main_game_window.cpp
     backend/source/game/news_window.cpp
+    backend/source/game/starting_window.cpp
 
     backend/source/land_plot/building_land.cpp
     backend/source/land_plot/land_plot.cpp

@@ -3,9 +3,9 @@
 
 int main(int argc, char* argv[]) {
     setlocale(0, "");
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
     PocketEconomic w;
     /*Game game;
     game.start();*/
-    return a.exec();
+    return app.exec();
 }

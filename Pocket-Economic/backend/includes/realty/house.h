@@ -5,19 +5,30 @@
 
 class House : public virtual Realty {
 public:
+    enum class HouseType {
+        MonoliticHouse,
+        PanelHouse,
+        BrickHouse,
+        Non
+    };
+
     class Flat {
     public:
-        Flat(const int& area = 0) : area_(area) {}
+        Flat(const int& area = 0, const int64_t& cost_of_square_meter = 0)
+            : area_(area), cost_of_square_meter_(cost_of_square_meter) {}
         Flat(const Flat&) = default;
         Flat(Flat&&) = default;
         Flat& operator=(const Flat&) = default;
         Flat& operator=(Flat&&) = default;
         ~Flat() = default;
         void setArea(const int& area) { area_ = area; }
+        void setCostOfSquareMeter(const int& cost) { cost_of_square_meter_ = cost; }
         int getArea() const { return area_; }
+        int64_t getCostOfSquareMeter() const { return cost_of_square_meter_; }
 
     private:
         int area_ = 0;
+        int64_t cost_of_square_meter_ = 0;
 
     };
 
@@ -31,13 +42,13 @@ public:
         FlatType& operator=(FlatType&&) = default;
         ~FlatType() = default;
 
-        void setFlatsCnt(FlatType* flat, const int& cnt, const int& free);
-        void setFreeFlatsCnt(FlatType* flat, const int& free_cnt);
+        void setFlatsCnt(const int& cnt, const int& free);
+        void setFreeFlatsCnt(const int& free_cnt);
         void pushFlat();
 
         House::Flat* getFlat() const;
-        int getFlatsCnt(FlatType* flat) const;
-        int getFreeFlats(FlatType* flat) const;
+        int getFlatsCnt() const;
+        int getFreeFlats() const;
 
     private:
         Flat* flat_ = nullptr;
@@ -47,16 +58,21 @@ public:
 
 public:
     void setFlatTypesArr(const std::vector<FlatType*>& vec);
-
+    void setHouseType(const House::HouseType& type);
+    virtual void setNewness(const int& newness) override final;
 
     void pushFlatType(FlatType* flat);
     void pushFlatTypesArr(const std::vector<FlatType*>& vec);
 
 
     std::vector<FlatType*> getFlatTypesArr() const;
+    House::HouseType getHouseType() const;
+    virtual int getNewness() const override;
 
 private:
     std::vector<FlatType*> flats_arr_;
+    HouseType house_type_ = HouseType::Non;
+    int newness_ = 0;
 
 };
 
