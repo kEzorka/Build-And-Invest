@@ -2,10 +2,10 @@
 
 #include <iostream>
 
-class Player;
 class LandPlot;
 class RealEstateAgency;
 class Calamity;
+class Player;
 
 class Realty {
 public:
@@ -15,6 +15,7 @@ public:
     virtual void setLandPlot(LandPlot* land_plot);
     virtual void setCalamity(Calamity* calamity);
     virtual void setNumberOfRealty(const int& number);
+    virtual void setNewness(const int& newness) {}
 
     virtual int64_t getBuildingCost() const;
     virtual int64_t getBuildingTime() const;
@@ -23,6 +24,7 @@ public:
     virtual Calamity* getCalamity();
     virtual int getNumberOfRealty() const;
     virtual int64_t getIncome() const;
+    virtual int getNewness() const { return 0; }
 
     virtual bool isBuilt() const;
 

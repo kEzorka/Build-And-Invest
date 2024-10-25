@@ -15,3 +15,19 @@ void LandAgency::buyResort(Player* player) const {
 	}
 	player->setMoney(player->getMoney() - cost_of_resort_);
 }
+
+void LandAgency::setCostOfCell(const int64_t& cost) {
+	cost_of_cell_ = cost;
+}
+
+void LandAgency::setCostOfResort(const int64_t& cost) {
+	cost_of_resort_ = cost;
+}
+
+int64_t LandAgency::getCostOfCell() const {
+	return cost_of_cell_;
+}
+
+int64_t LandAgency::getCostOfResort() const {
+	return cost_of_resort_;
+}

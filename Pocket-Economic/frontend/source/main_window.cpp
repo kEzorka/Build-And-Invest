@@ -2,7 +2,6 @@
 #include <QDebug>
 #include <iostream>
 
-
 PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
     InputCosts();
 }
