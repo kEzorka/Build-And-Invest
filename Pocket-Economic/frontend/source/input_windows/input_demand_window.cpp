@@ -84,32 +84,32 @@ void PocketEconomic::InputDemandWindow::InputSuppliesContinue() {
 
         try {
             game->setDefaultMonolithicHouseDemand(
-                std::stoi(input_supplies_house1_demand->text().toStdString()));
+                std::stod(input_supplies_house1_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 
         try {
             game->setDefaultPanelHouseDemand(
-                std::stoi(input_supplies_house2_demand->text().toStdString()));
+                std::stod(input_supplies_house2_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 
         try {
             game->setDefaultBrickHouseDemand(
-                std::stoi(input_supplies_house3_demand->text().toStdString()));
+                std::stod(input_supplies_house3_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 
 
         try {
             game->setDefaultSupermarketDemand(
-                std::stoi(input_supplies_shop1_demand->text().toStdString()));
+                std::stod(input_supplies_shop1_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 
         try {
             game->setDefaultHypermarketDemand(
-                std::stoi(input_supplies_shop2_demand->text().toStdString()));
+                std::stod(input_supplies_shop2_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 

@@ -50,6 +50,8 @@ public:
     std::vector<Player*> getPlayersArr() const;	
     Player* getCurPlayer() const;
     std::vector<std::pair<Player*, std::string>> getFreshNews() const;
+    std::vector<std::pair<Player*, std::string>> getBuyNews() const;
+    void clearBuyNewsArr();
     int getMovesCnt() const;
     int getStartMoneyCnt() const;
 

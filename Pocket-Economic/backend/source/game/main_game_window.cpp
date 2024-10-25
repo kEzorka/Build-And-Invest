@@ -62,7 +62,7 @@ void Game::nextGameStep() {
                 } else {
                     house->setCalamity(nullptr);
                     house->setBuildingTime(house->getBuildingTime() - 1);
-                    news_window_.buy_news_arr_.push_back(std::make_pair(player_owner,
+                    news_window_.fresh_news_arr_.push_back(std::make_pair(player_owner,
                         "successfully continued the construction of the house " + std::to_string(house->getNumberOfRealty())
                         + " in " + house->getLandPlot()->getNameOfLand() + "."
                         + " It will take " + std::to_string(house->getBuildingTime()) + " month!"
@@ -96,7 +96,7 @@ void Game::nextGameStep() {
                 } else {
                     supermarket->setCalamity(nullptr);
                     supermarket->setBuildingTime(supermarket->getBuildingTime() - 1);
-                    news_window_.buy_news_arr_.push_back(std::make_pair(player_owner,
+                    news_window_.fresh_news_arr_.push_back(std::make_pair(player_owner,
                         + "successfully continued the construction of the supermarket " + std::to_string(supermarket->getNumberOfRealty())
                         + " in " + supermarket->getLandPlot()->getNameOfLand() + "."
                         + " It will take " + std::to_string(supermarket->getBuildingTime()) + " month!"

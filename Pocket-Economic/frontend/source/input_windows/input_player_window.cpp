@@ -125,7 +125,6 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
     QObject::connect(input_players_ok, &QPushButton::clicked, [&]() {
         if (players_cnt_on_players_window + bots_cnt_on_players_window >= 2
             && players_cnt_on_players_window + bots_cnt_on_players_window <= 5) {
-            /* */
             for (int i = 0; i < players_cnt_on_players_window + bots_cnt_on_players_window; ++i) {
                 player_owner->availiable[i] = true;
             }
