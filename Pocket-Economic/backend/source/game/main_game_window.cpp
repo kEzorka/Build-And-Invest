@@ -366,10 +366,10 @@ void Game::buyLand(Player* player_owner, const int& row, const int& column) {
 void Game::buyBuildingLand(Player* player_owner, const int& row, const int& column)  {
     if (row > land_plots_arr_.size()) {
         return;
-        //throw std::runtime_error("can not buy land: pos_y more than land plots");
+        throw std::runtime_error("can not buy land: pos_y more than land plots");
     } else if (column > land_plots_arr_[row].size()) {
         return;
-        //throw std::runtime_error("can not buy land: pos_x more than land plots");
+        throw std::runtime_error("can not buy land: pos_x more than land plots");
     }
     player_owner->buyBuildingLand(dynamic_cast<BuildingLand*>(land_plots_arr_[row][column]), *land_agency_);
     news_window_.buy_news_arr_.push_back(std::make_pair(player_owner,

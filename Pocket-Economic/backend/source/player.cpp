@@ -116,6 +116,7 @@ int64_t Player::getMoney() const {
 }
 
 void Player::getIncome(const int& month) {
+    global_income_ = 0;
     int64_t house_income = 0;
     int64_t supermarket_income = 0;
     int64_t player_income = 0;
@@ -150,6 +151,9 @@ void Player::getIncome(const int& month) {
     money_ += house_income;
     money_ += supermarket_income;
     money_ += player_income;
+    money_ += resort_income;
+
+    global_income_ = house_income + supermarket_income + player_income + resort_income;
 
     updateIncome();
 }
@@ -214,4 +218,8 @@ double Player::getSupermarketIncome() const {
 
 double Player::getHypermarketIncome() const {
     return income_hypermarket_house_;
+}
+
+double Player::getGlobalIncome() const {
+    return global_income_;
 }
