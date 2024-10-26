@@ -233,3 +233,22 @@ std::string Game::getMonth() const {
         return "December";
     }
 }
+
+int64_t Game::getCostOfLand(const int& row, const int& column) const {
+    BuildingLand* building = dynamic_cast<BuildingLand*>(land_plots_arr_[row][column]);
+    Resort* resort = dynamic_cast<Resort*>(land_plots_arr_[row][column]);
+    if (building != nullptr) {
+        return land_agency_->getCostOfCell() * building->getSizeX() * building->getSizeY()
+            * building->getSizeX() * building->getSizeY() / 10;
+    }
+    else if (resort != nullptr) {
+        return land_agency_->getCostOfResort();
+    }
+}
+
+void Game::upadteResort(const int& row, const int& column) {
+    Resort* resort = dynamic_cast<Resort*>(land_plots_arr_[row][column]);
+    if (resort != nullptr) {
+        resort->update();
+    }
+}

@@ -128,11 +128,13 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
             for (int i = 0; i < players_cnt_on_players_window + bots_cnt_on_players_window; ++i) {
                 player_owner->availiable[i] = true;
             }
+            std::vector<std::string> availiable_colors = { "#cd0000;","#e87400;", "#b4a800;", "#0000e0;", "#8500d0;" };
+            int start_index = 0;
             if (player1->isVisible()) {
                 Player* new_player = new Player();
                 std::string name = player1->text().toStdString();
                 if (name.empty()) name = "Player 1";
-                new_player->setColor("#");
+                new_player->setColor(availiable_colors[start_index++]);
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
@@ -140,7 +142,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
                 Player* new_player = new Player();
                 std::string name = player2->text().toStdString();
                 if (name.empty()) name = "Player 2";
-                new_player->setColor("#");
+                new_player->setColor(availiable_colors[start_index++]);
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
@@ -148,7 +150,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
                 Player* new_player = new Player();
                 std::string name = player3->text().toStdString();
                 if (name.empty()) name = "Player 3";
-                new_player->setColor("#");
+                new_player->setColor(availiable_colors[start_index++]);
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
@@ -156,7 +158,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
                 Player* new_player = new Player();
                 std::string name = player4->text().toStdString();
                 if (name.empty()) name = "Player 4";
-                new_player->setColor("#");
+                new_player->setColor(availiable_colors[start_index++]);
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
@@ -164,13 +166,13 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
                 Player* new_player = new Player();
                 std::string name = player5->text().toStdString();
                 if (name.empty()) name = "Player 5";
-                new_player->setColor("#");
+                new_player->setColor(availiable_colors[start_index++]);
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
             for (int i = 0; i < bots_cnt_on_players_window; ++i) {
                 game->pushBot();
-                game->getPlayersArr().back()->setColor("#");
+                game->getPlayersArr().back()->setColor(availiable_colors[start_index++]);
             }
             input_players_window->close();
             game->begin();
