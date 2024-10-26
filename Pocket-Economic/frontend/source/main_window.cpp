@@ -1761,6 +1761,7 @@ void PocketEconomic::MakeMainWindow() {
 }
 
 void PocketEconomic::UpdatePersonalInfo() {
+
     int64_t money = game->getCurPlayer()->getMoney() / 1000;
     std::string add = std::to_string(money) + "K";
     if (money < 0) {
