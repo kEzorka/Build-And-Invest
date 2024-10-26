@@ -1590,7 +1590,6 @@ void PocketEconomic::CloseAllInfoWindows() {
 
 void PocketEconomic::NextStep() {
     QObject::connect(next_step_btn, &QPushButton::clicked, [&]() {
-
         if (game->nextPlayer()) {
             std::vector<std::pair<Player*, std::string>> news_from_begin = game->getBuyNews();
             game->clearBuyNewsArr();
@@ -1612,7 +1611,11 @@ void PocketEconomic::NextStep() {
                 news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
             }
         }
-        
+      
+      
+        if (game->getCurPlayer()->isBot()) {
+            ChangeWindowAfterBot();
+        }
         if (game->finished()) {
             results->setText(QString::fromStdString(game->getResults()));
             window->close();
@@ -1758,10 +1761,11 @@ void PocketEconomic::MakeMainWindow() {
 }
 
 void PocketEconomic::UpdatePersonalInfo() {
+
     int64_t money = game->getCurPlayer()->getMoney() / 1000;
     std::string add = std::to_string(money) + "K";
     if (money < 0) {
-        add = '-' + add;        
+        add = '-' + add;
     }
     capital_number->setText(QString::fromStdString(add));
     capital_number->setStyleSheet(money < 0 ? personal_info_bad_value_style : personal_info_good_value_style);
@@ -1773,4 +1777,72 @@ void PocketEconomic::UpdatePersonalInfo() {
     }
     income_number->setText(QString::fromStdString(add));
     income_number->setStyleSheet(money < 0 ? personal_info_bad_value_style : personal_info_good_value_style);
+}
+
+void PocketEconomic::ChangeWindowAfterBot() {
+    for (auto& bot_land : game->getCurPlayer()->getLandPlotsArr()) {
+        int row = 5, column = 5;
+        /*
+        bot_land->getPositionOfLand();
+        */
+        for (int i = 0; i < grid->lands.size(); ++i) {
+            Grid::land_struct* land = &grid->lands[i];
+            if (land->row == row && land->column == column && land->owner.color != player_owner->color) {
+                land->owner.color = player_owner->color;
+            }
+        }
+    }
+    for (auto& bot_houses : game->getCurPlayer()->getHousesArr()) {
+        int row = 2, column = 5;
+        int small_row = 0, small_column = 0;
+        /*
+        bot_land->getPositionOfLand()->getPositionInLand();
+        bot_houses->getLandPlot();
+        get -> row, column ->
+        */
+        for (int i = 0; i < grid->lands.size(); ++i) {
+            Grid::land_struct* land = &grid->lands[i];
+            if (land->row == row && land->column == column && land->free_space[small_column][small_row]) { // <-
+                int x = land->x + grid->cell_size * small_column; // check - i want to sleep, i'm not sure about the order
+                int y = land->y + grid->cell_size * small_row;
+                QPixmap pix;
+                if (bot_houses->getHouseType() == House::HouseType::MonoliticHouse) pix = house1_roof->pixmap();
+                else if (bot_houses->getHouseType() == House::HouseType::PanelHouse) pix = house2_roof->pixmap();
+                else pix = house3_roof->pixmap();
+                bought_objects_[index_bought_buildings_]->setGeometry(x, y, pix.size().width(), pix.size().height());
+                bought_objects_[index_bought_buildings_]->setAlignment(house1_roof->alignment());
+                bought_objects_[index_bought_buildings_]->setPixmap(pix);
+                bought_objects_[index_bought_buildings_]->setVisible(true);
+                bought_objects_[index_bought_buildings_]->setMouseTracking(true);
+                index_bought_buildings_++;
+            }
+        }
+    }
+
+
+    for (auto& bot_shops : game->getCurPlayer()->getSupermarketsArr()) {
+        int row = 1, column = 1;
+        int small_row = 0, small_column = 0;
+        /*
+        bot_land->getPositionOfLand()->getPositionInLand();
+        bot_shops->getLandPlot();
+        get -> row, column ->
+        */
+        for (int i = 0; i < grid->lands.size(); ++i) {
+            Grid::land_struct* land = &grid->lands[i];
+            if (land->row == row && land->column == column && land->free_space[small_column][small_row]) { // <-
+                int x = land->x + grid->cell_size * small_column; // check - i want to sleep, i'm not sure about the order
+                int y = land->y + grid->cell_size * small_row;
+                QPixmap pix;
+                if (bot_shops->getSupermarketType() == Supermarket::SupermarketType::Supermarket) pix = shop1_roof->pixmap();
+                else pix = shop2_roof->pixmap();
+                bought_objects_[index_bought_buildings_]->setGeometry(x, y, pix.size().width(), pix.size().height());
+                bought_objects_[index_bought_buildings_]->setAlignment(house1_roof->alignment());
+                bought_objects_[index_bought_buildings_]->setPixmap(pix);
+                bought_objects_[index_bought_buildings_]->setVisible(true);
+                bought_objects_[index_bought_buildings_]->setMouseTracking(true);
+                index_bought_buildings_++;
+            }
+        }
+    }
 }

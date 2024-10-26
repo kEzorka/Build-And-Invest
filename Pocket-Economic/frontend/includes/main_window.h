@@ -45,6 +45,7 @@ public:
     void NextStep();
     void ChangePlayer();
     void UpdatePersonalInfo();
+    void ChangeWindowAfterBot();
 
     bool eventFilter(QObject*, QEvent* event);
 
