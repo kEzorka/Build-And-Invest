@@ -75,7 +75,20 @@ void PocketEconomic::InputDemandWindow::InputSuppliesSettings() {
 
 
     supplies_ok->setFixedSize(QSize(450, 50));
-    input_supplies_layout->addWidget(supplies_ok, 5, 2, 2, 2);
+    input_supplies_layout->addWidget(supplies_ok, 10, 2, 2, 2);
+
+
+    QLabel* steps_lbl = new QLabel("Steps amount: ");
+    input_supplies_layout->addWidget(steps_lbl, 5, 0, 1, 6);
+    steps_amount->setFixedSize(QSize(450, 25));
+    steps_amount->setPlaceholderText("INF");
+    input_supplies_layout->addWidget(steps_amount, 6, 0, 1, 2);
+
+    QLabel* money_lbl = new QLabel("Money amount: ");
+    input_supplies_layout->addWidget(money_lbl, 7, 0, 1, 6);
+    money_amount->setFixedSize(QSize(450, 25));
+    money_amount->setPlaceholderText("20000000");
+    input_supplies_layout->addWidget(money_amount, 8, 0, 1, 2);
 
 }
 
@@ -84,35 +97,48 @@ void PocketEconomic::InputDemandWindow::InputSuppliesContinue() {
 
         try {
             game->setDefaultMonolithicHouseDemand(
-                std::stoi(input_supplies_house1_demand->text().toStdString()));
+                std::stod(input_supplies_house1_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 
         try {
             game->setDefaultPanelHouseDemand(
-                std::stoi(input_supplies_house2_demand->text().toStdString()));
+                std::stod(input_supplies_house2_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 
         try {
             game->setDefaultBrickHouseDemand(
-                std::stoi(input_supplies_house3_demand->text().toStdString()));
+                std::stod(input_supplies_house3_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 
 
         try {
             game->setDefaultSupermarketDemand(
-                std::stoi(input_supplies_shop1_demand->text().toStdString()));
+                std::stod(input_supplies_shop1_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 
         try {
             game->setDefaultHypermarketDemand(
-                std::stoi(input_supplies_shop2_demand->text().toStdString()));
+                std::stod(input_supplies_shop2_demand->text().toStdString()));
         }
         catch (const std::exception& e) {}
 
+
+        try {
+            game->setMovesCnt(
+                std::stoi(steps_amount->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
+
+
+        try {
+            game->setStartMoneyCnt(
+                std::stoi(money_amount->text().toStdString()));
+        }
+        catch (const std::exception& e) {}
 
         supplies_window->close();
 
