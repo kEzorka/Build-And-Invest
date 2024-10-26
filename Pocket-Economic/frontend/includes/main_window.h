@@ -2,138 +2,24 @@
 
 #include "qt_headers.h"
 #include "../../backend/includes/game/game.h"
-
-class Player_Owner {
-public:
-    Player_Owner() {
-        color = Nobody;
-    }
-    enum Color {
-        Red,
-        Orange,
-        Yellow,
-        Blue,
-        Violet,
-        Nobody
-    };
-    Color color = Nobody;
-    std::vector<bool> availiable = std::vector<bool>(5, false);
-};
-
-class Grid {
-public:
-    struct land_struct {
-        int x = 0;
-        int y = 0;
-        int amount_x = -1;
-        int amount_y = -1;
-        std::vector<std::vector<bool>> free_space;
-        Player_Owner owner;
-    };
-    int cell_size = 25;
-    std::vector<land_struct> lands;
-    std::vector<land_struct> resorts;
-    bool isBuyingProcess = false;
-    std::pair< land_struct*, land_struct*> chosen_land = { nullptr, nullptr };
-};
+#include "../includes/roof_label.h"
 
 
-class MyLabel : public QLabel {
-public:
-    void setGrid(Grid* grid) {
-        grid_ = grid;
-    }
-
-    void setPlayer(Player_Owner* person) {
-        player = person;
-    }
-
-protected:
-    virtual void paintEvent(QPaintEvent* e) {
-        QLabel::paintEvent(e);
-
-        if (grid_->isBuyingProcess) {
-            QPainter painter(this);
-            painter.setRenderHint(QPainter::Antialiasing, true);
-            painter.setBrush(QBrush(QColor(255, 255, 255, 50)));
-            painter.setPen(QPen(QColor(255, 255, 255, 150), 1));
-            for (Grid::land_struct& land : grid_->lands) {
-                if (land.owner.color == player->color) {
-                    for (int y = land.y; y < land.y + land.amount_y * grid_->cell_size; y += grid_->cell_size) {
-                        for (int x = land.x; x < land.x + land.amount_x * grid_->cell_size; x += grid_->cell_size) {
-                            painter.drawRect(QRect(x, y, grid_->cell_size, grid_->cell_size));
-                        }
-                    }
-                }
-            }
-            update();
-        }
-    }
-private:
-    Grid* grid_ = new Grid();
-    Player_Owner* player = new Player_Owner();
-};
-
-
-class RoofLabel : public QLabel {
-public:
-    void setGrid(Grid* grid) {
-        grid_ = grid;
-    }
-
-    void setPlayer(Player_Owner* person) {
-        player = person;
-    }
-
-    bool object_can_be_built_here = false;
-    int chosen_x = 0;
-    int chosen_y = 0;
-protected:
-    virtual void paintEvent(QPaintEvent* e) {
-        QLabel::paintEvent(e);
-        object_can_be_built_here = false;
-        QPainter painter(this);
-        painter.setRenderHint(QPainter::Antialiasing, true);
-        for (Grid::land_struct& land : grid_->lands) {
-            auto x = pos().x(), y = pos().y() + 50;
-            if (land.x < x && x < land.x + land.amount_x * grid_->cell_size &&
-                land.y < y && y < land.y + land.amount_y * grid_->cell_size) {
-                if (land.free_space.size()) {
-                    int x_in_vector = (x - land.x) / grid_->cell_size;
-                    int y_in_vector = (y - land.y) / grid_->cell_size;
-                    if (land.free_space[x_in_vector][y_in_vector] == true && land.owner.color == player->color) {
-                        object_can_be_built_here = true;
-                        chosen_x = land.x + x_in_vector * grid_->cell_size;
-                        chosen_y = land.y + y_in_vector * grid_->cell_size - 50;
-                        break;
-                    }
-                }
-            }
-        }
-        painter.setPen(QPen((object_can_be_built_here ? QColor(0, 150, 0, 150) : QColor(255, 0, 0, 150)), 2));
-        painter.drawRect(QRect(0, 0, 25, 25));
-        update();
-    }
-private:
-    Grid* grid_ = new Grid();
-    Player_Owner* player = new Player_Owner();
-};
 class PocketEconomic : public QMainWindow {
+public:
+    class InputCostsWindow;
+    class InputDemandWindow;
+    class InputPlayerWindow;
+
+private:
     Q_OBJECT
 
 public:
     PocketEconomic(QWidget* parent = nullptr);
     ~PocketEconomic() = default;
 
-    void InputCosts();
-    void InputCostsContinue();
-    void InputCostsSettings();
-    void InputSupplies();
-    void InputSuppliesContinue();
-    void InputSuppliesSettings();
-    void InputPlayers();
-    void InputPlayersSettings();
-    void InputPlayersContinue();
+
+
     void MakeMainWindow();
     void MakeButtons();
     void Styling();
@@ -158,6 +44,8 @@ public:
     void CloseAllInfoWindows();
     void NextStep();
     void ChangePlayer();
+    void UpdatePersonalInfo();
+    void ChangeWindowAfterBot();
 
     bool eventFilter(QObject*, QEvent* event);
 
@@ -166,69 +54,11 @@ public:
 private:
     QWidget* window = new QWidget();
 
-    QWidget* costs_window = new QWidget();
-    QPushButton* input_costs_settings_ok = new QPushButton("Continue");
-
-    QGridLayout* input_costs_settings_layout = new QGridLayout();
-    QLabel* input_costs_settings_first_title = new QLabel("Costs of square meter of houses");
-    QLabel* input_costs_settings_second_title = new QLabel("Costs of building houses");
-    QLabel* input_costs_settings_third_title = new QLabel("Costs of one unit of goods in supermarkets");
-    QLabel* input_costs_settings_forth_title = new QLabel("Costs of building supermarkets");
-    QLabel* input_costs_settings_fifth_title = new QLabel("Cost of one square of land");
-    QLabel* input_costs_settings_sixth_title = new QLabel("Cost of a resort");
-    QLineEdit* input_costs_settings_house1_sqr = new QLineEdit();
-    QLineEdit* input_costs_settings_house2_sqr = new QLineEdit();
-    QLineEdit* input_costs_settings_house3_sqr = new QLineEdit();
-    QLineEdit* input_costs_settings_house1_build = new QLineEdit();
-    QLineEdit* input_costs_settings_house2_build = new QLineEdit();
-    QLineEdit* input_costs_settings_house3_build = new QLineEdit();
-    QLineEdit* input_costs_settings_shop1_product = new QLineEdit();
-    QLineEdit* input_costs_settings_shop2_product = new QLineEdit();
-    QLineEdit* input_costs_settings_shop1_build = new QLineEdit();
-    QLineEdit* input_costs_settings_shop2_build = new QLineEdit();
-    QLineEdit* input_costs_settings_cell_cost = new QLineEdit();
-    QLineEdit* input_costs_settings_resort_cost = new QLineEdit();
+    InputCostsWindow* input_costs_window_ = nullptr;
+    InputDemandWindow* input_demand_window_ = nullptr;
+    InputPlayerWindow* input_player_window_ = nullptr;
 
 
-
-
-
-
-    QWidget* supplies_window = new QWidget();
-    QPushButton* supplies_ok = new QPushButton("Continue");
-    QGridLayout* input_supplies_layout = new QGridLayout();
-    QLabel* input_supplies_first_title = new QLabel("Initial demand for houses");
-    QLabel* input_supplies_second_title = new QLabel("Initial demand for supermarkets");
-    QLineEdit* input_supplies_house1_supply = new QLineEdit();
-    QLineEdit* input_supplies_house2_supply = new QLineEdit();
-    QLineEdit* input_supplies_house3_supply = new QLineEdit();
-    QLineEdit* input_supplies_shop1_supply = new QLineEdit();
-    QLineEdit* input_supplies_shop2_supply = new QLineEdit();
-
-
-
-
-
-
-    QWidget* input_players_window = new QWidget();
-    QPushButton* input_players_ok = new QPushButton("Continue");
-    QPushButton* add_player = new QPushButton("Add player");
-    QPushButton* remove_player = new QPushButton("Remove player");
-    QPushButton* add_bot = new QPushButton("Add bot");
-    QPushButton* remove_bot = new QPushButton("Remove bot");
-    QLineEdit* player1 = new QLineEdit();
-    QLineEdit* player2 = new QLineEdit();
-    QLineEdit* player3 = new QLineEdit();
-    QLineEdit* player4 = new QLineEdit();
-    QLineEdit* player5 = new QLineEdit();
-
-
-    QLabel* bot1 = new QLabel("  Bot 1");
-    QLabel* bot2 = new QLabel("  Bot 2");
-    QLabel* bot3 = new QLabel("  Bot 3");
-    QLabel* bot4 = new QLabel("  Bot 4");
-    QLabel* bot5 = new QLabel("  Bot 5");
-    int players = 0, bots = 0;
 
     int fullscreen_width = QRect(QGuiApplication::primaryScreen()->geometry()).width();
     int fullscreen_height = QRect(QGuiApplication::primaryScreen()->geometry()).height();
@@ -238,7 +68,7 @@ private:
     QPixmap cursor_invisible_pix = QPixmap("../../../Pocket-Economic/frontend/assets/empty_cursor.png").scaled(18, 18, Qt::KeepAspectRatio);
    
 
-    QLabel* background_picture_ = new MyLabel();
+    QLabel* background_picture_ = nullptr;
     QPushButton* house1_btn = new QPushButton();
     QPushButton* house2_btn = new QPushButton();
     QPushButton* house3_btn = new QPushButton();
@@ -249,14 +79,14 @@ private:
     std::vector<QLabel*> bought_objects_;
     int index_bought_buildings_ = 0;
 
-    Grid* grid = new Grid();
-    Player_Owner* player = new Player_Owner();
+    Grid* grid = nullptr;
+    PlayerOwner* player_owner = nullptr;
 
-    QLabel* house1_roof = new RoofLabel();
-    QLabel* house2_roof = new RoofLabel();
-    QLabel* house3_roof = new RoofLabel();
-    QLabel* shop1_roof = new RoofLabel();
-    QLabel* shop2_roof = new RoofLabel();
+    QLabel* house1_roof = nullptr;
+    QLabel* house2_roof = nullptr;
+    QLabel* house3_roof = nullptr;
+    QLabel* shop1_roof = nullptr;
+    QLabel* shop2_roof = nullptr;
 
     bool house1_buying_in_process = false;
     bool house2_buying_in_process = false;
@@ -361,6 +191,7 @@ private:
     QPushButton* close_land_resort_information_btn = new QPushButton();
     QPushButton* land_resort_information_advertising_btn = new QPushButton();
     QPushButton* land_resort_information_updating_resort_btn = new QPushButton();
+    Grid::land_struct* resort_chosen = nullptr;
 
     QLabel* news = new QLabel();
     QString news_txt_style;
@@ -391,6 +222,7 @@ private:
     QString yellow_css = "#b4a800;";
     QString blue_css = "#0000e0;";
     QString violet_css = "#8500d0;";
+    QString grey_css = "#494949;";
 
 
     QString personal_info_red_border_style;
@@ -402,8 +234,11 @@ private:
     QString personal_info_bad_value_style;
 
     QPushButton* next_step_btn = new QPushButton();
-    QLabel* month = new QLabel();
+    QLabel* month_lbl = new QLabel();
 
 
+    QLabel* results = new QLabel();
     Game* game = nullptr;
+
+    QMessageBox* MsgBox = new QMessageBox();
 };

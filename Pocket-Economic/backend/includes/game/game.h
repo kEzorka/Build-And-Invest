@@ -33,6 +33,7 @@ public:
     std::string getResults();
 
     bool nextPlayer();
+    void begin();
     //////////////////
     //
     // return TRUE if it's next step of the game
@@ -43,39 +44,41 @@ public:
     void setStartMoneyCnt(const int& money);
     void setMovesCnt(const int& moves);
 
-    void pushPlayer(Player* player);
+    void pushPlayer(Player* player_owner);
     void pushBot();
     
     std::vector<Player*> getPlayersArr() const;	
     Player* getCurPlayer() const;
     std::vector<std::pair<Player*, std::string>> getFreshNews() const;
+    std::vector<std::pair<Player*, std::string>> getBuyNews() const;
+    void clearBuyNewsArr();
     int getMovesCnt() const;
     int getStartMoneyCnt() const;
 
     const int INF = -1;
 
 
-    void buildHouse(Player* player, BuildingLand* building_land, const House::HouseType& house_type,
+    void buildHouse(Player* player_owner, BuildingLand* building_land, const House::HouseType& house_type,
         const int& building_pos_x, const int& building_pos_y);
-    void buildSupermarket(Player* player, BuildingLand* building_land,
+    void buildSupermarket(Player* player_owner, BuildingLand* building_land,
         const Supermarket::SupermarketType& house_type,
         const int& building_pos_x, const int& building_pos_y);
-    void buyLand(Player* player, const int& pos_x, const int& pos_y);
-    void buyBuildingLand(Player* player, const int& pos_x, const int& pos_y);
-    void buyResort(Player* player, const int& pos_x, const int& pos_y);
+    void buyLand(Player* player_owner, const int& pos_x, const int& pos_y);
+    void buyBuildingLand(Player* player_owner, const int& pos_x, const int& pos_y);
+    void buyResort(Player* player_owner, const int& pos_x, const int& pos_y);
 
-    void buyHouseAdvert(Player* player, const int& cnt_of_advert) const;
-    void buySupermarketAdvert(Player* player, const int& cnt_of_advert) const;
-
-
+    void buyHouseAdvert(Player* player_owner, const int& cnt_of_advert) const;
+    void buySupermarketAdvert(Player* player_owner, const int& cnt_of_advert) const;
 
 
+    std::vector<std::vector<LandPlot*>> getLandsArr() const;
 
-    double getMonolithicIncome(Player* player) const;
-    double getPanelIncome(Player* player) const;
-    double getBrickIncome(Player* player) const;
-    double getSupermarketIncome(Player* player) const;
-    double getHypermarketIncome(Player* player) const;
+
+    double getMonolithicIncome(Player* player_owner) const;
+    double getPanelIncome(Player* player_owner) const;
+    double getBrickIncome(Player* player_owner) const;
+    double getSupermarketIncome(Player* player_owner) const;
+    double getHypermarketIncome(Player* player_owner) const;
 
 
     void setDefaultMonolithicHouseDemand(const double& demand);
@@ -132,8 +135,15 @@ public:
     int64_t getTimeOfBuildingSupermarket() const;
     int64_t getTimeOfBuildingHypermarket() const;
 
+    std::string getMonth() const;
+
+
+    int64_t getCostOfLand(const int& row, const int& column) const;
+    void upadteResort(const int& row, const int& column);
+
+
 private:
-    int default_money_for_player_ = 10'000'000;
+    int default_money_for_player_ = 20'000'000;
     int moves_in_the_game_ = INF;
 
     void nextGameStep();
@@ -141,7 +151,7 @@ private:
     void makeLandPlotsArr();
 
 
-    void buildNonBuildRealty(Player* player, BuildingLand* building_land, const int& x, const int& y);
+    void buildNonBuildRealty(Player* player_owner, BuildingLand* building_land, const int& x, const int& y);
 
 
     NewsWindow news_window_;
@@ -156,7 +166,7 @@ private:
 
     std::vector<Player*> players_arr_; /*players club 7-3-5*/
     Player* cur_player_ = nullptr;
-    size_t month_ = 0;
+    size_t month_ = 1;
     int cur_player_pos_in_arr_ = 0;
 
     std::vector<std::vector<LandPlot*>> land_plots_arr_;

@@ -5,8 +5,8 @@
 
 class LandAgency {
 public:
-	void buyBuildingLand(Player* player, const int& size_x, const int& size_y) const;
-	void buyResort(Player* player) const;
+	bool buyBuildingLand(Player* player_owner, const int& size_x, const int& size_y) const;
+	bool buyResort(Player* player_owner) const;
 
 	void setCostOfCell(const int64_t& cost);
 	void setCostOfResort(const int64_t& cost);
@@ -15,7 +15,8 @@ public:
 	int64_t getCostOfResort() const;
 
 private:
-	int64_t cost_of_cell_ = 0;
-	int64_t cost_of_resort_ = 0;
+	int64_t cost_of_cell_ = 300'000;
+	int64_t cost_of_resort_ = 10'000'000;
+	int64_t base_income_of_resort_ = 1'500'000;
 
 };

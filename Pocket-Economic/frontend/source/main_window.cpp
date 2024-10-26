@@ -1,11 +1,37 @@
-﻿#include "../includes/main_window.h"
+﻿#include "../includes/input_windows/input_costs_window.h"
+#include "../includes/input_windows/input_demand_window.h"
+#include "../includes/input_windows/input_player_window.h"
+#include "../includes/roof_label.h"
 #include <QDebug>
 #include <iostream>
 
+
 PocketEconomic::PocketEconomic(QWidget* parent) : QMainWindow(parent) {
+    grid = new Grid();
+    player_owner = new PlayerOwner();
+    background_picture_ = new MyLabel();
+    house1_roof = new RoofLabel();
+    house2_roof = new RoofLabel();
+    house3_roof = new RoofLabel();
+    shop1_roof = new RoofLabel();
+    shop2_roof = new RoofLabel();
+
+
     game = new Game();
     game->start();
-    InputCosts();
+    input_player_window_ = new InputPlayerWindow();
+    input_player_window_->setGame(game);
+    input_player_window_->setPocketEconomic(this);
+    input_player_window_->setPlayerOwner(player_owner);
+
+    input_demand_window_ = new InputDemandWindow();
+    input_demand_window_->setGame(game);
+    input_demand_window_->setInputPlayerWindow(input_player_window_);
+
+    input_costs_window_ = new InputCostsWindow();
+    input_costs_window_->setGame(game);
+    input_costs_window_->setInputDemandWindow(input_demand_window_);
+    input_costs_window_->InputCosts();
 }
 
 void PocketEconomic::MakeButtons() {
@@ -17,7 +43,7 @@ void PocketEconomic::MakeButtons() {
     background_picture_->setPixmap(background_pix);
 
     dynamic_cast<MyLabel*>(background_picture_)->setGrid(grid);
-    dynamic_cast<MyLabel*>(background_picture_)->setPlayer(player);
+    dynamic_cast<MyLabel*>(background_picture_)->setPlayer(player_owner);
 
     int button_size = (window->size().width() - 50) / 5;
     house1_btn->setGeometry(0, fullscreen_height - 50, button_size, 50);
@@ -57,7 +83,7 @@ void PocketEconomic::MakeButtons() {
     house1_roof->setPixmap(house1_roof_red_pix);
     house1_roof->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     dynamic_cast<RoofLabel*>(house1_roof)->setGrid(grid);
-    dynamic_cast<RoofLabel*>(house1_roof)->setPlayer(player);
+    dynamic_cast<RoofLabel*>(house1_roof)->setPlayer(player_owner);
 
     house2_roof->setGeometry(QCursor::pos().x(), QCursor::pos().y(), 50, 50);
     house2_roof->setMouseTracking(true);
@@ -66,7 +92,7 @@ void PocketEconomic::MakeButtons() {
     house2_roof->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     house2_roof->setPixmap(house2_roof_red_pix);
     dynamic_cast<RoofLabel*>(house2_roof)->setGrid(grid);
-    dynamic_cast<RoofLabel*>(house2_roof)->setPlayer(player);
+    dynamic_cast<RoofLabel*>(house2_roof)->setPlayer(player_owner);
 
     house3_roof->setGeometry(QCursor::pos().x(), QCursor::pos().y(), 50, 50);
     house3_roof->setMouseTracking(true);
@@ -75,7 +101,7 @@ void PocketEconomic::MakeButtons() {
     house3_roof->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     house3_roof->setPixmap(house3_roof_red_pix);
     dynamic_cast<RoofLabel*>(house3_roof)->setGrid(grid);
-    dynamic_cast<RoofLabel*>(house3_roof)->setPlayer(player);
+    dynamic_cast<RoofLabel*>(house3_roof)->setPlayer(player_owner);
 
     shop1_roof->setGeometry(QCursor::pos().x(), QCursor::pos().y(), 50, 50);
     shop1_roof->setMouseTracking(true);
@@ -84,7 +110,7 @@ void PocketEconomic::MakeButtons() {
     shop1_roof->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     shop1_roof->setPixmap(shop1_roof_pix);
     dynamic_cast<RoofLabel*>(shop1_roof)->setGrid(grid);
-    dynamic_cast<RoofLabel*>(shop1_roof)->setPlayer(player);
+    dynamic_cast<RoofLabel*>(shop1_roof)->setPlayer(player_owner);
 
     shop2_roof->setGeometry(QCursor::pos().x(), QCursor::pos().y(), 50, 50);
     shop2_roof->setMouseTracking(true);
@@ -93,7 +119,7 @@ void PocketEconomic::MakeButtons() {
     shop2_roof->setAlignment(Qt::AlignTop | Qt::AlignLeft);
     shop2_roof->setPixmap(shop2_roof_pix);
     dynamic_cast<RoofLabel*>(shop2_roof)->setGrid(grid);
-    dynamic_cast<RoofLabel*>(shop2_roof)->setPlayer(player);
+    dynamic_cast<RoofLabel*>(shop2_roof)->setPlayer(player_owner);
 
     close_btn->setGeometry(fullscreen_width - 47, 0, 47, 47);
     close_btn->setParent(window);
@@ -110,10 +136,10 @@ void PocketEconomic::MakeButtons() {
     players_info_btn->setText("Player's information");
     players_info_btn->setVisible(false);
 
-    month->setParent(window);
-    month->setText("September");
-    month->setAlignment(Qt::AlignCenter);
-    month->setGeometry(5, 5, 100, 25);
+    month_lbl->setParent(window);
+    //month_lbl->setText("September");
+    month_lbl->setAlignment(Qt::AlignCenter);
+    month_lbl->setGeometry(5, 5, 100, 25);
 }
 
 void PocketEconomic::PrepareBuildings() {
@@ -241,7 +267,7 @@ void PocketEconomic::Styling() {
         "  background-color: #a20000;"
         "}";
 
-     personal_info_red_border_style =
+    personal_info_red_border_style =
         "QLabel { "
         "  background-color: #ffffff;"
         "  border-width: 3px;"
@@ -250,7 +276,7 @@ void PocketEconomic::Styling() {
         "  border-radius: 10px;"
         "}";
 
-     personal_info_orange_border_style =
+    personal_info_orange_border_style =
         "QLabel { "
         "  background-color: #ffffff;"
         "  border-width: 3px;"
@@ -259,7 +285,7 @@ void PocketEconomic::Styling() {
         "  border-radius: 10px;"
         "}";
 
-     personal_info_yellow_border_style =
+    personal_info_yellow_border_style =
         "QLabel { "
         "  background-color: #ffffff;"
         "  border-width: 3px;"
@@ -268,7 +294,7 @@ void PocketEconomic::Styling() {
         "  border-radius: 10px;"
         "}";
 
-     personal_info_blue_border_style =
+    personal_info_blue_border_style =
         "QLabel { "
         "  background-color: #ffffff;"
         "  border-width: 3px;"
@@ -277,7 +303,7 @@ void PocketEconomic::Styling() {
         "  border-radius: 10px;"
         "}";
 
-     personal_info_violet_border_style =
+    personal_info_violet_border_style =
         "QLabel { "
         "  background-color: #ffffff;"
         "  border-width: 3px;"
@@ -430,7 +456,7 @@ void PocketEconomic::Styling() {
     players_nicknames_table->verticalHeader()->hide();*/
 
     next_step_btn->setStyleSheet(menu_buttons_style);
-    month->setStyleSheet(month_style);
+    month_lbl->setStyleSheet(month_style);
 }
 
 void PocketEconomic::SetLandsCoors() {
@@ -438,113 +464,169 @@ void PocketEconomic::SetLandsCoors() {
     int delta_x = 400;
     for (int k = 0; k < 3; ++k) {
         // 1 column
-        grid->lands[k * grid->lands.size() / 4] = { 101 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 1] = { 101 + k * delta_x, 260, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 2] = { 101 + k * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 3] = { 101 + k * delta_x, 561, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 4] = { 101 + k * delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
+        grid->lands[k * grid->lands.size() / 4] = { 101 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 0, 3 * k + 1 };
+        grid->lands[k * grid->lands.size() / 4 + 1] = { 101 + k * delta_x, 260, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)), 1, 2 * k + 1 }; //
+        grid->lands[k * grid->lands.size() / 4 + 2] = { 101 + k * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 2, 3 * k + 1 };
+        grid->lands[k * grid->lands.size() / 4 + 3] = { 101 + k * delta_x, 561, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)), 3, 2 * k + 1 }; //
+        grid->lands[k * grid->lands.size() / 4 + 4] = { 101 + k * delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 4, 3 * k + 1 };
 
         // 2 column
-        grid->lands[k * grid->lands.size() / 4 + 5] = { 241 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 7] = { 240 + k * delta_x, 260, k == 2 ? 0 : 8, 5, std::vector<std::vector<bool>>(k == 2 ? 0 : 8, std::vector<bool>(5, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 6] = { 241 + k * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 8] = { 240 + k * delta_x, 561, 8, 5, std::vector<std::vector<bool>>(8, std::vector<bool>(5, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 9] = { 241 + k * delta_x, 723, k == 1 ? 0 : 4, 4, std::vector<std::vector<bool>>(k == 1 ? 0 : 4, std::vector<bool>(4, true)) };
+        grid->lands[k * grid->lands.size() / 4 + 5] = { 241 + k * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 0, 2 + 3 * k };
+        grid->lands[k * grid->lands.size() / 4 + 7] = { 240 + k * delta_x, 260, k == 2 ? 0 : 8, 5, std::vector<std::vector<bool>>(k == 2 ? 0 : 8, std::vector<bool>(5, true)), 1, 2 + 2 * k }; //
+        grid->lands[k * grid->lands.size() / 4 + 6] = { 241 + k * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 2, 2 + 3 * k };
+        grid->lands[k * grid->lands.size() / 4 + 8] = { 240 + k * delta_x, 561, 8, 5, std::vector<std::vector<bool>>(8, std::vector<bool>(5, true)), 3, 2 + 2 * k };//
+        grid->lands[k * grid->lands.size() / 4 + 9] = { 241 + k * delta_x, 723, k == 1 ? 0 : 4, 4, std::vector<std::vector<bool>>(k == 1 ? 0 : 4, std::vector<bool>(4, true)), 4, 2 + 3 * k };
 
         // 2.5 column
-        grid->lands[k * grid->lands.size() / 4 + 10] = { 440 + k * delta_x, 285, k == 2 ? 0 : 1, 4, std::vector<std::vector<bool>>(k == 2 ? 0 : 1, std::vector<bool>(4, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 11] = { 440 + k * delta_x, 586, 1, 4, std::vector<std::vector<bool>>(1, std::vector<bool>(4, true)) };
+        grid->lands[k * grid->lands.size() / 4 + 10] = { 440 + k * delta_x, 285, k == 2 ? 0 : 1, 4, std::vector<std::vector<bool>>(k == 2 ? 0 : 1, std::vector<bool>(4, true)), 1, 2 + k * 2 };
+        grid->lands[k * grid->lands.size() / 4 + 11] = { 440 + k * delta_x, 586, 1, 4, std::vector<std::vector<bool>>(1, std::vector<bool>(4, true)), 3, 2 + k * 2 };
 
         // 2.75 column
-        grid->lands[k * grid->lands.size() / 4 + 12] = { 389 + k * delta_x, 147, 1, 2, std::vector<std::vector<bool>>(1, std::vector<bool>(2, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 13] = { 389 + k * delta_x, 448, 1, 2, std::vector<std::vector<bool>>(1, std::vector<bool>(2, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 14] = { 389 + k * delta_x, 748, 1, 2, std::vector<std::vector<bool>>(1, std::vector<bool>(2, true)) };
+        grid->lands[k * grid->lands.size() / 4 + 12] = { 389 + k * delta_x, 147, 1, 2, std::vector<std::vector<bool>>(1, std::vector<bool>(2, true)), 0, 3 + k * 3 };
+        grid->lands[k * grid->lands.size() / 4 + 13] = { 389 + k * delta_x, 448, 1, 2, std::vector<std::vector<bool>>(1, std::vector<bool>(2, true)), 2, 3 + k * 3 };
+        grid->lands[k * grid->lands.size() / 4 + 14] = { 389 + k * delta_x, 748, 1, 2, std::vector<std::vector<bool>>(1, std::vector<bool>(2, true)), 4, 3 + k * 3 };
 
         // 3 column
-        grid->lands[k * grid->lands.size() / 4 + 15] = { 414 + k * delta_x, 122, 2, 4, std::vector<std::vector<bool>>(2, std::vector<bool>(4, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 16] = { 414 + k * delta_x, 423, 2, 4, std::vector<std::vector<bool>>(2, std::vector<bool>(4, true)) };
-        grid->lands[k * grid->lands.size() / 4 + 17] = { 414 + k * delta_x, 723, 2, 4, std::vector<std::vector<bool>>(2, std::vector<bool>(4, true)) };
+        grid->lands[k * grid->lands.size() / 4 + 15] = { 414 + k * delta_x, 122, 2, 4, std::vector<std::vector<bool>>(2, std::vector<bool>(4, true)), 0, 3 + k * 3 };
+        grid->lands[k * grid->lands.size() / 4 + 16] = { 414 + k * delta_x, 423, 2, 4, std::vector<std::vector<bool>>(2, std::vector<bool>(4, true)), 2, 3 + k * 3 };
+        grid->lands[k * grid->lands.size() / 4 + 17] = { 414 + k * delta_x, 723, 2, 4, std::vector<std::vector<bool>>(2, std::vector<bool>(4, true)), 4, 3 + k * 3 };
     }
 
-    grid->lands[3 * grid->lands.size() / 4] = { 101 + 3 * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
-    grid->lands[3 * grid->lands.size() / 4 + 1] = { 101 + 3 * delta_x, 260, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)) };
-    grid->lands[3 * grid->lands.size() / 4 + 2] = { 101 + 3 * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
-    grid->lands[3 * grid->lands.size() / 4 + 3] = { 101 + 3 * delta_x, 561, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)) };
-    grid->lands[3 * grid->lands.size() / 4 + 4] = { 101 + 3 * delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
+    grid->lands[3 * grid->lands.size() / 4] = { 101 + 3 * delta_x, 122, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 0, 10 };
+    grid->lands[3 * grid->lands.size() / 4 + 1] = { 101 + 3 * delta_x, 260, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)), 1, 7 };
+    grid->lands[3 * grid->lands.size() / 4 + 2] = { 101 + 3 * delta_x, 423, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 2, 10 };
+    grid->lands[3 * grid->lands.size() / 4 + 3] = { 101 + 3 * delta_x, 561, 4, 5, std::vector<std::vector<bool>>(4, std::vector<bool>(5, true)), 3, 7 };
+    grid->lands[3 * grid->lands.size() / 4 + 4] = { 101 + 3 * delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 4, 10 };
+
+
 
     grid->resorts.resize(3);
-    grid->resorts[0] = { 0, 122, 3, 4, std::vector<std::vector<bool>>(3, std::vector<bool>(4, true)) };
-    grid->resorts[1] = { 240 + 2 * delta_x + 3 * grid->cell_size, 260, 5, 5, std::vector<std::vector<bool>>(5, std::vector<bool>(5, true)) };
-    grid->resorts[2] = { 241 + delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)) };
+    grid->resorts[0] = { 0, 122, 3, 4, std::vector<std::vector<bool>>(3, std::vector<bool>(4, true)) , 0, 0};
+    grid->resorts[1] = { 240 + 2 * delta_x + 3 * grid->cell_size, 260, 5, 5, std::vector<std::vector<bool>>(5, std::vector<bool>(5, true)), 1, 6 };
+    grid->resorts[2] = { 241 + delta_x, 723, 4, 4, std::vector<std::vector<bool>>(4, std::vector<bool>(4, true)), 4, 5 };
 }
 
-void PocketEconomic::AddHouse(){
+void PocketEconomic::AddHouse() {
     QObject::connect(house1_btn, &QPushButton::clicked, [&]() {
-        CloseAllInfoWindows();
-        house1_buying_in_process ^= 1;
-        house1_roof->setVisible(house1_buying_in_process);
-        grid->isBuyingProcess = house1_buying_in_process;
-        if (house1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-        else QGuiApplication::restoreOverrideCursor();
+        if (!game->getCurPlayer()->isBot()) {
+            CloseAllInfoWindows();
+            house1_buying_in_process ^= 1;
+            house1_roof->setVisible(house1_buying_in_process);
+            grid->isBuyingProcess = house1_buying_in_process;
+            if (house1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+            else QGuiApplication::restoreOverrideCursor();
+        }
         });
     QObject::connect(house2_btn, &QPushButton::clicked, [&]() {
-        CloseAllInfoWindows();
-        house2_buying_in_process ^= 1;
-        house2_roof->setVisible(house2_buying_in_process);
-        grid->isBuyingProcess = house2_buying_in_process;
-        if (house2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-        else QGuiApplication::restoreOverrideCursor();
+        if (!game->getCurPlayer()->isBot()) {
+            CloseAllInfoWindows();
+            house2_buying_in_process ^= 1;
+            house2_roof->setVisible(house2_buying_in_process);
+            grid->isBuyingProcess = house2_buying_in_process;
+            if (house2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+            else QGuiApplication::restoreOverrideCursor();
+        }
         });
     QObject::connect(house3_btn, &QPushButton::clicked, [&]() {
-        CloseAllInfoWindows();
-        house3_buying_in_process ^= 1;
-        house3_roof->setVisible(house3_buying_in_process);
-        grid->isBuyingProcess = house3_buying_in_process;
-        if (house3_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-        else QGuiApplication::restoreOverrideCursor();
+        if (!game->getCurPlayer()->isBot()) {
+            CloseAllInfoWindows();
+            house3_buying_in_process ^= 1;
+            house3_roof->setVisible(house3_buying_in_process);
+            grid->isBuyingProcess = house3_buying_in_process;
+            if (house3_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+            else QGuiApplication::restoreOverrideCursor();
+        }
         });
     QObject::connect(shop1_btn, &QPushButton::clicked, [&]() {
-        CloseAllInfoWindows();
-        shop1_buying_in_process ^= 1;
-        shop1_roof->setVisible(shop1_buying_in_process);
-        grid->isBuyingProcess = shop1_buying_in_process;
-        if (shop1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-        else QGuiApplication::restoreOverrideCursor();
+        if (!game->getCurPlayer()->isBot()) {
+            CloseAllInfoWindows();
+            shop1_buying_in_process ^= 1;
+            shop1_roof->setVisible(shop1_buying_in_process);
+            grid->isBuyingProcess = shop1_buying_in_process;
+            if (shop1_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+            else QGuiApplication::restoreOverrideCursor();
+        }
         });
     QObject::connect(shop2_btn, &QPushButton::clicked, [&]() {
-        CloseAllInfoWindows();
-        shop2_buying_in_process ^= 1;
-        shop2_roof->setVisible(shop2_buying_in_process);
-        grid->isBuyingProcess = shop2_buying_in_process;
-        if (shop2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
-        else QGuiApplication::restoreOverrideCursor();
+        if (!game->getCurPlayer()->isBot()) {
+            CloseAllInfoWindows();
+            shop2_buying_in_process ^= 1;
+            shop2_roof->setVisible(shop2_buying_in_process);
+            grid->isBuyingProcess = shop2_buying_in_process;
+            if (shop2_buying_in_process) QGuiApplication::setOverrideCursor(QCursor(cursor_invisible_pix));
+            else QGuiApplication::restoreOverrideCursor();
+        }
         });
+
     QObject::connect(close_btn, &QPushButton::clicked, [&]() {
         window->close();
         });
-    }
+}
 
 void PocketEconomic::SetBuilding(QLabel* roof) {
     QPixmap pix = roof->pixmap();
-    if (dynamic_cast<RoofLabel*>(roof)->object_can_be_built_here) {
-        int x = dynamic_cast<RoofLabel*>(roof)->chosen_x;
-        int y = dynamic_cast<RoofLabel*>(roof)->chosen_y;
-        bought_objects_[index_bought_buildings_]->setGeometry(x, y, roof->size().width(), roof->size().height());
-        bought_objects_[index_bought_buildings_]->setAlignment(roof->alignment());
-        bought_objects_[index_bought_buildings_]->setPixmap(roof->pixmap());
-        bought_objects_[index_bought_buildings_]->setVisible(true);
-        bought_objects_[index_bought_buildings_]->setMouseTracking(true);
-        index_bought_buildings_++;
+    try {
+        roof->setVisible(false);
+        roof->setPixmap(pix);
+
+        grid->isBuyingProcess = false;
+
+        QGuiApplication::restoreOverrideCursor();
+        if (dynamic_cast<RoofLabel*>(roof)->object_can_be_built_here) {
+            dynamic_cast<RoofLabel*>(roof)->object_can_be_built_here = false;
+            int x = dynamic_cast<RoofLabel*>(roof)->chosen_x;
+            int y = dynamic_cast<RoofLabel*>(roof)->chosen_y;
+
+            for (int i = 0; i < grid->lands.size(); ++i) {
+                Grid::land_struct* land = &grid->lands[i];
+                if (land->x <= x && x < land->x + land->amount_x * grid->cell_size &&
+                    land->y <= y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
+                    int row = land->row;
+                    int column = land->column;
+                    int column_small = (x - land->x) / grid->cell_size;
+                    int row_small = (y + 50 - land->y) / grid->cell_size;
+                    land->free_space[column_small][row_small] = false;
+                    if (roof == house1_roof) {
+                        game->buildHouse(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            House::HouseType::MonoliticHouse, row_small, column_small);
+                    } else if (roof == house2_roof) {
+                        game->buildHouse(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            House::HouseType::PanelHouse, row_small, column_small);
+                    } else if (roof == house3_roof) {
+                        game->buildHouse(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            House::HouseType::BrickHouse, row_small, column_small);
+                    } else if (roof == shop1_roof) {
+                        game->buildSupermarket(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            Supermarket::SupermarketType::Supermarket, row_small, column_small);
+                    } else if (roof == shop2_roof) {
+                        game->buildSupermarket(game->getCurPlayer(),
+                            dynamic_cast<BuildingLand*>(game->getLandsArr()[row][column]),
+                            Supermarket::SupermarketType::Hypermarket, row_small, column_small);
+                    }
+                }
+            }
+            bought_objects_[index_bought_buildings_]->setGeometry(x, y, roof->size().width(), roof->size().height());
+            bought_objects_[index_bought_buildings_]->setAlignment(roof->alignment());
+            bought_objects_[index_bought_buildings_]->setPixmap(roof->pixmap());
+            bought_objects_[index_bought_buildings_]->setVisible(true);
+            bought_objects_[index_bought_buildings_]->setMouseTracking(true);
+            index_bought_buildings_++;
+
+            UpdatePersonalInfo();
+        }
     }
-    roof->setVisible(false);
-    roof->setPixmap(pix);
-
-
-    grid->isBuyingProcess = false;
-
-    dynamic_cast<RoofLabel*>(roof)->object_can_be_built_here = false;
-
-    QGuiApplication::restoreOverrideCursor();
+    catch (const std::exception& e) {
+        std::string exception;
+        exception += "Exception: ";
+        exception += e.what();
+        MsgBox->setText(QString::fromStdString(exception));
+        MsgBox->exec();
+        return;
+    }
 }
 
 void PocketEconomic::RotateBuilding(QLabel* roof) {
@@ -566,79 +648,68 @@ bool PocketEconomic::eventFilter(QObject* target, QEvent* event)
         shop2_roof->setGeometry(mouseEvent->pos().x(), y, 50, 50);
         //shop1_btn->setText(QString::fromStdString(std::to_string(mouseEvent->pos().x()) + " " + std::to_string(mouseEvent->pos().y())));
         return true;
-    }
-    else if (event->type() == QEvent::MouseButtonPress)
+    } else if (event->type() == QEvent::MouseButtonPress)
     {
         CloseAllInfoWindows();
         QMouseEvent* mouseEvent = (QMouseEvent*)event;
         if (mouseEvent->button() == Qt::LeftButton) {
-            if (house1_buying_in_process) {
-                SetBuilding(house1_roof);
-                house1_buying_in_process = false;
+            if (!game->getCurPlayer()->isBot()) {
+                if (house1_buying_in_process) {
+                    SetBuilding(house1_roof);
+                    house1_buying_in_process = false;
+                } else if (house2_buying_in_process) {
+                    SetBuilding(house2_roof);
+                    house2_buying_in_process = false;
+                } else if (house3_buying_in_process) {
+                    SetBuilding(house3_roof);
+                    house3_buying_in_process = false;
+                } else if (shop1_buying_in_process) {
+                    SetBuilding(shop1_roof);
+                    shop1_buying_in_process = false;
+                } else if (shop2_buying_in_process) {
+                    SetBuilding(shop2_roof);
+                    shop2_buying_in_process = false;
+                } else {
+                    CloseAllInfoWindows();
+                    BuyLandOrResort(mouseEvent->pos().x(), mouseEvent->pos().y());
+                }
             }
-            else if (house2_buying_in_process) {
-                SetBuilding(house2_roof);
-                house2_buying_in_process = false;
-            }
-            else if (house3_buying_in_process) {
-                SetBuilding(house3_roof);
-                house3_buying_in_process = false;
-            }
-            else if (shop1_buying_in_process) {
-                SetBuilding(shop1_roof);
-                shop1_buying_in_process = false;
-            }
-            else if (shop2_buying_in_process) {
-                SetBuilding(shop2_roof);
-                shop2_buying_in_process = false;
-            }
-            else {
-                CloseAllInfoWindows();
-                BuyLandOrResort(mouseEvent->pos().x(), mouseEvent->pos().y());
-            }
-        }
-        else {
+        } else {
             if (house1_buying_in_process) {
                 RotateBuilding(house1_roof);
-            }
-            else if (house2_buying_in_process) {
+            } else if (house2_buying_in_process) {
                 RotateBuilding(house2_roof);
-            }
-            else if (house3_buying_in_process) {
+            } else if (house3_buying_in_process) {
                 RotateBuilding(house3_roof);
-            }
-            else if (shop1_buying_in_process) {
+            } else if (shop1_buying_in_process) {
                 RotateBuilding(shop1_roof);
-            }
-            else if (shop2_buying_in_process) {
+            } else if (shop2_buying_in_process) {
                 RotateBuilding(shop2_roof);
             }
         }
         return true;
-    }
-    else if (event->type() == QEvent::KeyPress) {
+    } else if (event->type() == QEvent::KeyPress) {
         QKeyEvent* keyEvent = (QKeyEvent*)event;
         if (keyEvent->key() == Qt::Key::Key_Escape) {
             close_btn->setVisible(!close_btn->isVisible());
             news_btn->setVisible(!news_btn->isVisible());
             if (news_btn->isVisible()) {
-                month->setGeometry(month->pos().x(), month->pos().y() + news_btn->size().height(), month->size().width(), month->size().height());
-            }
-            else {
-                month->setGeometry(month->pos().x(), month->pos().y() - news_btn->size().height(), month->size().width(), month->size().height());
+                month_lbl->setGeometry(month_lbl->pos().x(), month_lbl->pos().y() + news_btn->size().height(), month_lbl->size().width(), month_lbl->size().height());
+            } else {
+                month_lbl->setGeometry(month_lbl->pos().x(), month_lbl->pos().y() - news_btn->size().height(), month_lbl->size().width(), month_lbl->size().height());
             }
             players_info_btn->setVisible(!players_info_btn->isVisible());
             if (close_btn->isVisible()) {
                 personal_info->setGeometry(personal_info->pos().x(), personal_info->pos().y() + 50, personal_info->size().width(), personal_info->size().height());
                 next_step_btn->setGeometry(personal_info->pos().x() + 10, personal_info->pos().y() + personal_info->size().height() + 5, personal_info->size().width() - 20, 25);
                 shop_information->setGeometry(shop_information->pos().x(), shop_information->pos().y() + 50, shop_information->size().width(), shop_information->size().height() - 50);
-            }
-            else {
+            } else {
                 personal_info->setGeometry(personal_info->pos().x(), personal_info->pos().y() - 50, personal_info->size().width(), personal_info->size().height());
                 next_step_btn->setGeometry(personal_info->pos().x() + 10, personal_info->pos().y() + personal_info->size().height() + 5, personal_info->size().width() - 20, 25);
                 shop_information->setGeometry(shop_information->pos().x(), shop_information->pos().y() - 50, shop_information->size().width(), shop_information->size().height() + 50);
             }
             news->setVisible(false);
+            players_info->setVisible(false);
             background_picture_->setPixmap(background_pix);
         }
         return true;
@@ -650,26 +721,31 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
     int x_pos = x, y_pos = y;
     for (int i = 0; i < grid->lands.size(); ++i) {
         Grid::land_struct* land = &grid->lands[i];
-        if (land->x < x && x < land->x + land->amount_x * grid->cell_size &&
-            land->y < y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
-            if (land->owner.color == player->Nobody) {
+        if (land->x <= x && x < land->x + land->amount_x * grid->cell_size &&
+            land->y <= y + 50 && y + 50 < land->y + land->amount_y * grid->cell_size) {
+            if (land->owner.color == player_owner->Nobody) {
                 offer_pic->setPixmap(land_pix);
                 offer_txt->setText("Buy a land!");
                 offer->setVisible(true);
                 is_offer_shown = true;
+
+
+                std::string new_cost = std::to_string(game->getCostOfLand(land->row, land->column) / 1000);
+                /* 
+                int64_t cost = game->getLandCost(land->row, land->column);
+                new_cost = std::to_string(cost / 1000);
+                */
+                offer_cost_txt->setText(QString::fromStdString("Cost: " + new_cost + "K"));
+                
                 if (land->amount_x == 8) {
                     grid->chosen_land = { land, &grid->lands[i + 3] };
-                }
-                else if (land->amount_x == 1 && land->amount_y == 4) {
+                } else if (land->amount_x == 1 && land->amount_y == 4) {
                     grid->chosen_land = { land, &grid->lands[i - 3] };
-                }
-                else if (land->amount_x == 2 && land->amount_y == 4) {
+                } else if (land->amount_x == 2 && land->amount_y == 4) {
                     grid->chosen_land = { land, &grid->lands[i - 3] };
-                }
-                else if (land->amount_x == 1 && land->amount_y == 2) {
+                } else if (land->amount_x == 1 && land->amount_y == 2) {
                     grid->chosen_land = { land, &grid->lands[i + 3] };
-                }
-                else {
+                } else {
                     grid->chosen_land = { land, nullptr };
                 }
                 if (x + offer->size().width() >= fullscreen_width) x_pos -= offer->size().width();
@@ -678,43 +754,59 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 background_picture_->setPixmap(background_pix);
                 OfferIsShown();
                 return;
-            }
-            else {
+            } else {
                 land_resort_information_txt->setText("This land belongs to");
                 land_resort_information_advertising_btn->setVisible(false);
                 land_resort_information_updating_resort_btn->setVisible(false);
-                if (land->owner.color != player->color) {
-                    land_resort_information_owner_txt->setText("someone"); // add name from backend
-                }
-                else {
+                if (land->owner.color != player_owner->color) {
+
+                    std::string name = "someone";
+                    if (land->owner.color == player_owner->Red) {
+                        name = game->getPlayersArr()[0]->getNickname();
+                    }
+                    else if (land->owner.color == player_owner->Orange) {
+                        name = game->getPlayersArr()[1]->getNickname();
+                    }
+                    if (land->owner.color == player_owner->Yellow) {
+                        name = game->getPlayersArr()[2]->getNickname();
+                    }
+                    if (land->owner.color == player_owner->Blue) {
+                        name = game->getPlayersArr()[3]->getNickname();
+                    }
+                    if (land->owner.color == player_owner->Violet) {
+                        name = game->getPlayersArr()[4]->getNickname();
+                    }
+                    land_resort_information_owner_txt->setText(QString::fromStdString(name)); 
+                } else {
                     land_resort_information_owner_txt->setText("you");
                 }
                 if (x + land_resort_information->size().width() >= fullscreen_width) x_pos -= land_resort_information->size().width();
                 if (y + land_resort_information->size().height() + 75 >= fullscreen_height - house1_btn->size().height()) y_pos -= land_resort_information->size().height();
                 land_resort_information->setGeometry(x_pos, y_pos, land_resort_information->size().width(), 50 + (land_resort_information_owner_txt->text() == "you" ? 75 : 0));
                 land_resort_information->setVisible(true);
-                if (land->owner.color == player->color) {
+                if (land->owner.color == player_owner->color) {
                     land_resort_information_advertising_btn->setParent(land_resort_information);
                     land_resort_information_advertising_btn->setVisible(true);
                     land_resort_information_advertising_btn->setText("Buy advertising!");
                     land_resort_information_advertising_btn->setGeometry((land_resort_information->size().width() - 100) / 2, land_resort_information->size().height() - 40, 100, 30);
                 }
-                
-                if (land->owner.color == player->Red) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + red_css);
-                else if (land->owner.color == player->Orange) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + orange_css);
-                else if (land->owner.color == player->Yellow) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + yellow_css);
-                else if (land->owner.color == player->Blue) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + blue_css);
-                else if (land->owner.color == player->Violet) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + violet_css);
+
+                if (land->owner.color == player_owner->Red) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + red_css);
+                else if (land->owner.color == player_owner->Orange) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + orange_css);
+                else if (land->owner.color == player_owner->Yellow) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + yellow_css);
+                else if (land->owner.color == player_owner->Blue) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + blue_css);
+                else if (land->owner.color == player_owner->Violet) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + violet_css);
                 background_picture_->setPixmap(background_pix);
                 LandAnsResortInformationIsShown();
                 return;
             }
         }
     }
-    for (Grid::land_struct& resort : grid->resorts) {
-        if (resort.x < x && x < resort.x + resort.amount_x * grid->cell_size &&
-            resort.y < y + 50 && y + 50 < resort.y + resort.amount_y * grid->cell_size) {
-            if (resort.owner.color == player->Nobody) {
+        for (int i = 0; i < grid->resorts.size(); ++i) {
+            Grid::land_struct* resort = &grid->resorts[i];
+        if (resort->x <= x && x < resort->x + resort->amount_x * grid->cell_size &&
+            resort->y <= y + 50 && y + 50 < resort->y + resort->amount_y * grid->cell_size) {
+            if (resort->owner.color == player_owner->Nobody) {
                 if (x + offer->size().width() >= fullscreen_width) x_pos -= offer->size().width();
                 if (y + offer->size().height() >= fullscreen_height - house1_btn->size().height()) y_pos -= offer->size().height();
 
@@ -723,9 +815,19 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 offer->setVisible(true);
                 is_offer_shown = true;
 
-                grid->chosen_land = { &resort, nullptr };
+                grid->chosen_land = { resort, nullptr };
                 offer->setGeometry(x_pos, y_pos, offer->size().width(), offer->size().height());
                 background_picture_->setPixmap(background_pix);
+
+
+                std::string new_cost = std::to_string(game->getCostOfLand(resort->row, resort->column) / 1000);
+                /*
+                int64_t cost = game->getLandCost(land->row, land->column);
+                new_cost = std::to_string(cost / 1000);
+                */
+                offer_cost_txt->setText(QString::fromStdString("Cost: " + new_cost + "K"));
+
+
                 OfferIsShown();
                 return;
             }
@@ -733,8 +835,24 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 land_resort_information_txt->setText("This resort belongs to");
                 land_resort_information_advertising_btn->setVisible(false);
                 land_resort_information_updating_resort_btn->setVisible(false);
-                if (resort.owner.color != player->color) {
-                    land_resort_information_owner_txt->setText("someone"); // add name from backend
+                if (resort->owner.color != player_owner->color) {
+                    std::string name = "someone";
+                    if (resort->owner.color == player_owner->Red) {
+                        name = game->getPlayersArr()[0]->getNickname();
+                    }
+                    else if (resort->owner.color == player_owner->Orange) {
+                        name = game->getPlayersArr()[1]->getNickname();
+                    }
+                    if (resort->owner.color == player_owner->Yellow) {
+                        name = game->getPlayersArr()[2]->getNickname();
+                    }
+                    if (resort->owner.color == player_owner->Blue) {
+                        name = game->getPlayersArr()[3]->getNickname();
+                    }
+                    if (resort->owner.color == player_owner->Violet) {
+                        name = game->getPlayersArr()[4]->getNickname();
+                    }
+                    land_resort_information_owner_txt->setText(QString::fromStdString(name));
                     land_resort_information_advertising_btn->setVisible(false);
                     land_resort_information_updating_resort_btn->setVisible(false);
                 }
@@ -745,19 +863,20 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 if (y + land_resort_information->size().height() + 75 >= fullscreen_height - house1_btn->size().height()) y_pos -= land_resort_information->size().height();
                 land_resort_information->setGeometry(x_pos, y_pos, land_resort_information->size().width(), 50 + (land_resort_information_owner_txt->text() == "you" ? 75 : 0));
                 land_resort_information->setVisible(true);
-                if (resort.owner.color == player->color) {
+                if (resort->owner.color == player_owner->color) {
                     land_resort_information_updating_resort_btn->setParent(land_resort_information);
                     land_resort_information_updating_resort_btn->setVisible(true);
                     land_resort_information_updating_resort_btn->setText("Update resort!");
                     land_resort_information_updating_resort_btn->setGeometry((land_resort_information->size().width() - 100) / 2, land_resort_information->size().height() - 40, 100, 30);
                 }
 
-                if (resort.owner.color == player->Red) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + red_css);
-                else if (resort.owner.color == player->Orange) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + orange_css);
-                else if (resort.owner.color == player->Yellow) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + yellow_css);
-                else if (resort.owner.color == player->Blue) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + blue_css);
-                else if (resort.owner.color == player->Violet) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + violet_css);
+                if (resort->owner.color == player_owner->Red) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + red_css);
+                else if (resort->owner.color == player_owner->Orange) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + orange_css);
+                else if (resort->owner.color == player_owner->Yellow) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + yellow_css);
+                else if (resort->owner.color == player_owner->Blue) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + blue_css);
+                else if (resort->owner.color == player_owner->Violet) land_resort_information_owner_txt->setStyleSheet("border: 0px; color: " + violet_css);
                 background_picture_->setPixmap(background_pix);
+                resort_chosen = resort;
                 LandAnsResortInformationIsShown();
                 return;
             }
@@ -811,16 +930,39 @@ void PocketEconomic::OfferIsShown() {
         offer->setVisible(false);
         is_offer_shown = false;
         background_picture_->setPixmap(background_pix);
+        close_offer_btn->disconnect();
         return;
         });
     QObject::connect(buy_offer_btn, &QPushButton::clicked, [&]() {
         offer->setVisible(false);
         is_offer_shown = false;
-        (grid->chosen_land.first)->owner = *player;
-        if (grid->chosen_land.second) (grid->chosen_land.second)->owner = *player;
+        bool isLand = true;
+        for (auto& resort : grid->resorts) {
+            if (grid->chosen_land.first->x == resort.x && grid->chosen_land.first->y == resort.y) {
+                isLand = false;
+                break;
+            }
+        }
+        try {
+            if (isLand) game->buyBuildingLand(game->getCurPlayer(), grid->chosen_land.first->row, grid->chosen_land.first->column);
+            else game->buyResort(game->getCurPlayer(), grid->chosen_land.first->row, grid->chosen_land.first->column);
+        }
+        catch (const std::exception& e) {
+            std::string exception;
+            exception += "Exception: ";
+            exception += e.what();
+            MsgBox->setText(QString::fromStdString(exception));
+            MsgBox->exec();
+            buy_offer_btn->disconnect();
+            return;
+        }
+
+        (grid->chosen_land.first)->owner = *player_owner;
+        if (grid->chosen_land.second) (grid->chosen_land.second)->owner = *player_owner;
+        UpdatePersonalInfo();
         background_picture_->setPixmap(background_pix);
-        return;
-        });
+        buy_offer_btn->disconnect();
+    });
 }
 
 void PocketEconomic::CapitalAndIncome() {
@@ -835,6 +977,7 @@ void PocketEconomic::CapitalAndIncome() {
     income_layout->setAlignment(Qt::AlignLeft);
 
     capital->setText("Capital: ");
+    
     capital_number->setText("70M");
     capital_layout->addWidget(capital);
     capital_layout->addWidget(capital_number);
@@ -861,81 +1004,6 @@ void PocketEconomic::CreateShop() {
     shop_name_layout->setAlignment(Qt::AlignCenter);
     shop_main_layout->addLayout(shop_name_layout);
 
-    /*shop_house1_picture->setFixedSize(100, 100);
-    shop_house1_picture->setAlignment(Qt::AlignCenter);
-    shop_house1_layout->addWidget(shop_house1_picture);
-    shop_house1_layout->addLayout(shop_house1_info_layout);
-    shop_house1_info_layout->addWidget(shop_house1_info_name);
-    shop_house1_info_layout->addWidget(shop_house1_info_income);
-    shop_house1_info_layout->addWidget(shop_house1_info_cost);
-    shop_house1_info_layout->setAlignment(Qt::AlignVCenter);
-    shop_main_layout->addLayout(shop_house1_layout);
-    shop_house1_picture->setPixmap(house1_front_red_pix.scaled(100, 100, Qt::KeepAspectRatio));
-    shop_house1_info_name->setText("House 1");
-    shop_house1_info_income->setText("Income: +500000");
-    shop_house1_info_cost->setText("Cost: 800000");
-
-    shop_house2_picture->setFixedSize(100, 100);
-    shop_house2_picture->setAlignment(Qt::AlignCenter);
-    shop_house2_layout->addWidget(shop_house2_picture);
-    shop_house2_layout->addLayout(shop_house2_info_layout);
-    shop_house2_info_layout->addWidget(shop_house2_info_name);
-    shop_house2_info_layout->addWidget(shop_house2_info_income);
-    shop_house2_info_layout->addWidget(shop_house2_info_cost);
-    shop_house2_info_layout->setAlignment(Qt::AlignVCenter);
-    shop_main_layout->addLayout(shop_house2_layout);
-    shop_house2_picture->setPixmap(house2_front_red_pix.scaled(75, 75, Qt::KeepAspectRatio));
-    shop_house2_info_name->setText("House 2");
-    shop_house2_info_income->setText("Income: +250000");
-    shop_house2_info_cost->setText("Cost: 400000");
-
-    shop_house3_picture->setFixedSize(100, 100);
-    shop_house3_picture->setAlignment(Qt::AlignCenter);
-    shop_house3_layout->addWidget(shop_house3_picture);
-    shop_house3_layout->addLayout(shop_house3_info_layout);
-    shop_house3_info_layout->addWidget(shop_house3_info_name);
-    shop_house3_info_layout->addWidget(shop_house3_info_income);
-    shop_house3_info_layout->addWidget(shop_house3_info_cost);
-    shop_house3_info_layout->setAlignment(Qt::AlignVCenter);
-    shop_main_layout->addLayout(shop_house3_layout);
-    shop_house3_picture->setPixmap(house3_front_red_pix.scaled(70, 70, Qt::KeepAspectRatio));
-    shop_house3_info_name->setText("House 3");
-    shop_house3_info_income->setText("Income: +10000");
-    shop_house3_info_cost->setText("Cost: 100000");
-
-    shop_shop1_picture->setFixedSize(100, 100);
-    shop_shop1_picture->setAlignment(Qt::AlignCenter);
-    shop_shop1_layout->addWidget(shop_shop1_picture);
-    shop_shop1_layout->addLayout(shop_shop1_info_layout);
-    shop_shop1_info_layout->addWidget(shop_shop1_info_name);
-    shop_shop1_info_layout->addWidget(shop_shop1_info_income);
-    shop_shop1_info_layout->addWidget(shop_shop1_info_cost);
-    shop_shop1_info_layout->setAlignment(Qt::AlignVCenter);
-    shop_main_layout->addLayout(shop_shop1_layout);
-    shop_shop1_picture->setPixmap(shop1_btn_pix.scaled(65, 65, Qt::KeepAspectRatio));
-    shop_shop1_info_name->setText("Supermarket 1");
-    shop_shop1_info_income->setText("Income: +500000");
-    shop_shop1_info_cost->setText("Cost: 800000");
-
-    shop_shop2_picture->setFixedSize(100, 100);
-    shop_shop2_picture->setAlignment(Qt::AlignCenter);
-    shop_shop2_layout->addWidget(shop_shop2_picture);
-    shop_shop2_layout->addLayout(shop_shop2_info_layout);
-    shop_shop2_info_layout->addWidget(shop_shop2_info_name);
-    shop_shop2_info_layout->addWidget(shop_shop2_info_income);
-    shop_shop2_info_layout->addWidget(shop_shop2_info_cost);
-    shop_shop2_info_layout->setAlignment(Qt::AlignVCenter);
-    shop_main_layout->addLayout(shop_shop2_layout);
-    shop_shop2_picture->setPixmap(shop2_btn_pix.scaled(50, 50, Qt::KeepAspectRatio));
-    shop_shop2_info_name->setText("Supermarket 2");
-    shop_shop2_info_income->setText("Income: +350000");
-    shop_shop2_info_cost->setText("Cost: 600000");*/
-
-
-    //close_shop_btn->setIcon(cross_pix);
-    //close_shop_btn->setIconSize(QSize(15, 15));
-    //close_shop_btn->setParent(shop_information);
-    //close_shop_btn->setGeometry(shop_information->size().width() - 30, 5, 25, 25);
 
     for (int i = 0; i < 5; ++i) {
         shop_buidings_pictures[i] = new QLabel(news);
@@ -1000,14 +1068,12 @@ void PocketEconomic::ShopIsShown() {
             if (players_info_btn->isVisible()) {
                 x_size = 300;
                 y_size = 750;
-            }
-            else {
+            } else {
                 x_size = 300;
                 y_size = 750 + players_info_btn->size().height();
             }
             shop_information->setGeometry(x_pos, y_pos, x_size, y_size);
-        }
-        else {
+        } else {
             shop_information->setVisible(false);
             personal_info->setGeometry(personal_info->pos().x() + shop_information->size().width() + 5, personal_info->pos().y(), personal_info->size().width(), personal_info->size().height());
             next_step_btn->setGeometry(personal_info->pos().x() + 10, personal_info->pos().y() + personal_info->size().height() + 5, personal_info->size().width() - 20, 25);
@@ -1052,35 +1118,60 @@ void PocketEconomic::LandAnsResortInformationIsShown() {
         return;
         });
     QObject::connect(land_resort_information_advertising_btn, &QPushButton::clicked, [&]() {
-        land_resort_information->setVisible(false);
-        background_picture_->setPixmap(background_pix);
+        land_resort_information_advertising_btn->disconnect();
+        try {
+            game->buyHouseAdvert(game->getCurPlayer(), 1);
+            game->buySupermarketAdvert(game->getCurPlayer(), 1);
+            land_resort_information->setVisible(false);
+            UpdatePersonalInfo();
+            background_picture_->setPixmap(background_pix);
+        }
+        catch (const std::exception& e) {
+            std::string exception;
+            exception += "Exception: ";
+            exception += e.what();
+            MsgBox->setText(QString::fromStdString(exception));
+            MsgBox->exec();
+            buy_offer_btn->disconnect();
+            return;
+        }
         return;
         });
     QObject::connect(land_resort_information_updating_resort_btn, &QPushButton::clicked, [&]() {
-        land_resort_information->setVisible(false);
-        background_picture_->setPixmap(background_pix);
+        land_resort_information_updating_resort_btn->disconnect();
+        try {
+            game->upadteResort(resort_chosen->row, resort_chosen->column);
+            land_resort_information->setVisible(false); 
+            UpdatePersonalInfo();
+            background_picture_->setPixmap(background_pix);
+        }
+        catch (const std::exception& e) {
+            std::string exception;
+            exception += "Exception: ";
+            exception += e.what();
+            MsgBox->setText(QString::fromStdString(exception));
+            MsgBox->exec();
+            buy_offer_btn->disconnect();
+            return;
+        }
         return;
         });
 }
 
 void PocketEconomic::MakeNews() {
-    tmp_news.resize(30);
+    /*tmp_news.resize(30);
     for (int i = 0; i < tmp_news.size(); ++i) {
-        int col = rand() % 6; 
+        int col = rand() % 6;
         tmp_news[i].first += "       ";
-        if (col == player->Red) {
+        if (col == player_owner->Red) {
             tmp_news[i].first += "Red:";
-        }
-        else if (col == player->Orange) {
+        } else if (col == player_owner->Orange) {
             tmp_news[i].first += "Orange:";
-        }
-        else if (col == player->Yellow) {
+        } else if (col == player_owner->Yellow) {
             tmp_news[i].first += "Yellow:";
-        }
-        else if (col == player->Blue) {
+        } else if (col == player_owner->Blue) {
             tmp_news[i].first += "Blue:";
-        }
-        else if (col == player->Violet) {
+        } else if (col == player_owner->Violet) {
             tmp_news[i].first += "Violet:";
         }
         tmp_news[i].first += "       ";
@@ -1114,7 +1205,7 @@ void PocketEconomic::MakeNews() {
     tmp_news[26].second = "is delayed: it became necessary to obtain additional approvals for the project with environmental services.";
     tmp_news[27].second = "is delayed due to the discovery of archaeological finds on the site.";
     tmp_news[28].second = "is delayed due to legal proceedings on land issues.";
-    tmp_news[29].second = "is delayed: it became necessary to conduct additional material tests.";
+    tmp_news[29].second = "is delayed: it became necessary to conduct additional material tests.";*/
 }
 
 void PocketEconomic::PrepareNews() {
@@ -1135,33 +1226,37 @@ void PocketEconomic::PrepareNews() {
     news_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     news_table->setSelectionMode(QAbstractItemView::NoSelection);
 
-    MakeNews();
-
-    for (auto& el : tmp_news) {
+    std::vector<std::pair<Player*, std::string>> news_from_begin = game->getFreshNews();
+    for (auto& el : news_from_begin) {
         int row = news_table->rowCount();
         news_table->insertRow(row);
-        news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first)));
+        if (el.first != nullptr) {
+            news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first->getNickname())));
+        }
         news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
+        if (el.first == nullptr) {
+            news_table->item(row, 1)->setBackground(QColor(0, 0, 0, 25));
+        }
     }
 
-    // add months
-    tmp_news[5] = { "May", "" };
-    tmp_news[10] = { "June", "" };
-    //merge cells for months
-    news_table->setSpan(5, 0, 1, 2);
-    news_table->item(5, 0)->setBackground(QColor(0, 0, 0, 25));
-    news_table->setSpan(10, 0, 1, 2);
-    news_table->item(10, 0)->setBackground(QColor(0, 0, 0, 25));
+    //// add months
+    //tmp_news[5] = { "May", "" };
+    //tmp_news[10] = { "June", "" };
+    ////merge cells for months
+    //news_table->setSpan(5, 0, 1, 2);
+    //news_table->item(5, 0)->setBackground(QColor(0, 0, 0, 25));
+    //news_table->setSpan(10, 0, 1, 2);
+    //news_table->item(10, 0)->setBackground(QColor(0, 0, 0, 25));
 
-    for (int i = 0; i < news_table->rowCount(); ++i) {
-        QTableWidgetItem* cur = news_table->item(i, 0);
-        std::string color = (cur->text()).toStdString();
-        if (color.find("Red") != std::string::npos) cur->setForeground(red_color);
-        else if (color.find("Orange") != std::string::npos) cur->setForeground(orange_color);
-        else if (color.find("Yellow") != std::string::npos) cur->setForeground(yellow_color);
-        else if (color.find("Blue") != std::string::npos) cur->setForeground(blue_color);
-        else if (color.find("Violet") != std::string::npos) cur->setForeground(violet_color);
-    }
+    //for (int i = 0; i < news_table->rowCount(); ++i) {
+    //    QTableWidgetItem* cur = news_table->item(i, 0);
+    //    std::string color = (cur->text()).toStdString();
+    //    if (color.find("Red") != std::string::npos) cur->setForeground(red_color);
+    //    else if (color.find("Orange") != std::string::npos) cur->setForeground(orange_color);
+    //    else if (color.find("Yellow") != std::string::npos) cur->setForeground(yellow_color);
+    //    else if (color.find("Blue") != std::string::npos) cur->setForeground(blue_color);
+    //    else if (color.find("Violet") != std::string::npos) cur->setForeground(violet_color);
+    //}
 }
 
 void PocketEconomic::NewsIsShown() {
@@ -1221,7 +1316,9 @@ void PocketEconomic::PreparePlayersInfo() {
         QLabel* player = new QLabel(QString::fromStdString("Player " + std::to_string(i + 1)));
         player->setStyleSheet(news_txt_style);
         info->addWidget(player);
-        QLabel* nickname = new QLabel("Nickname");
+        std::string name_nick = "Nickname";
+        if (player_owner->availiable[i]) name_nick = game->getPlayersArr()[i]->getNickname();
+        QLabel* nickname = new QLabel(QString::fromStdString(name_nick));
         nickname->setStyleSheet(news_txt_style);
         info->addWidget(nickname);
     }
@@ -1240,83 +1337,126 @@ void PocketEconomic::PreparePlayersInfo() {
 
     players_info_icons[0]->setStyleSheet("background-color: " + red_css);
     players_info_icons[1]->setStyleSheet("background-color: " + orange_css);
-    players_info_icons[2]->setStyleSheet("background-color: " + yellow_css);
-    players_info_icons[3]->setStyleSheet("background-color: " + blue_css);
-    players_info_icons[4]->setStyleSheet("background-color: " + violet_css);
+    players_info_icons[2]->setStyleSheet("background-color: " + (player_owner->availiable[2] ? yellow_css : grey_css));
+    players_info_icons[3]->setStyleSheet("background-color: " + (player_owner->availiable[3] ? blue_css : grey_css));
+    players_info_icons[4]->setStyleSheet("background-color: " + (player_owner->availiable[4] ? violet_css : grey_css));
 
 
     players_info_place_for_profile->setLayout(red_profile->layout());
 }
 
 void PocketEconomic::MakeProfile(QLabel* profile) {
-    //delete players_info_place_for_profile->layout();
-    if (players_info_place_for_profile->layout()) {
-        for (int i = 0; i < players_info_place_for_profile->layout()->count(); ++i)
-        {
-            delete players_info_place_for_profile->layout()->takeAt(i);
+    bool need_to_change = false;
+    int player_index = 0;
+    if (profile == red_profile && player_owner->availiable[0]) {
+        need_to_change = true;
+        player_index = 0;
+    }
+    else if (profile == orange_profile && player_owner->availiable[1]) {
+        need_to_change = true;
+        player_index = 1;
+    }
+    else if (profile == yellow_profile && player_owner->availiable[2]) {
+        need_to_change = true;
+        player_index = 2;
+    }
+    else if (profile == blue_profile && player_owner->availiable[3]) {
+        need_to_change = true;
+        player_index = 3;
+    }
+    else if (profile == violet_profile && player_owner->availiable[4]) {
+        need_to_change = true;
+        player_index = 4;
+    }
+    if (need_to_change) {
+        if (players_info_place_for_profile->layout()) {
+            for (int i = 0; i < players_info_place_for_profile->layout()->count(); ++i)
+            {
+                delete players_info_place_for_profile->layout()->takeAt(i);
+            }
+        } else {
+            players_info_place_for_profile->setLayout(new QHBoxLayout());
         }
-    }
-    else {
-        players_info_place_for_profile->setLayout(new QHBoxLayout());
-    }
-    QColor color(0, 0, 0);
-    if (profile == red_profile) color = red_color;
-    else if (profile == orange_profile) color = orange_color;
-    else if (profile == yellow_profile) color = yellow_color;
-    else if (profile == blue_profile) color = blue_color;
-    else if (profile == violet_profile) color = violet_color;
-    std::vector<int> info_tmp = { 1, 1, 1, 5, 1 };
-    QLayout* layout = players_info_place_for_profile->layout();
-    profile->setStyleSheet("background-color: white; border-width: 1px;");
-    profile->setLayout(layout);
-    profile->setFixedSize(players_info->size().width() - 208 - 30, 717);
-    profile->setAlignment(Qt::AlignCenter);
-    profile->setStyleSheet("background-color: white; border-width: 1px;");
+        QColor color(0, 0, 0);
+        if (profile == red_profile) color = red_color;
+        else if (profile == orange_profile) color = orange_color;
+        else if (profile == yellow_profile) color = yellow_color;
+        else if (profile == blue_profile) color = blue_color;
+        else if (profile == violet_profile) color = violet_color;
+        QLayout* layout = players_info_place_for_profile->layout();
+        profile->setStyleSheet("background-color: white; border-width: 1px;");
+        profile->setLayout(layout);
+        profile->setFixedSize(players_info->size().width() - 208 - 30, 717);
+        profile->setAlignment(Qt::AlignCenter);
+        profile->setStyleSheet("background-color: white; border-width: 1px;");
 
-    QTableWidget* table = new QTableWidget();
-    layout->addWidget(table);
-    table->setRowCount(25);
-    table->setColumnCount(2);
-    table->setColumnWidth(1, 500);
-    table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    table->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
-    table->setStyleSheet("color: black;");
-    table->setIconSize(QSize(75, 75));
-    table->row(0);
-    table->setShowGrid(false);
-    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    table->setSelectionMode(QAbstractItemView::NoSelection);
-    table->horizontalHeader()->hide();
-    table->verticalHeader()->hide();
+        QTableWidget* table = new QTableWidget();
+        layout->addWidget(table);
+        table->setRowCount(25);
+        table->setColumnCount(2);
+        table->setColumnWidth(1, 500);
+        table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+        table->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+        table->setStyleSheet("color: black;");
+        table->setIconSize(QSize(75, 75));
+        table->row(0);
+        table->setShowGrid(false);
+        table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        table->setSelectionMode(QAbstractItemView::NoSelection);
+        table->horizontalHeader()->hide();
+        table->verticalHeader()->hide();
 
-    QString income = "Income: ", capital = "Capital: ";
-    capital += QString::fromStdString("70M");
-    income += QString::fromStdString("-30M");
+        QString income = "Income: ", capital = "Capital: ";
+        int64_t money = game->getPlayersArr()[player_index]->getMoney() / 1000;
+        std::string add = std::to_string(money);
+        capital += QString::fromStdString(add);
+        money = game->getPlayersArr()[player_index]->getGlobalIncome() / 1000;
+        add = std::to_string(money);
+        if (money < 0) add = '-' + add;
+        income += QString::fromStdString(add);
 
-    table->setSpan(0, 0, 2, 2);
-    table->setItem(0, 0, new QTableWidgetItem(capital));
-    table->setSpan(2, 0, 2, 2);
-    table->setItem(2, 0, new QTableWidgetItem(income));
-    QFont font = table->item(0, 0)->font();
-    font.setPixelSize(20);
-    table->item(0, 0)->setFont(font);
-    table->item(2, 0)->setFont(font);
+        table->setSpan(0, 0, 2, 2);
+        table->setItem(0, 0, new QTableWidgetItem(capital));
+        table->setSpan(2, 0, 2, 2);
+        table->setItem(2, 0, new QTableWidgetItem(income));
+        QFont font = table->item(0, 0)->font();
+        font.setPixelSize(20);
+        table->item(0, 0)->setFont(font);
+        table->item(2, 0)->setFont(font);
 
-    table->setSpan(4, 0, 1, 2);
-    table->setItem(4, 0, new QTableWidgetItem());
-    table->setSpan(5, 0, 1, 2);
-    table->setItem(5, 0, new QTableWidgetItem("Houses                                                                                                          "));
-    table->item(5, 0)->setBackground(color);
-    table->item(5, 0)->setForeground(QColor(255, 255, 255));
-    int row = 6;
-    for (int i = 0; i < 3; ++i) {
-        if (info_tmp[i]) {
+        table->setSpan(4, 0, 1, 2);
+        table->setItem(4, 0, new QTableWidgetItem());
+        table->setSpan(5, 0, 1, 2);
+        table->setItem(5, 0, new QTableWidgetItem("Houses                                                                                                          "));
+        table->item(5, 0)->setBackground(color);
+        table->item(5, 0)->setForeground(QColor(255, 255, 255));
+        int row = 6;
+
+
+        game->getPlayersArr()[player_index]->getHousesArr();
+        int house1_cnt = 0, house2_cnt = 0, house3_cnt = 0, shop1_cnt = 0, shop2_cnt = 0;
+        std::vector<int64_t> buildings_cnt(5, 0);
+        for (auto& building : game->getPlayersArr()[player_index]->getHousesArr()) {
+            if (building->getHouseType() == House::HouseType::MonoliticHouse) buildings_cnt[0]++;
+            else if (building->getHouseType() == House::HouseType::MonoliticHouse) buildings_cnt[1]++;
+            else if (building->getHouseType() == House::HouseType::MonoliticHouse) buildings_cnt[2]++;
+        }
+        for (auto& building : game->getPlayersArr()[player_index]->getSupermarketsArr()) {
+            if (building->getSupermarketType() == Supermarket::SupermarketType::Supermarket) buildings_cnt[3]++;
+            else if (building->getSupermarketType() == Supermarket::SupermarketType::Hypermarket) buildings_cnt[4]++;
+        }
+
+        for (int i = 0; i < 3; ++i) {
             table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString("House " + std::to_string(i + 1))));
             QString income_house = "Income: ";
-            income_house += "+50M";
+            int64_t money = 0;
+            if (i == 0) money = game->getPlayersArr()[player_index]->getMonolithicIncome() / 1000;
+            else if (i == 1) money = game->getPlayersArr()[player_index]->getPanelIncome() / 1000;
+            else money = game->getPlayersArr()[player_index]->getBrickIncome() / 1000;
+            income_house += std::to_string(money) + "K";
             table->setItem(row + 1, 1, new QTableWidgetItem(income_house));
             QString amount_house = "Amount: ";
-            amount_house += std::to_string(info_tmp[i]);
+            amount_house += std::to_string(buildings_cnt[i]);
             table->setItem(row + 2, 1, new QTableWidgetItem(amount_house));
             table->setSpan(row, 0, 3, 1);
             QIcon icon;
@@ -1325,7 +1465,7 @@ void PocketEconomic::MakeProfile(QLabel* profile) {
                 else if (profile == orange_profile) icon = QIcon(house1_front_orange_pix);
                 else if (profile == yellow_profile) icon = QIcon(house1_front_yellow_pix);
                 else if (profile == blue_profile) icon = QIcon(house1_front_blue_pix);
-                else if (profile ==  violet_profile) icon = QIcon(house1_front_violet_pix);
+                else if (profile == violet_profile) icon = QIcon(house1_front_violet_pix);
             }
             else if (i == 1) {
                 if (profile == red_profile) icon = QIcon(house2_front_red_pix);
@@ -1347,23 +1487,26 @@ void PocketEconomic::MakeProfile(QLabel* profile) {
             table->setSpan(row + 3, 0, 1, 2);
             row += 4;
 
+
         }
-    }
-    table->setSpan(row - 1, 0, 1, 2);
-    table->setItem(row - 1, 0, new QTableWidgetItem());
-    table->setSpan(row, 0, 1, 2);
-    table->setItem(row, 0, new QTableWidgetItem("Supermarkets                                                                                                          "));
-    table->item(row, 0)->setBackground(color);
-    table->item(row, 0)->setForeground(QColor(255, 255, 255));
-    row++;
-    for (int i = 3; i < 5; ++i) {
-        if (info_tmp[i]) {
+
+        table->setSpan(row - 1, 0, 1, 2);
+        table->setItem(row - 1, 0, new QTableWidgetItem());
+        table->setSpan(row, 0, 1, 2);
+        table->setItem(row, 0, new QTableWidgetItem("Supermarkets                                                                                                          "));
+        table->item(row, 0)->setBackground(color);
+        table->item(row, 0)->setForeground(QColor(255, 255, 255));
+        row++;
+        for (int i = 3; i < 5; ++i) {
             table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString("Supermarket " + std::to_string(i - 2))));
-            QString income_house = "Income: ";
-            income_house += "+50M";
-            table->setItem(row + 1, 1, new QTableWidgetItem(income_house));
+            QString income_shop = "Income: ";
+            int64_t money = 0;
+            if (i == 3) money = game->getPlayersArr()[player_index]->getSupermarketIncome() / 1000;
+            else money = game->getPlayersArr()[player_index]->getHypermarketIncome() / 1000;
+            income_shop += std::to_string(money) + "K";
+            table->setItem(row + 1, 1, new QTableWidgetItem(income_shop));
             QString amount_house = "Amount: ";
-            amount_house += std::to_string(info_tmp[i]);
+            amount_house += std::to_string(buildings_cnt[i]);
             table->setItem(row + 2, 1, new QTableWidgetItem(amount_house));
             table->setSpan(row, 0, 3, 1);
 
@@ -1376,6 +1519,7 @@ void PocketEconomic::MakeProfile(QLabel* profile) {
             table->setSpan(row + 3, 0, 1, 2);
             row += 4;
 
+
         }
     }
 }
@@ -1384,11 +1528,11 @@ void PocketEconomic::PlayersInfoIsShown() {
     QObject::connect(players_info_btn, &QPushButton::clicked, [&]() {
         players_info->setVisible(!players_info->isVisible());
         if (players_info->isVisible()) {
-            if (player->color == player->Red) MakeProfile(red_profile);
-            else if (player->color == player->Orange) MakeProfile(orange_profile);
-            else if (player->color == player->Yellow) MakeProfile(yellow_profile);
-            else if (player->color == player->Blue) MakeProfile(blue_profile);
-            else if (player->color == player->Violet) MakeProfile(violet_profile);
+            if (player_owner->color == player_owner->Red) MakeProfile(red_profile);
+            else if (player_owner->color == player_owner->Orange) MakeProfile(orange_profile);
+            else if (player_owner->color == player_owner->Yellow) MakeProfile(yellow_profile);
+            else if (player_owner->color == player_owner->Blue) MakeProfile(blue_profile);
+            else if (player_owner->color == player_owner->Violet) MakeProfile(violet_profile);
             players_info->update();
         }
         news->setVisible(false);
@@ -1448,91 +1592,158 @@ void PocketEconomic::CloseAllInfoWindows() {
 
 void PocketEconomic::NextStep() {
     QObject::connect(next_step_btn, &QPushButton::clicked, [&]() {
-        auto color = player->color;
-        if (color == player->Red) {
-            if (player->availiable[1]) player->color = player->Orange;
-            else if (player->availiable[2]) player->color = player->Yellow;
-            else if (player->availiable[3]) player->color = player->Blue;
-            else if (player->availiable[4]) player->color = player->Violet;
+        if (game->nextPlayer()) {
+            std::vector<std::pair<Player*, std::string>> news_from_begin = game->getBuyNews();
+            game->clearBuyNewsArr();
+            for (auto& el : news_from_begin) {
+                int row = news_table->rowCount();
+                news_table->insertRow(row);
+                if (el.first != nullptr) {
+                    news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first->getNickname())));
+
+                    QTableWidgetItem* cur = news_table->item(row, 0);
+                    QString color_str = QString::fromStdString(el.first->getColor());
+                    QColor color;
+                    if (color_str == red_css) color = red_color;
+                    else if (color_str == orange_css) color = orange_color;
+                    else if (color_str == yellow_css) color = yellow_color;
+                    else if (color_str == blue_css) color = blue_color;
+                    else if (color_str == violet_css) color = violet_color;
+                    else color = QColor(0, 0, 0);
+                    cur->setForeground(color);
+                }
+                news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));  
+                if (el.first == nullptr) {
+                    news_table->item(row, 1)->setBackground(QColor(0, 0, 0, 25));
+                }
+            }
+            news_from_begin = game->getFreshNews();
+            for (auto& el : news_from_begin) {
+                int row = news_table->rowCount();
+                news_table->insertRow(row);
+                if (el.first != nullptr) {
+                    news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first->getNickname())));
+                    QTableWidgetItem* cur = news_table->item(row, 0);
+                    QString color_str = QString::fromStdString(el.first->getColor());
+                    QColor color;
+                    if (color_str == red_css) color = red_color;
+                    else if (color_str == orange_css) color = orange_color;
+                    else if (color_str == yellow_css) color = yellow_color;
+                    else if (color_str == blue_css) color = blue_color;
+                    else if (color_str == violet_css) color = violet_color;
+                    else color = QColor(0, 0, 0);
+                    cur->setForeground(color);
+                }
+                news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
+                if (el.first == nullptr) {
+                    news_table->item(row, 1)->setBackground(QColor(0, 0, 0, 25));
+                }
+            }
         }
-        else if (color == player->Orange) {
-            if (player->availiable[2]) player->color = player->Yellow;
-            else if (player->availiable[3]) player->color = player->Blue;
-            else if (player->availiable[4]) player->color = player->Violet;
-            else if (player->availiable[0]) player->color = player->Red;
+      
+      
+        if (game->getCurPlayer()->isBot()) {
+            ChangeWindowAfterBot();
         }
-        else if (color == player->Yellow) {
-            if (player->availiable[3]) player->color = player->Blue;
-            else if (player->availiable[4]) player->color = player->Violet;
-            else if (player->availiable[0]) player->color = player->Red;
-            else if (player->availiable[1]) player->color = player->Orange;
+        if (game->finished()) {
+            results->setText(QString::fromStdString(game->getResults()));
+            window->close();
+            results->show();
         }
-        else if (color == player->Blue) {
-            if (player->availiable[4]) player->color = player->Violet;
-            else if (player->availiable[0]) player->color = player->Red;
-            else if (player->availiable[1]) player->color = player->Orange;
-            else if (player->availiable[2]) player->color = player->Yellow;
+        auto color = player_owner->color;
+        if (color == player_owner->Red) {
+            if (player_owner->availiable[1]) player_owner->color = player_owner->Orange;
+            else if (player_owner->availiable[2]) player_owner->color = player_owner->Yellow;
+            else if (player_owner->availiable[3]) player_owner->color = player_owner->Blue;
+            else if (player_owner->availiable[4]) player_owner->color = player_owner->Violet;
+        } else if (color == player_owner->Orange) {
+            if (player_owner->availiable[2]) player_owner->color = player_owner->Yellow;
+            else if (player_owner->availiable[3]) player_owner->color = player_owner->Blue;
+            else if (player_owner->availiable[4]) player_owner->color = player_owner->Violet;
+            else if (player_owner->availiable[0]) player_owner->color = player_owner->Red;
+        } else if (color == player_owner->Yellow) {
+            if (player_owner->availiable[3]) player_owner->color = player_owner->Blue;
+            else if (player_owner->availiable[4]) player_owner->color = player_owner->Violet;
+            else if (player_owner->availiable[0]) player_owner->color = player_owner->Red;
+            else if (player_owner->availiable[1]) player_owner->color = player_owner->Orange;
+        } else if (color == player_owner->Blue) {
+            if (player_owner->availiable[4]) player_owner->color = player_owner->Violet;
+            else if (player_owner->availiable[0]) player_owner->color = player_owner->Red;
+            else if (player_owner->availiable[1]) player_owner->color = player_owner->Orange;
+            else if (player_owner->availiable[2]) player_owner->color = player_owner->Yellow;
+        } else if (color == player_owner->Violet) {
+            if (player_owner->availiable[0]) player_owner->color = player_owner->Red;
+            else if (player_owner->availiable[1]) player_owner->color = player_owner->Orange;
+            else if (player_owner->availiable[2]) player_owner->color = player_owner->Yellow;
+            else if (player_owner->availiable[3]) player_owner->color = player_owner->Blue;
         }
-        else if (color == player->Violet) {
-            if (player->availiable[0]) player->color = player->Red;
-            else if (player->availiable[1]) player->color = player->Orange;
-            else if (player->availiable[2]) player->color = player->Yellow;
-            else if (player->availiable[3]) player->color = player->Blue;
-        }
+
+        month_lbl->setText(QString::fromStdString(game->getMonth()));
         CloseAllInfoWindows();
         ChangePlayer();
         });
 }
 
 void PocketEconomic::ChangePlayer() {
-    Player_Owner::Color color = player->color;
-    if (color == player->Red) {
+    PlayerOwner::Color color = player_owner->color;
+    if (color == player_owner->Red) {
         house1_btn->setIcon(house1_front_red_pix);
         house1_roof->setPixmap(house1_roof_red_pix);
         house2_btn->setIcon(house2_front_red_pix);
         house2_roof->setPixmap(house2_roof_red_pix);
         house3_btn->setIcon(house3_front_red_pix);
         house3_roof->setPixmap(house3_roof_red_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_red_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_red_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_red_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_red_border_style);
-    }
-    else if (color == player->Orange) {
+    } else if (color == player_owner->Orange) {
         house1_btn->setIcon(house1_front_orange_pix);
         house1_roof->setPixmap(house1_roof_orange_pix);
         house2_btn->setIcon(house2_front_orange_pix);
         house2_roof->setPixmap(house2_roof_orange_pix);
         house3_btn->setIcon(house3_front_orange_pix);
         house3_roof->setPixmap(house3_roof_orange_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_orange_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_orange_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_orange_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_orange_border_style);
-    }
-    else if (color == player->Yellow) {
+    } else if (color == player_owner->Yellow) {
         house1_btn->setIcon(house1_front_yellow_pix);
         house1_roof->setPixmap(house1_roof_yellow_pix);
         house2_btn->setIcon(house2_front_yellow_pix);
         house2_roof->setPixmap(house2_roof_yellow_pix);
         house3_btn->setIcon(house3_front_yellow_pix);
         house3_roof->setPixmap(house3_roof_yellow_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_yellow_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_yellow_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_yellow_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_yellow_border_style);
-    }
-    else if (color == player->Blue) {
+    } else if (color == player_owner->Blue) {
         house1_btn->setIcon(house1_front_blue_pix);
         house1_roof->setPixmap(house1_roof_blue_pix);
         house2_btn->setIcon(house2_front_blue_pix);
         house2_roof->setPixmap(house2_roof_blue_pix);
         house3_btn->setIcon(house3_front_blue_pix);
         house3_roof->setPixmap(house3_roof_blue_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_blue_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_blue_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_blue_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_blue_border_style);
-    }
-    else if (color == player->Violet) {
+    } else if (color == player_owner->Violet) {
         house1_btn->setIcon(house1_front_violet_pix);
         house1_roof->setPixmap(house1_roof_violet_pix);
         house2_btn->setIcon(house2_front_violet_pix);
         house2_roof->setPixmap(house2_roof_violet_pix);
         house3_btn->setIcon(house3_front_violet_pix);
         house3_roof->setPixmap(house3_roof_violet_pix);
+        shop_buidings_pictures[0]->setPixmap(house1_front_violet_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[1]->setPixmap(house2_front_violet_pix.scaled(100, 100, Qt::KeepAspectRatio));
+        shop_buidings_pictures[2]->setPixmap(house3_front_violet_pix.scaled(100, 100, Qt::KeepAspectRatio));
 
         personal_info->setStyleSheet(personal_info_violet_border_style);
     }
@@ -1540,24 +1751,7 @@ void PocketEconomic::ChangePlayer() {
     house2_btn->setIconSize(QSize(45, 45));
     house3_btn->setIconSize(QSize(45, 45));
 
-    std::string new_capital = std::to_string(rand() % 100 - rand() % 10) + "M"; ///////////////////////// backend
-    if (new_capital[0] == '-') {
-        capital_number->setStyleSheet(personal_info_bad_value_style);
-    }
-    else {
-        capital_number->setStyleSheet(personal_info_good_value_style);
-    }
-    capital_number->setText(QString::fromStdString(new_capital));
-
-    std::string new_income = std::to_string(rand() % 100 - rand() % 10) + "M"; ///////////////////////// backend
-    if (new_income[0] == '-') {
-        income_number->setStyleSheet(personal_info_bad_value_style);
-    }
-    else {
-        new_income = '+' + new_income;
-        income_number->setStyleSheet(personal_info_good_value_style);
-    }
-    income_number->setText(QString::fromStdString(new_income));
+    UpdatePersonalInfo();
 
     window->update();
 }
@@ -1569,7 +1763,7 @@ void PocketEconomic::MakeMainWindow() {
     window->installEventFilter(this);
     background_picture_->setMouseTracking(true);
 
-    player->color = player->Red;
+    player_owner->color = player_owner->Red;
 
     AddHouse();
     MakeButtons();
@@ -1592,408 +1786,101 @@ void PocketEconomic::MakeMainWindow() {
 
 
     //window->showMaximized();
+
+    if (game->getCurPlayer()->isBot()) {
+        ChangeWindowAfterBot();
+    }
     window->showFullScreen();
 }
 
-void PocketEconomic::InputCosts() {
-    InputCostsSettings();
-    InputCostsContinue();
-    costs_window->showFullScreen();
+void PocketEconomic::UpdatePersonalInfo() {
+
+    int64_t money = game->getCurPlayer()->getMoney() / 1000;
+    std::string add = std::to_string(money) + "K";
+    if (money < 0) {
+        add = '-' + add;
+    }
+    capital_number->setText(QString::fromStdString(add));
+    capital_number->setStyleSheet(money < 0 ? personal_info_bad_value_style : personal_info_good_value_style);
+
+    money = game->getCurPlayer()->getGlobalIncome() / 1000;
+    add = std::to_string(money) + "K";
+    if (money < 0) {
+        add = '-' + add;
+    }
+    income_number->setText(QString::fromStdString(add));
+    income_number->setStyleSheet(money < 0 ? personal_info_bad_value_style : personal_info_good_value_style);
 }
 
-void PocketEconomic::InputCostsSettings() {
-    costs_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
-    costs_window->setWindowTitle("PocketEconomic");
-    costs_window->setStyleSheet("background-color: black");
-    costs_window->setLayout(input_costs_settings_layout);
-    QString style =
-        "QPushButton {"
-        "  color: white;"
-        "  font-size: 16px;"
-        "  border-width: 2px;"
-        "  border-color: #525252;"
-        "  border-style: solid;"
-        "  border-radius: 8px;"
-        "}"
-        "QPushButton:hover { "
-        "  background-color: #0f0f0f;"
-        "}"
-        "QPushButton:pressed { "
-        "  background-color: black;"
-        "}"
-
-        "QLabel { "
-        "  font-size: 20px;"
-        //"  background-color: #1e1e1e;"
-        "}"
-        "QLineEdit { "
-        "  font-size: 16px;"
-        "  color: green;"
-        "}";
-    costs_window->setStyleSheet(style);
-
-    input_costs_settings_layout->addWidget(input_costs_settings_first_title, 0, 0, 1, 6);
-    input_costs_settings_layout->addWidget(input_costs_settings_second_title, 2, 0, 1, 6);
-    input_costs_settings_layout->addWidget(input_costs_settings_third_title, 4, 0, 1, 6);
-    input_costs_settings_layout->addWidget(input_costs_settings_forth_title, 6, 0, 1, 6);
-    input_costs_settings_layout->addWidget(input_costs_settings_fifth_title, 8, 0, 1, 2);
-    input_costs_settings_layout->addWidget(input_costs_settings_sixth_title, 10, 0, 1, 2);
-
-    input_costs_settings_house1_sqr->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfSquareMeterMonolithicHouse())));
-    input_costs_settings_layout->addWidget(input_costs_settings_house1_sqr, 1, 0, 1, 2);
-    input_costs_settings_house1_sqr->setFixedSize(QSize(450, 25));
-    input_costs_settings_house2_sqr->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfSquareMeterPanelHouse())));
-    input_costs_settings_layout->addWidget(input_costs_settings_house2_sqr, 1, 2, 1, 2);
-    input_costs_settings_house2_sqr->setFixedSize(QSize(450, 25));
-    input_costs_settings_house3_sqr->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfSquareMeterBrickHouse())));
-    input_costs_settings_layout->addWidget(input_costs_settings_house3_sqr, 1, 4, 1, 2);
-    input_costs_settings_house3_sqr->setFixedSize(QSize(450, 25));
-
-    input_costs_settings_house1_build->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfBuildingMonolithicHouse())));
-    input_costs_settings_layout->addWidget(input_costs_settings_house1_build, 3, 0, 1, 2);
-    input_costs_settings_house1_build->setFixedSize(QSize(450, 25));
-    input_costs_settings_house2_build->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfBuildingPanelHouse())));
-    input_costs_settings_layout->addWidget(input_costs_settings_house2_build, 3, 2, 1, 2);
-    input_costs_settings_house2_build->setFixedSize(QSize(450, 25));
-    input_costs_settings_house3_build->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfBuildingBrickHouse())));
-    input_costs_settings_layout->addWidget(input_costs_settings_house3_build, 3, 4, 1, 2);
-    input_costs_settings_house3_build->setFixedSize(QSize(450, 25));
-
-
-    input_costs_settings_shop1_product->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfOneProductSupermarket())));
-    input_costs_settings_layout->addWidget(input_costs_settings_shop1_product, 5, 0, 1, 2);
-    input_costs_settings_shop1_product->setFixedSize(QSize(450, 25));
-    input_costs_settings_shop2_product->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfOneProductHypermarket())));
-    input_costs_settings_layout->addWidget(input_costs_settings_shop2_product, 5, 2, 1, 2);
-    input_costs_settings_shop2_product->setFixedSize(QSize(450, 25));
-
-
-    input_costs_settings_shop1_build->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfBuildingSupermarket())));
-    input_costs_settings_layout->addWidget(input_costs_settings_shop1_build, 7, 0, 1, 2);
-    input_costs_settings_shop1_build->setFixedSize(QSize(450, 25));
-    input_costs_settings_shop2_build->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfBuildingHypermarket())));
-    input_costs_settings_layout->addWidget(input_costs_settings_shop2_build, 7, 2, 1, 2);
-    input_costs_settings_shop2_build->setFixedSize(QSize(450, 25));
-
-    input_costs_settings_cell_cost->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfLandCell())));
-    input_costs_settings_layout->addWidget(input_costs_settings_cell_cost, 9, 0, 1, 2);
-    input_costs_settings_cell_cost->setFixedSize(QSize(450, 25));
-    input_costs_settings_resort_cost->setPlaceholderText(QString::fromStdString(
-        std::to_string(game->getCostOfResort())));
-    input_costs_settings_layout->addWidget(input_costs_settings_resort_cost, 11, 0, 1, 2);
-    input_costs_settings_resort_cost->setFixedSize(QSize(450, 25));
-
-    input_costs_settings_ok->setFixedSize(QSize(450, 50));
-    input_costs_settings_layout->addWidget(input_costs_settings_ok, 12, 2, 1, 2);
-
-}
-
-void PocketEconomic::InputCostsContinue() {
-    QObject::connect(input_costs_settings_ok, &QPushButton::clicked, [&]() {
-
-
-        costs_window->close();
-
-
-
-        InputSupplies();
-        });
-}
-
-
-void PocketEconomic::InputSupplies() {
-    InputSuppliesSettings();
-    InputSuppliesContinue();
-    supplies_window->showFullScreen();
-}
-
-void PocketEconomic::InputSuppliesSettings() {
-    supplies_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
-    supplies_window->setWindowTitle("PocketEconomic");
-    supplies_window->setStyleSheet("background-color: white");
-    supplies_window->setLayout(input_supplies_layout);
-    QString style =
-        "QPushButton {"
-        "  color: white;"
-        "  font-size: 16px;"
-        "  border-width: 2px;"
-        "  border-color: #525252;"
-        "  border-style: solid;"
-        "  border-radius: 8px;"
-        "}"
-        "QPushButton:hover { "
-        "  background-color: #0f0f0f;"
-        "}"
-        "QPushButton:pressed { "
-        "  background-color: black;"
-        "}"
-
-        "QLabel { "
-        "  font-size: 20px;"
-        "}"
-        "QLineEdit { "
-        "  font-size: 16px;"
-        "  color: white; "
-        "}";
-    supplies_window->setStyleSheet(style);
-
-    input_supplies_layout->addWidget(input_supplies_first_title, 0, 0, 1, 6);
-    input_supplies_layout->addWidget(input_supplies_second_title, 2, 0, 1, 6);
-
-    input_supplies_house1_supply->setPlaceholderText("");
-    input_supplies_layout->addWidget(input_supplies_house1_supply, 1, 0, 1, 2);
-    input_supplies_house1_supply->setFixedSize(QSize(450, 25));
-    input_supplies_house2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    input_supplies_layout->addWidget(input_supplies_house2_supply, 1, 2, 1, 2);
-    input_supplies_house2_supply->setFixedSize(QSize(450, 25));
-    input_supplies_house3_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    input_supplies_layout->addWidget(input_supplies_house3_supply, 1, 4, 1, 2);
-    input_supplies_house3_supply->setFixedSize(QSize(450, 25));
-    
-
-    input_supplies_shop1_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    input_supplies_layout->addWidget(input_supplies_shop1_supply, 3, 0, 1, 2);
-    input_supplies_shop1_supply->setFixedSize(QSize(450, 25));
-    input_supplies_shop2_supply->setPlaceholderText(QString::fromStdString(std::to_string(5)));
-    input_supplies_layout->addWidget(input_supplies_shop2_supply, 3, 2, 1, 2);
-    input_supplies_shop2_supply->setFixedSize(QSize(450, 25));
-
-
-    supplies_ok->setFixedSize(QSize(450, 50));
-    input_supplies_layout->addWidget(supplies_ok, 5, 2, 2, 2);
-
-}
-
-void PocketEconomic::InputSuppliesContinue() {
-    QObject::connect(supplies_ok, &QPushButton::clicked, [&]() {
-        supplies_window->close();
-        InputPlayers();
-        });
-}
-
-void PocketEconomic::InputPlayers() {
-    InputPlayersSettings();
-    InputPlayersContinue();
-    input_players_window->showFullScreen();
-}
-
-void  PocketEconomic::InputPlayersSettings() {
-    QGridLayout* layout = new QGridLayout();
-    QLabel* first_title = new QLabel("Players");
-    input_players_window->setGeometry(0, 0, fullscreen_width, fullscreen_height - 50);
-    input_players_window->setWindowTitle("PocketEconomic");
-    input_players_window->setStyleSheet("background-color: white");
-    input_players_window->setLayout(layout);
-    QString style =
-        "QPushButton {"
-        "  color: white;"
-        "  font-size: 16px;"
-        "  border-width: 2px;"
-        "  border-color: #525252;"
-        "  border-style: solid;"
-        "  border-radius: 8px;"
-        "}"
-        "QPushButton:hover { "
-        "  background-color: #0f0f0f;"
-        "}"
-        "QPushButton:pressed { "
-        "  background-color: black;"
-        "}"
-
-        "QLabel { "
-        "  font-size: 20px;"
-        "}"
-        "QLineEdit { "
-        "  font-size: 16px;"
-        "  color: white; "
-        "}";
-
-    // #2d2d2d
-    bot1->setStyleSheet("font-size: 16px; background-color: #2d2d2d; color: white;");
-    bot2->setStyleSheet(bot1->styleSheet());
-    bot3->setStyleSheet(bot1->styleSheet());
-    bot4->setStyleSheet(bot1->styleSheet());
-    bot5->setStyleSheet(bot1->styleSheet());
-    input_players_window->setStyleSheet(style);
-
-    layout->addWidget(first_title, 0, 0, 1, 2);
-    layout->setAlignment(Qt::AlignHCenter);
-
-    player1->setPlaceholderText("Player 1");
-    layout->addWidget(player1, 1, 3, 1, 2);
-    player1->setFixedSize(QSize(450, 25));
-    player2->setPlaceholderText("Player 2");
-    layout->addWidget(player2, 2, 3, 1, 2);
-    player2->setFixedSize(QSize(450, 25));
-    player3->setPlaceholderText("Player 3");
-    layout->addWidget(player3, 3, 3, 1, 2);
-    player3->setFixedSize(QSize(450, 25));
-    player4->setPlaceholderText("Player 4");
-    layout->addWidget(player4, 4, 3, 1, 2);
-    player4->setFixedSize(QSize(450, 25));
-    player5->setPlaceholderText("Player 5");
-    layout->addWidget(player5, 5, 3, 1, 2);
-    player5->setFixedSize(QSize(450, 25));
-
-    player1->setVisible(false);
-    player2->setVisible(false);
-    player3->setVisible(false);
-    player4->setVisible(false);
-    player5->setVisible(false);
-
-
-    layout->addWidget(bot1, 6, 3, 1, 2);
-    bot1->setFixedSize(QSize(450, 25));
-    layout->addWidget(bot2, 7, 3, 1, 2);
-    bot2->setFixedSize(QSize(450, 25));
-    layout->addWidget(bot3, 8, 3, 1, 2);
-    bot3->setFixedSize(QSize(450, 25));
-    layout->addWidget(bot4, 9, 3, 1, 2);
-    bot4->setFixedSize(QSize(450, 25));
-    layout->addWidget(bot5, 10, 3, 1, 2);
-    bot5->setFixedSize(QSize(450, 25));
-
-
-    bot1->setVisible(false);
-    bot2->setVisible(false);
-    bot3->setVisible(false);
-    bot4->setVisible(false);
-    bot5->setVisible(false);
-
-    input_players_ok->setFixedSize(QSize(450, 50));
-    layout->addWidget(input_players_ok, 11, 3, 1, 2);
-
-    add_player->setFixedSize(QSize(150, 50));
-    layout->addWidget(add_player, 0, 3);
-    remove_player->setFixedSize(QSize(150, 50));
-    layout->addWidget(remove_player, 0, 4);
-    add_bot->setFixedSize(QSize(150, 50));
-    layout->addWidget(add_bot, 0, 5);
-    remove_bot->setFixedSize(QSize(150, 50));
-    layout->addWidget(remove_bot, 0, 6);
-}
-
-void PocketEconomic::InputPlayersContinue() {
-    QObject::connect(input_players_ok, &QPushButton::clicked, [&]() {
-        input_players_window->close();
-        for (int i = 0; i < players + bots; ++i) {
-            player->availiable[i] = true;
-        }
-        MakeMainWindow();
-        });
-
-    QObject::connect(add_player, &QPushButton::clicked, [&]() {
-        if (players + bots < 5 && players < 5) {
-            players++;
-            if (!player1->isVisible()) {
-                player1->setVisible(true);
-                player1->clear();
-                player1->setPlaceholderText("Player 1");
-            }
-            else if (!player2->isVisible()) {
-                player2->setVisible(true);
-                player2->clear();
-                player2->setPlaceholderText("Player 2");
-            }
-            else if (!player3->isVisible()) {
-                player3->setVisible(true);
-                player3->clear();
-                player3->setPlaceholderText("Player 3");
-            }
-            else if (!player4->isVisible()) {
-                player4->setVisible(true);
-                player4->clear();
-                player4->setPlaceholderText("Player 4");
-            }
-            else if (!player5->isVisible()) {
-                player5->setVisible(true);
-                player5->clear();
-                player5->setPlaceholderText("Player 5");
+void PocketEconomic::ChangeWindowAfterBot() {
+    for (auto& bot_land : game->getCurPlayer()->getLandPlotsArr()) {
+        int row = bot_land->getCoords().first, column = bot_land->getCoords().second;
+        /*
+        bot_land->getPositionOfLand();
+        */
+        for (int i = 0; i < grid->lands.size(); ++i) {
+            Grid::land_struct* land = &grid->lands[i];
+            if (land->row == row && land->column == column && land->owner.color != player_owner->color) {
+                land->owner.color = player_owner->color;
             }
         }
-        });
-    QObject::connect(remove_player, &QPushButton::clicked, [&]() {
-        if (players + bots > 0 && players > 0) {
-            players--;
-            if (player5->isVisible()) {
-                player5->setVisible(false);
-                player5->clear();
-                player5->setPlaceholderText("Player 5");
-            }
-            else if (player4->isVisible()) {
-                player4->setVisible(false);
-                player4->clear();
-                player4->setPlaceholderText("Player 4");
-            }
-            else if (player3->isVisible()) {
-                player3->setVisible(false);
-                player3->clear();
-                player3->setPlaceholderText("Player 3");
-            }
-            else if (player2->isVisible()) {
-                player2->setVisible(false);
-                player2->clear();
-                player2->setPlaceholderText("Player 2");
-            }
-            else if (player1->isVisible()) {
-                player1->setVisible(false);
-                player1->clear();
-                player1->setPlaceholderText("Player 1");
+    }
+    for (auto& bot_houses : game->getCurPlayer()->getHousesArr()) {
+        int row = bot_houses->getLandPlot()->getCoords().first, 
+            column = bot_houses->getLandPlot()->getCoords().second;
+        int small_row = bot_houses->getCoordsInBuildingLand().first,
+            small_column = bot_houses->getCoordsInBuildingLand().second;
+        /*
+        bot_land->getPositionOfLand()->getPositionInLand();
+        bot_houses->getLandPlot();
+        get -> row, column ->
+        */
+        for (int i = 0; i < grid->lands.size(); ++i) {
+            Grid::land_struct* land = &grid->lands[i];
+            if (land->row == row && land->column == column && land->free_space[small_row][small_column]) { // <-
+                int x = land->x + grid->cell_size * small_column; // check - i want to sleep, i'm not sure about the order
+                int y = land->y + grid->cell_size * small_row - 50;
+                QPixmap pix = house3_roof->pixmap();
+                if (bot_houses->getHouseType() == House::HouseType::MonoliticHouse) pix = house1_roof->pixmap();
+                else if (bot_houses->getHouseType() == House::HouseType::PanelHouse) pix = house2_roof->pixmap();
+                bought_objects_[index_bought_buildings_]->setGeometry(x, y, 25, 25);
+                bought_objects_[index_bought_buildings_]->setAlignment(house1_roof->alignment());
+                bought_objects_[index_bought_buildings_]->setPixmap(pix);
+                bought_objects_[index_bought_buildings_]->setVisible(true);
+                bought_objects_[index_bought_buildings_]->setMouseTracking(true);
+                index_bought_buildings_++;
+                land->free_space[small_row][small_column] = false;
             }
         }
-        });
+    }
 
 
-    QObject::connect(add_bot, &QPushButton::clicked, [&]() {
-        if (players + bots < 5 && bots < 5) {
-            bots++;
-            if (!bot1->isVisible()) {
-                bot1->setVisible(true);
-            }
-            else if (!bot2->isVisible()) {
-                bot2->setVisible(true);
-            }
-            else if (!bot3->isVisible()) {
-                bot3->setVisible(true);
-            }
-            else if (!bot4->isVisible()) {
-                bot4->setVisible(true);
-            }
-            else if (!bot5->isVisible()) {
-                bot5->setVisible(true);
+    for (auto& bot_shops : game->getCurPlayer()->getSupermarketsArr()) {
+        int row = bot_shops->getLandPlot()->getCoords().first,
+            column = bot_shops->getLandPlot()->getCoords().second;
+        int small_row = bot_shops->getCoordsInBuildingLand().first,
+            small_column = bot_shops->getCoordsInBuildingLand().second;
+        /*
+        bot_land->getPositionOfLand()->getPositionInLand();
+        bot_shops->getLandPlot();
+        get -> row, column ->
+        */
+        for (int i = 0; i < grid->lands.size(); ++i) {
+            Grid::land_struct* land = &grid->lands[i];
+            if (land->row == row && land->column == column && land->free_space[small_row][small_column]) { // <-
+                int x = land->x + grid->cell_size * small_column; // check - i want to sleep, i'm not sure about the order
+                int y = land->y + grid->cell_size * small_row - 50;
+                QPixmap pix;
+                if (bot_shops->getSupermarketType() == Supermarket::SupermarketType::Supermarket) pix = shop1_roof->pixmap();
+                else pix = shop2_roof->pixmap();
+                bought_objects_[index_bought_buildings_]->setGeometry(x, y, pix.size().width(), pix.size().height());
+                bought_objects_[index_bought_buildings_]->setAlignment(house1_roof->alignment());
+                bought_objects_[index_bought_buildings_]->setPixmap(pix);
+                bought_objects_[index_bought_buildings_]->setVisible(true);
+                bought_objects_[index_bought_buildings_]->setMouseTracking(true);
+                index_bought_buildings_++;
+                land->free_space[small_row][small_column] = false;
             }
         }
-        });
-    QObject::connect(remove_bot, &QPushButton::clicked, [&]() {
-        if (players + bots > 0 && bots > 0) {
-            bots--;
-            if (bot5->isVisible()) {
-                bot5->setVisible(false);
-            }
-            else if (bot4->isVisible()) {
-                bot4->setVisible(false);
-            }
-            else if (bot3->isVisible()) {
-                bot3->setVisible(false);
-            }
-            else if (bot2->isVisible()) {
-                bot2->setVisible(false);
-            }
-            else if (bot1->isVisible()) {
-                bot1->setVisible(false);
-            }
-        }
-        });
-
+    }
 }

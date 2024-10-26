@@ -13,6 +13,10 @@ void LandPlot::updateSupply() {
 
 }
 
+void LandPlot::setCoords(const std::pair<int, int>& coords) {
+	coords_ = coords;
+}
+
 int64_t LandPlot::getIncome() const {
 	return 0;
 }
@@ -23,4 +27,8 @@ Player* LandPlot::getOwner() const {
 
 std::string LandPlot::getNameOfLand() const {
 	return name_of_land_;
+}
+
+std::pair<int, int> LandPlot::getCoords() const {
+	return coords_;
 }

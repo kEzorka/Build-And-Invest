@@ -19,11 +19,25 @@ set(PROJECT_SOURCES
     main.cpp
 
 
+    frontend/includes/input_windows/input_costs_window.h
+    frontend/includes/input_windows/input_demand_window.h
+    frontend/includes/input_windows/input_player_window.h
+    frontend/includes/grid.h
     frontend/includes/main_window.h
+    frontend/includes/my_label.h
+    frontend/includes/player_owner.h
+    frontend/includes/roof_label.h
     frontend/includes/qt_headers.h
 
 
+    frontend/source/input_windows/input_costs_window.cpp
+    frontend/source/input_windows/input_demand_window.cpp
+    frontend/source/input_windows/input_player_window.cpp
+    frontend/source/grid.cpp
     frontend/source/main_window.cpp
+    frontend/source/my_label.cpp
+    frontend/source/player_owner.cpp
+    frontend/source/roof_label.cpp
 
     
 

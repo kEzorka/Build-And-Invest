@@ -4,12 +4,13 @@
 #include <algorithm>
 //#include "qdebug.h"
 
+extern StandardClasses* standard_classes = nullptr;
+
 void Game::start() {
     makeCalamitiesArr();
     main_game_window_.distrib_calamity_type_ =
         std::uniform_int_distribution<>(0, main_game_window_.calamities_.size() - 1);
     makeLandPlotsArr();
-    standard_classes = new StandardClasses();
 
     land_agency_ = new LandAgency();
     global_real_estate_agency_ = new RealEstateAgency();
@@ -24,7 +25,9 @@ void Game::start() {
 
     news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
         "Congratulations, our game has started!                                                                 "));
-    nextGameStep();
+    news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+        "January has started!                                                                                   "));
+    //nextGameStep();
 }
 
 bool Game::finished() const {
@@ -35,9 +38,9 @@ bool Game::finished() const {
 std::string Game::getResults() {
     std::string results_str;
     std::vector<std::pair<int64_t, Player*>> results_for_player;
-    for (Player*& player : players_arr_) {
-        results_for_player.push_back(std::make_pair(0, player));
-        for (House*& house : player->getHousesArr()) {
+    for (Player*& player_owner : players_arr_) {
+        results_for_player.push_back(std::make_pair(0, player_owner));
+        for (House*& house : player_owner->getHousesArr()) {
             if (!house->isBuilt()) {
                 results_for_player.back().first += house->getBuildingCost();
             } else {
@@ -57,7 +60,7 @@ std::string Game::getResults() {
             }
         }
 
-        for (Supermarket*& supermarket : player->getSupermarketsArr()) {
+        for (Supermarket*& supermarket : player_owner->getSupermarketsArr()) {
             if (supermarket->getSupermarketType() == Supermarket::SupermarketType::Supermarket) {
                 results_for_player.back().first += 1.6 * building_agency_->getSupermarketBuildingCost();
             } else if (supermarket->getSupermarketType() == Supermarket::SupermarketType::Hypermarket) {
@@ -65,14 +68,14 @@ std::string Game::getResults() {
             }
         }
 
-        for (LandPlot*& land_plot : player->getLandPlotsArr()) {
+        for (LandPlot*& land_plot : player_owner->getLandPlotsArr()) {
             Resort* resort = dynamic_cast<Resort*>(land_plot);
             if (resort != nullptr) {
                 results_for_player.back().first += resort->getIncome() * 2;
             }
         }
 
-        results_for_player.back().first += player->getMoney();
+        results_for_player.back().first += player_owner->getMoney();
     }
 
     std::sort(results_for_player.begin(), results_for_player.end());
@@ -127,16 +130,26 @@ bool Game::nextPlayer() {
     ++cur_player_pos_in_arr_;
     if (cur_player_pos_in_arr_ == players_arr_.size()) {
         cur_player_pos_in_arr_ = 0;
-        nextGameStep();
+        nextGameStep(); 
         cur_player_ = players_arr_[cur_player_pos_in_arr_];
+        if (cur_player_->isBot()) {
+            Bot* bot_ptr = dynamic_cast<Bot*>(cur_player_);
+            bot_ptr->step(this);
+        }
         return true;
     }
+
     cur_player_ = players_arr_[cur_player_pos_in_arr_];
     if (cur_player_->isBot()) {
         Bot* bot_ptr = dynamic_cast<Bot*>(cur_player_);
         bot_ptr->step(this);
     }
     return false;
+}
+
+void Game::begin() {
+    cur_player_pos_in_arr_ = -1;
+    nextPlayer();
 }
 
 
@@ -150,26 +163,32 @@ void Game::setMovesCnt(const int& moves) {
     moves_in_the_game_ = moves;
 }
 
-void Game::pushPlayer(Player* player) {
-    players_arr_.push_back(player);
+void Game::pushPlayer(Player* player_owner) {
+    players_arr_.push_back(player_owner);
+    player_owner->setMoney(default_money_for_player_);
 }
 
 void Game::pushBot() {
     int64_t rand_num = RandNum() % 5;
     if (rand_num == 0) {
         Player* new_bot = new FirstBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     } else if (rand_num == 1) {
         Player* new_bot = new SecondBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     } else if (rand_num == 2) {
         Player* new_bot = new ThirdBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     } else if (rand_num == 3) {
         Player* new_bot = new FourthBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     } else if (rand_num == 4) {
         Player* new_bot = new FifthBot();
+        new_bot->setMoney(default_money_for_player_);
         players_arr_.push_back(new_bot);
     }
 }
@@ -183,4 +202,55 @@ std::vector<Player*> Game::getPlayersArr() const {
 
 Player* Game::getCurPlayer() const {
     return cur_player_;
+}
+
+
+std::string Game::getMonth() const {
+    switch (month_ % 12) {
+    case 1:
+        return "January";
+    case 2:
+        return "February";
+    case 3:
+        return "March";
+    case 4:
+        return "April";
+    case 5:
+        return "May";
+    case 6:
+        return "June";
+    case 7:
+        return "July";
+    case 8:
+        return "August";
+    case 9:
+        return "September";
+    case 10:
+        return "October";
+    case 11:
+        return "November";
+    case 0:
+        return "December";
+    }
+    return "";
+}
+
+int64_t Game::getCostOfLand(const int& row, const int& column) const {
+    BuildingLand* building = dynamic_cast<BuildingLand*>(land_plots_arr_[row][column]);
+    Resort* resort = dynamic_cast<Resort*>(land_plots_arr_[row][column]);
+    if (building != nullptr) {
+        return land_agency_->getCostOfCell() * building->getSizeX() * building->getSizeY()
+            * building->getSizeX() * building->getSizeY() / 10;
+    }
+    else if (resort != nullptr) {
+        return land_agency_->getCostOfResort();
+    }
+    return 0;
+}
+
+void Game::upadteResort(const int& row, const int& column) {
+    Resort* resort = dynamic_cast<Resort*>(land_plots_arr_[row][column]);
+    if (resort != nullptr) {
+        resort->update();
+    }
 }

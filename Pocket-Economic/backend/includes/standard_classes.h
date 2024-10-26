@@ -11,5 +11,3 @@ public:
 	GroceryAgency* grocery_agency_standard_ = nullptr;
 
 };
-
-static StandardClasses* standard_classes = nullptr;

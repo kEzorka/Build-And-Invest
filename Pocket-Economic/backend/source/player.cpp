@@ -4,6 +4,9 @@
 #include "../includes/standard_classes.h"
 #include "../bots/includes/bot.h"
 
+
+extern StandardClasses* standard_classes;
+
 Player::Player() {
     player_estate_agency_ = new RealEstateAgency(*(standard_classes->real_estate_agency_standard_));
 }
@@ -44,17 +47,23 @@ bool Player::isBot() {
 
 void Player::buyHouseAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency) {
     int64_t cost_of_advert = advert_agency.buyHouseAdvert(this, cnt_of_advert);
+    if (cost_of_advert == -1) {
+        return;
+    }
     coef_of_advert_houses_this_month_ += cnt_of_advert * advert_agency.getBoostOfHouseSalesValue();
     coef_of_advert_houses_next_month_ += cnt_of_advert * advert_agency.getBoostOfHouseSalesValue();
 }
 
 void Player::buySupermarketAdvert(const int& cnt_of_advert, const AdvertAgency& advert_agency) {
     int64_t cost_of_advert = advert_agency.buySupermarketAdvert(this, cnt_of_advert);
+    if (cost_of_advert == -1) {
+        return;
+    }
     coef_of_advert_supermarket_this_month_ +=
         cnt_of_advert * advert_agency.getBoostOfSupermarketSalesValue();
 }
 
-Supermarket* Player::buildSupermarket(const Supermarket::SupermarketType& supermarket_type, 
+Supermarket* Player::buildSupermarket(const Supermarket::SupermarketType& supermarket_type,
     const BuildingAgency& building_agency) {
     Supermarket* supermarket = building_agency.buySupermarket(this, supermarket_type);
     supermarket_arr_.push_back(supermarket);
@@ -68,17 +77,19 @@ House* Player::buildHouse(const House::HouseType& house_type, const BuildingAgen
 }
 
 void Player::buyBuildingLand(BuildingLand* land_plot, const LandAgency& land_agency) {
-    land_agency.buyBuildingLand(this, land_plot->getSizeX(), land_plot->getSizeY());
-    land_plot->setOwner(this);
-    land_plot_arr_.push_back(land_plot);
+    if (land_agency.buyBuildingLand(this, land_plot->getSizeX(), land_plot->getSizeY())) {
+        land_plot->setOwner(this);
+        land_plot_arr_.push_back(land_plot);
+    }
 }
 
 void Player::buyResort(Resort* land_plot, const LandAgency& land_agency) {
-    land_agency.buyResort(this);
-    land_plot->setOwner(this);
-    land_plot_arr_.push_back(land_plot);
-    land_plot->setCostOfNextUpdate(land_agency.getCostOfResort() * 4);
-    land_plot->setCurIncome(land_agency.getCostOfResort());
+    if (land_agency.buyResort(this)) {
+        land_plot->setOwner(this);
+        land_plot_arr_.push_back(land_plot);
+        land_plot->setCostOfNextUpdate(land_agency.getCostOfResort() * 4);
+        land_plot->setCurIncome(land_agency.getCostOfResort());
+    }
 }
 
 
@@ -103,8 +114,8 @@ std::vector<LandPlot*> Player::getLandPlotsArr() const {
 int64_t Player::getMoney() const {
     return money_;
 }
-
 void Player::getIncome(const int& month) {
+    global_income_ = 0;
     int64_t house_income = 0;
     int64_t supermarket_income = 0;
     int64_t player_income = 0;
@@ -118,7 +129,8 @@ void Player::getIncome(const int& month) {
             house_income += building_land->getRealEstateAgency()->getIncome(this, building_land, month);
             building_land->getRealEstateAgency()->giveDemandForPlayer(this);
             supermarket_income += building_land->getGroceryAgency()->getIncome(this, building_land, month);
-        } else if (resort != nullptr) {
+        }
+        else if (resort != nullptr) {
             resort_income += resort->getIncome();
         }
     }
@@ -139,9 +151,13 @@ void Player::getIncome(const int& month) {
     money_ += house_income;
     money_ += supermarket_income;
     money_ += player_income;
+    money_ += resort_income;
+
+    global_income_ = house_income + supermarket_income + player_income + resort_income;
 
     updateIncome();
 }
+
 
 bool Player::hasSupply() const {
     return player_estate_agency_->getCurMonolithicDemand() != 0 ||
@@ -203,4 +219,8 @@ double Player::getSupermarketIncome() const {
 
 double Player::getHypermarketIncome() const {
     return income_hypermarket_house_;
+}
+
+double Player::getGlobalIncome() const {
+    return global_income_;
 }
