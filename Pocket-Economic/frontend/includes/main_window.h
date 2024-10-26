@@ -44,6 +44,7 @@ public:
     void CloseAllInfoWindows();
     void NextStep();
     void ChangePlayer();
+    void UpdatePersonalInfo();
 
     bool eventFilter(QObject*, QEvent* event);
 

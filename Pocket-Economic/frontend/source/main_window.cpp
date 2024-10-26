@@ -609,9 +609,7 @@ void PocketEconomic::SetBuilding(QLabel* roof) {
             bought_objects_[index_bought_buildings_]->setMouseTracking(true);
             index_bought_buildings_++;
 
-            int64_t money = game->getCurPlayer()->getMoney() / 1000;
-            capital_number->setText(QString::fromStdString(std::to_string(money) + "K"));
-
+            UpdatePersonalInfo();
 
             roof->setVisible(false);
             roof->setPixmap(pix);
@@ -738,6 +736,14 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 offer_txt->setText("Buy a land!");
                 offer->setVisible(true);
                 is_offer_shown = true;
+
+
+                std::string new_cost = "70";
+                /* 
+                int64_t cost = game->getLandCost(land->row, land->column);
+                new_cost = std::to_string(cost / 1000);
+                */
+                offer_cost_txt->setText(QString::fromStdString("Cost: " + new_cost + "K"));
                 
                 if (land->amount_x == 8) {
                     grid->chosen_land = { land, &grid->lands[i + 3] };
@@ -819,6 +825,16 @@ void PocketEconomic::BuyLandOrResort(int x, int y) {
                 grid->chosen_land = { &resort, nullptr };
                 offer->setGeometry(x_pos, y_pos, offer->size().width(), offer->size().height());
                 background_picture_->setPixmap(background_pix);
+
+
+                std::string new_cost = "70";
+                /*
+                int64_t cost = game->getLandCost(land->row, land->column);
+                new_cost = std::to_string(cost / 1000);
+                */
+                offer_cost_txt->setText(QString::fromStdString("Cost: " + new_cost + "K"));
+
+
                 OfferIsShown();
                 return;
             } else {
@@ -947,8 +963,7 @@ void PocketEconomic::OfferIsShown() {
 
         (grid->chosen_land.first)->owner = *player_owner;
         if (grid->chosen_land.second) (grid->chosen_land.second)->owner = *player_owner;
-        int64_t money = game->getCurPlayer()->getMoney() / 1000;
-        capital_number->setText(QString::fromStdString(std::to_string(money) + "K"));
+        UpdatePersonalInfo();
         background_picture_->setPixmap(background_pix);
         buy_offer_btn->disconnect();
     });
@@ -1107,13 +1122,39 @@ void PocketEconomic::LandAnsResortInformationIsShown() {
         return;
         });
     QObject::connect(land_resort_information_advertising_btn, &QPushButton::clicked, [&]() {
-        land_resort_information->setVisible(false);
-        background_picture_->setPixmap(background_pix);
+        try {
+            game->buyHouseAdvert(game->getCurPlayer(), 1);
+            land_resort_information->setVisible(false);
+            UpdatePersonalInfo();
+            background_picture_->setPixmap(background_pix);
+        }
+        catch (const std::exception& e) {
+            std::string exception;
+            exception += "Exception: ";
+            exception += e.what();
+            MsgBox->setText(QString::fromStdString(exception));
+            MsgBox->exec();
+            buy_offer_btn->disconnect();
+            return;
+        }
         return;
         });
     QObject::connect(land_resort_information_updating_resort_btn, &QPushButton::clicked, [&]() {
-        land_resort_information->setVisible(false);
-        background_picture_->setPixmap(background_pix);
+        try {
+            game->buySupermarketAdvert(game->getCurPlayer(), 1);
+            land_resort_information->setVisible(false); 
+            UpdatePersonalInfo();
+            background_picture_->setPixmap(background_pix);
+        }
+        catch (const std::exception& e) {
+            std::string exception;
+            exception += "Exception: ";
+            exception += e.what();
+            MsgBox->setText(QString::fromStdString(exception));
+            MsgBox->exec();
+            buy_offer_btn->disconnect();
+            return;
+        }
         return;
         });
 }
@@ -1656,24 +1697,7 @@ void PocketEconomic::ChangePlayer() {
     house2_btn->setIconSize(QSize(45, 45));
     house3_btn->setIconSize(QSize(45, 45));
 
-    int64_t money = game->getCurPlayer()->getMoney() / 1000;
-    std::string new_capital = std::to_string(money) + "K";
-    if (money < 0) {
-        capital_number->setStyleSheet(personal_info_bad_value_style);
-    } else {
-        capital_number->setStyleSheet(personal_info_good_value_style);
-    }
-    capital_number->setText(QString::fromStdString(new_capital));
-
-    money = game->getCurPlayer()->getGlobalIncome() / 1000;
-    std::string new_income = std::to_string(money) + "K"; 
-    if (money < 0) {
-        income_number->setStyleSheet(personal_info_bad_value_style);
-    } else {
-        new_income = '+' + new_income;
-        income_number->setStyleSheet(personal_info_good_value_style);
-    }
-    income_number->setText(QString::fromStdString(new_income));
+    UpdatePersonalInfo();
 
     window->update();
 }
@@ -1709,4 +1733,22 @@ void PocketEconomic::MakeMainWindow() {
 
     //window->showMaximized();
     window->showFullScreen();
+}
+
+void PocketEconomic::UpdatePersonalInfo() {
+    int64_t money = game->getCurPlayer()->getMoney() / 1000;
+    std::string add = std::to_string(money) + "K";
+    if (money < 0) {
+        add = '-' + add;        
+    }
+    capital_number->setText(QString::fromStdString(add));
+    capital_number->setStyleSheet(money < 0 ? personal_info_bad_value_style : personal_info_good_value_style);
+
+    money = game->getCurPlayer()->getGlobalIncome() / 1000;
+    add = std::to_string(money) + "K";
+    if (money < 0) {
+        add = '-' + add;
+    }
+    income_number->setText(QString::fromStdString(add));
+    income_number->setStyleSheet(money < 0 ? personal_info_bad_value_style : personal_info_good_value_style);
 }

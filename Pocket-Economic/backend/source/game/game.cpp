@@ -198,7 +198,7 @@ Player* Game::getCurPlayer() const {
 
 
 std::string Game::getMonth() const {
-    switch (month_) {
+    switch (month_ % 12) {
     case 1:
         return "January";
     case 2:
@@ -221,7 +221,7 @@ std::string Game::getMonth() const {
         return "October";
     case 11:
         return "November";
-    case 12:
+    case 0:
         return "December";
     }
 }
