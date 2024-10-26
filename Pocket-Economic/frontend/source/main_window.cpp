@@ -1160,7 +1160,7 @@ void PocketEconomic::LandAnsResortInformationIsShown() {
 }
 
 void PocketEconomic::MakeNews() {
-    tmp_news.resize(30);
+    /*tmp_news.resize(30);
     for (int i = 0; i < tmp_news.size(); ++i) {
         int col = rand() % 6;
         tmp_news[i].first += "       ";
@@ -1206,7 +1206,7 @@ void PocketEconomic::MakeNews() {
     tmp_news[26].second = "is delayed: it became necessary to obtain additional approvals for the project with environmental services.";
     tmp_news[27].second = "is delayed due to the discovery of archaeological finds on the site.";
     tmp_news[28].second = "is delayed due to legal proceedings on land issues.";
-    tmp_news[29].second = "is delayed: it became necessary to conduct additional material tests.";
+    tmp_news[29].second = "is delayed: it became necessary to conduct additional material tests.";*/
 }
 
 void PocketEconomic::PrepareNews() {
@@ -1227,33 +1227,34 @@ void PocketEconomic::PrepareNews() {
     news_table->setEditTriggers(QAbstractItemView::NoEditTriggers);
     news_table->setSelectionMode(QAbstractItemView::NoSelection);
 
-    MakeNews();
-
-    for (auto& el : tmp_news) {
+    std::vector<std::pair<Player*, std::string>> news_from_begin = game->getFreshNews();
+    for (auto& el : news_from_begin) {
         int row = news_table->rowCount();
         news_table->insertRow(row);
-        news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first)));
+        if (el.first != nullptr) {
+            news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first->getNickname())));
+        }
         news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
     }
 
-    // add months
-    tmp_news[5] = { "May", "" };
-    tmp_news[10] = { "June", "" };
-    //merge cells for months
-    news_table->setSpan(5, 0, 1, 2);
-    news_table->item(5, 0)->setBackground(QColor(0, 0, 0, 25));
-    news_table->setSpan(10, 0, 1, 2);
-    news_table->item(10, 0)->setBackground(QColor(0, 0, 0, 25));
+    //// add months
+    //tmp_news[5] = { "May", "" };
+    //tmp_news[10] = { "June", "" };
+    ////merge cells for months
+    //news_table->setSpan(5, 0, 1, 2);
+    //news_table->item(5, 0)->setBackground(QColor(0, 0, 0, 25));
+    //news_table->setSpan(10, 0, 1, 2);
+    //news_table->item(10, 0)->setBackground(QColor(0, 0, 0, 25));
 
-    for (int i = 0; i < news_table->rowCount(); ++i) {
-        QTableWidgetItem* cur = news_table->item(i, 0);
-        std::string color = (cur->text()).toStdString();
-        if (color.find("Red") != std::string::npos) cur->setForeground(red_color);
-        else if (color.find("Orange") != std::string::npos) cur->setForeground(orange_color);
-        else if (color.find("Yellow") != std::string::npos) cur->setForeground(yellow_color);
-        else if (color.find("Blue") != std::string::npos) cur->setForeground(blue_color);
-        else if (color.find("Violet") != std::string::npos) cur->setForeground(violet_color);
-    }
+    //for (int i = 0; i < news_table->rowCount(); ++i) {
+    //    QTableWidgetItem* cur = news_table->item(i, 0);
+    //    std::string color = (cur->text()).toStdString();
+    //    if (color.find("Red") != std::string::npos) cur->setForeground(red_color);
+    //    else if (color.find("Orange") != std::string::npos) cur->setForeground(orange_color);
+    //    else if (color.find("Yellow") != std::string::npos) cur->setForeground(yellow_color);
+    //    else if (color.find("Blue") != std::string::npos) cur->setForeground(blue_color);
+    //    else if (color.find("Violet") != std::string::npos) cur->setForeground(violet_color);
+    //}
 }
 
 void PocketEconomic::NewsIsShown() {
@@ -1589,10 +1590,32 @@ void PocketEconomic::CloseAllInfoWindows() {
 
 void PocketEconomic::NextStep() {
     QObject::connect(next_step_btn, &QPushButton::clicked, [&]() {
+        if (game->nextPlayer()) {
+            std::vector<std::pair<Player*, std::string>> news_from_begin = game->getBuyNews();
+            game->clearBuyNewsArr();
+            for (auto& el : news_from_begin) {
+                int row = news_table->rowCount();
+                news_table->insertRow(row);
+                if (el.first != nullptr) {
+                    news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first->getNickname())));
+                }
+                news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
+            }
+            news_from_begin = game->getFreshNews();
+            for (auto& el : news_from_begin) {
+                int row = news_table->rowCount();
+                news_table->insertRow(row);
+                if (el.first != nullptr) {
+                    news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first->getNickname())));
+                }
+                news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
+            }
+        }
+      
+      
         if (game->getCurPlayer()->isBot()) {
             ChangeWindowAfterBot();
         }
-        game->nextPlayer();
         if (game->finished()) {
             results->setText(QString::fromStdString(game->getResults()));
             window->close();

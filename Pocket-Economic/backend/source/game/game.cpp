@@ -25,7 +25,9 @@ void Game::start() {
 
     news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
         "Congratulations, our game has started!                                                                 "));
-    nextGameStep();
+    news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+        "January has started!                                                                                   "));
+    //nextGameStep();
 }
 
 bool Game::finished() const {
@@ -128,10 +130,15 @@ bool Game::nextPlayer() {
     ++cur_player_pos_in_arr_;
     if (cur_player_pos_in_arr_ == players_arr_.size()) {
         cur_player_pos_in_arr_ = 0;
-        nextGameStep();
+        nextGameStep(); 
         cur_player_ = players_arr_[cur_player_pos_in_arr_];
+        if (cur_player_->isBot()) {
+            Bot* bot_ptr = dynamic_cast<Bot*>(cur_player_);
+            bot_ptr->step(this);
+        }
         return true;
     }
+
     cur_player_ = players_arr_[cur_player_pos_in_arr_];
     if (cur_player_->isBot()) {
         Bot* bot_ptr = dynamic_cast<Bot*>(cur_player_);
@@ -141,7 +148,8 @@ bool Game::nextPlayer() {
 }
 
 void Game::begin() {
-    cur_player_ = players_arr_[0];
+    cur_player_pos_in_arr_ = -1;
+    nextPlayer();
 }
 
 

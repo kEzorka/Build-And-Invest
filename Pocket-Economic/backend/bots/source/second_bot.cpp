@@ -13,7 +13,10 @@ void SecondBot::step(Game* game) {
                 BuildingLand* building_land = dynamic_cast<BuildingLand*>(game->land_plots_arr_[row][column]);
                 if (building_land != nullptr) {
                     if (building_land->getOwner() == nullptr) {
-                        game->buyBuildingLand(this, row, column);
+                        try{
+                            game->buyBuildingLand(this, row, column);
+                        }
+                        catch (const std::exception& e) {}
                         bougth_land = true;
                         break;
                     }
@@ -33,11 +36,17 @@ void SecondBot::step(Game* game) {
             for (size_t row = 0; row < building_land->getCells().size(); ++row) {
                 for (size_t column = 0; column < building_land->getCells()[row].size(); ++column) {
                     if (building_land->getCells()[row][column] == nullptr && !buy_house) {
-                        game->buildHouse(this, building_land, House::HouseType::PanelHouse, row, column);
+                        try{
+                            game->buildHouse(this, building_land, House::HouseType::PanelHouse, row, column);
+                        }
+                        catch (const std::exception& e) {}
                         buy_house = true;
                     } else if (building_land->getCells()[row][column] == nullptr && !buy_supermarket) {
-                        game->buildSupermarket(this, building_land,
-                            Supermarket::SupermarketType::Supermarket, row, column);
+                        try{
+                            game->buildSupermarket(this, building_land,
+                                Supermarket::SupermarketType::Supermarket, row, column);
+                        }
+                        catch (const std::exception& e) {}
                         buy_supermarket = true;
                         break;
                     }
