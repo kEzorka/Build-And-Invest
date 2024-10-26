@@ -1781,7 +1781,7 @@ void PocketEconomic::UpdatePersonalInfo() {
 
 void PocketEconomic::ChangeWindowAfterBot() {
     for (auto& bot_land : game->getCurPlayer()->getLandPlotsArr()) {
-        int row = 5, column = 5;
+        int row = bot_land->getCoords().first, column = bot_land->getCoords().second;
         /*
         bot_land->getPositionOfLand();
         */
@@ -1793,8 +1793,10 @@ void PocketEconomic::ChangeWindowAfterBot() {
         }
     }
     for (auto& bot_houses : game->getCurPlayer()->getHousesArr()) {
-        int row = 2, column = 5;
-        int small_row = 0, small_column = 0;
+        int row = bot_houses->getLandPlot()->getCoords().first, 
+            column = bot_houses->getLandPlot()->getCoords().second;
+        int small_row = bot_houses->getCoordsInBuildingLand().first,
+            small_column = bot_houses->getCoordsInBuildingLand().second;
         /*
         bot_land->getPositionOfLand()->getPositionInLand();
         bot_houses->getLandPlot();
@@ -1821,8 +1823,10 @@ void PocketEconomic::ChangeWindowAfterBot() {
 
 
     for (auto& bot_shops : game->getCurPlayer()->getSupermarketsArr()) {
-        int row = 1, column = 1;
-        int small_row = 0, small_column = 0;
+        int row = bot_shops->getLandPlot()->getCoords().first,
+            column = bot_shops->getLandPlot()->getCoords().second;
+        int small_row = bot_shops->getCoordsInBuildingLand().first,
+            small_column = bot_shops->getCoordsInBuildingLand().second;
         /*
         bot_land->getPositionOfLand()->getPositionInLand();
         bot_shops->getLandPlot();
