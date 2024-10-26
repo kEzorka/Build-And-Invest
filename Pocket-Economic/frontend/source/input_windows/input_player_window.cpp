@@ -169,6 +169,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
             }
             input_players_window->close();
             game->begin();
+            pocket_economic_->month_lbl->setText(QString::fromStdString(game->getMonth()));
             pocket_economic_->MakeMainWindow();
         }
         });

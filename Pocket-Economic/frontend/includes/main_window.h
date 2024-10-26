@@ -231,7 +231,7 @@ private:
     QString personal_info_bad_value_style;
 
     QPushButton* next_step_btn = new QPushButton();
-    QLabel* month = new QLabel();
+    QLabel* month_lbl = new QLabel();
 
 
     QLabel* results = new QLabel();
