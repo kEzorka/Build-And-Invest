@@ -148,7 +148,8 @@ bool Game::nextPlayer() {
 }
 
 void Game::begin() {
-    cur_player_ = players_arr_[0];
+    cur_player_pos_in_arr_ = -1;
+    nextPlayer();
 }
 
 

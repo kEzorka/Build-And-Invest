@@ -132,6 +132,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
                 Player* new_player = new Player();
                 std::string name = player1->text().toStdString();
                 if (name.empty()) name = "Player 1";
+                new_player->setColor("#");
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
@@ -139,6 +140,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
                 Player* new_player = new Player();
                 std::string name = player2->text().toStdString();
                 if (name.empty()) name = "Player 2";
+                new_player->setColor("#");
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
@@ -146,6 +148,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
                 Player* new_player = new Player();
                 std::string name = player3->text().toStdString();
                 if (name.empty()) name = "Player 3";
+                new_player->setColor("#");
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
@@ -153,6 +156,7 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
                 Player* new_player = new Player();
                 std::string name = player4->text().toStdString();
                 if (name.empty()) name = "Player 4";
+                new_player->setColor("#");
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
@@ -160,11 +164,13 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
                 Player* new_player = new Player();
                 std::string name = player5->text().toStdString();
                 if (name.empty()) name = "Player 5";
+                new_player->setColor("#");
                 new_player->setNickname(name);
                 game->pushPlayer(new_player);
             }
             for (int i = 0; i < bots_cnt_on_players_window; ++i) {
                 game->pushBot();
+                game->getPlayersArr().back()->setColor("#");
             }
             input_players_window->close();
             game->begin();

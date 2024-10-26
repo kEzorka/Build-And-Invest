@@ -161,7 +161,7 @@ private:
 
     std::vector<Player*> players_arr_; /*players club 7-3-5*/
     Player* cur_player_ = nullptr;
-    size_t month_ = 0;
+    size_t month_ = 1;
     int cur_player_pos_in_arr_ = 0;
 
     std::vector<std::vector<LandPlot*>> land_plots_arr_;
