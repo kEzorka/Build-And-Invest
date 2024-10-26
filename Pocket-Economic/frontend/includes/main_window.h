@@ -191,6 +191,7 @@ private:
     QPushButton* close_land_resort_information_btn = new QPushButton();
     QPushButton* land_resort_information_advertising_btn = new QPushButton();
     QPushButton* land_resort_information_updating_resort_btn = new QPushButton();
+    Grid::land_struct* resort_chosen = nullptr;
 
     QLabel* news = new QLabel();
     QString news_txt_style;

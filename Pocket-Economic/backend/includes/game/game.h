@@ -137,6 +137,11 @@ public:
 
     std::string getMonth() const;
 
+
+    int64_t getCostOfLand(const int& row, const int& column) const;
+    void upadteResort(const int& row, const int& column);
+
+
 private:
     int default_money_for_player_ = 20'000'000;
     int moves_in_the_game_ = INF;
