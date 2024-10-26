@@ -1765,7 +1765,7 @@ void PocketEconomic::UpdatePersonalInfo() {
     int64_t money = game->getCurPlayer()->getMoney() / 1000;
     std::string add = std::to_string(money) + "K";
     if (money < 0) {
-        add = '-' + add;        
+        add = '-' + add;
     }
     capital_number->setText(QString::fromStdString(add));
     capital_number->setStyleSheet(money < 0 ? personal_info_bad_value_style : personal_info_good_value_style);

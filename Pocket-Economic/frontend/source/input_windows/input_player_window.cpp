@@ -174,6 +174,9 @@ void PocketEconomic::InputPlayerWindow::InputPlayersContinue() {
             }
             input_players_window->close();
             game->begin();
+            if (game->getCurPlayer()->isBot()) {
+                pocket_economic_->ChangeWindowAfterBot();
+            }
             pocket_economic_->month_lbl->setText(QString::fromStdString(game->getMonth()));
             pocket_economic_->MakeMainWindow();
         }
