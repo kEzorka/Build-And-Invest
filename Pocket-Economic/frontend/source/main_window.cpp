@@ -1786,6 +1786,10 @@ void PocketEconomic::MakeMainWindow() {
 
 
     //window->showMaximized();
+
+    if (game->getCurPlayer()->isBot()) {
+        ChangeWindowAfterBot();
+    }
     window->showFullScreen();
 }
 

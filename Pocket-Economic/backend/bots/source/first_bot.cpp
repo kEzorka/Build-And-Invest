@@ -10,6 +10,11 @@ void FirstBot::step(Game* game) {
         bool bougth_land = false;
         for (size_t row = 0; row < game->land_plots_arr_.size(); ++row) {
             for (size_t column = 0; column < game->land_plots_arr_[row].size(); ++column) {
+                if ((row == 0 && column == 3) || (row == 0 && column == 6) || (row == 0 && column == 9)
+                    || (row == 2 && column == 3) || (row == 2 && column == 6) || (row == 2 && column == 9)
+                    || (row == 4 && column == 3) || (row == 4 && column == 6) || (row == 4 && column == 9)) {
+                    continue;
+                }
                 BuildingLand* building_land = dynamic_cast<BuildingLand*>(game->land_plots_arr_[row][column]);
                 if (building_land != nullptr) {
                     if (building_land->getOwner() == nullptr) {

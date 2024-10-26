@@ -232,6 +232,7 @@ std::string Game::getMonth() const {
     case 0:
         return "December";
     }
+    return "";
 }
 
 int64_t Game::getCostOfLand(const int& row, const int& column) const {
@@ -244,6 +245,7 @@ int64_t Game::getCostOfLand(const int& row, const int& column) const {
     else if (resort != nullptr) {
         return land_agency_->getCostOfResort();
     }
+    return 0;
 }
 
 void Game::upadteResort(const int& row, const int& column) {
