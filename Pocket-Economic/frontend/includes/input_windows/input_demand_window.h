@@ -29,4 +29,7 @@ private:
     QLineEdit* input_supplies_shop1_demand = new QLineEdit();
     QLineEdit* input_supplies_shop2_demand = new QLineEdit();
 
+
+    QLineEdit* steps_amount = new QLineEdit();
+    QLineEdit* money_amount = new QLineEdit();
 };
