@@ -135,6 +135,8 @@ public:
     int64_t getTimeOfBuildingSupermarket() const;
     int64_t getTimeOfBuildingHypermarket() const;
 
+    std::string getMonth() const;
+
 private:
     int default_money_for_player_ = 20'000'000;
     int moves_in_the_game_ = INF;
