@@ -24,6 +24,10 @@ void Realty::setNumberOfRealty(const int& number) {
     number_of_realty_ = number;
 }
 
+void Realty::setCoordsInBuildingLand(const std::pair<int, int>& coords) {
+    coords_in_building_land_ = coords;
+}
+
 
 
 
@@ -53,6 +57,10 @@ int Realty::getNumberOfRealty() const {
 
 int64_t Realty::getIncome() const {
     return 0;
+}
+
+std::pair<int, int> Realty::getCoordsInBuildingLand() const {
+    return coords_in_building_land_;
 }
 
 
