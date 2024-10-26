@@ -3,40 +3,40 @@
 void Game::nextGameStep() {
     news_window_.fresh_news_arr_.clear();
     ++month_;
-    if (month_ % 12 == 0) {
+    if (month_ % 12 == 1) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
             "January has started!                                                                                   "));
-    } else if (month_ % 12 == 1) {
-        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "February has started!                                                                                   "));
     } else if (month_ % 12 == 2) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "March has started!                                                                                   "));
+            "February has started!                                                                                   "));
     } else if (month_ % 12 == 3) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "April has started!                                                                                   "));
+            "March has started!                                                                                   "));
     } else if (month_ % 12 == 4) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "May has started!                                                                                   "));
+            "April has started!                                                                                   "));
     } else if (month_ % 12 == 5) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "June has started!                                                                                   "));
+            "May has started!                                                                                   "));
     } else if (month_ % 12 == 6) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "July has started!                                                                                   "));
+            "June has started!                                                                                   "));
     } else if (month_ % 12 == 7) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "August has started!                                                                                   "));
+            "July has started!                                                                                   "));
     } else if (month_ % 12 == 8) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "September has started!                                                                                   "));
+            "August has started!                                                                                   "));
     } else if (month_ % 12 == 9) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "October has started!                                                                                   "));
+            "September has started!                                                                                   "));
     } else if (month_ % 12 == 10) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
-            "November has started!                                                                                   "));
+            "October has started!                                                                                   "));
     } else if (month_ % 12 == 11) {
+        news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
+            "November has started!                                                                                   "));
+    } else if (month_ % 12 == 0) {
         news_window_.fresh_news_arr_.push_back(std::make_pair(nullptr,
             "December has started!                                                                                   "));
     }

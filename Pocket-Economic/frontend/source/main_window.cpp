@@ -1235,6 +1235,9 @@ void PocketEconomic::PrepareNews() {
             news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first->getNickname())));
         }
         news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
+        if (el.first == nullptr) {
+            news_table->item(row, 1)->setBackground(QColor(0, 0, 0, 25));
+        }
     }
 
     //// add months
@@ -1598,8 +1601,22 @@ void PocketEconomic::NextStep() {
                 news_table->insertRow(row);
                 if (el.first != nullptr) {
                     news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first->getNickname())));
+
+                    QTableWidgetItem* cur = news_table->item(row, 0);
+                    QString color_str = QString::fromStdString(el.first->getColor());
+                    QColor color;
+                    if (color_str == red_css) color = red_color;
+                    else if (color_str == orange_css) color = orange_color;
+                    else if (color_str == yellow_css) color = yellow_color;
+                    else if (color_str == blue_css) color = blue_color;
+                    else if (color_str == violet_css) color = violet_color;
+                    else color = QColor(0, 0, 0);
+                    cur->setForeground(color);
                 }
-                news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
+                news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));  
+                if (el.first == nullptr) {
+                    news_table->item(row, 1)->setBackground(QColor(0, 0, 0, 25));
+                }
             }
             news_from_begin = game->getFreshNews();
             for (auto& el : news_from_begin) {
@@ -1607,8 +1624,21 @@ void PocketEconomic::NextStep() {
                 news_table->insertRow(row);
                 if (el.first != nullptr) {
                     news_table->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(el.first->getNickname())));
+                    QTableWidgetItem* cur = news_table->item(row, 0);
+                    QString color_str = QString::fromStdString(el.first->getColor());
+                    QColor color;
+                    if (color_str == red_css) color = red_color;
+                    else if (color_str == orange_css) color = orange_color;
+                    else if (color_str == yellow_css) color = yellow_color;
+                    else if (color_str == blue_css) color = blue_color;
+                    else if (color_str == violet_css) color = violet_color;
+                    else color = QColor(0, 0, 0);
+                    cur->setForeground(color);
                 }
                 news_table->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(el.second)));
+                if (el.first == nullptr) {
+                    news_table->item(row, 1)->setBackground(QColor(0, 0, 0, 25));
+                }
             }
         }
       
